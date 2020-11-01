@@ -22,7 +22,7 @@ public class CrescimentoPeriodo extends Estatistica {
 		
 		if (dias == 0) return 0;
 		
-		return (ultima.getCasos() - primeira.getCasos())/dias;
+		return ((float) ultima.getCasos() - primeira.getCasos())/dias;
 	}
 
 }
