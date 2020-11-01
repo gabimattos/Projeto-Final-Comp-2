@@ -38,5 +38,5 @@ public abstract class Estatistica {
 		return new ArrayList<>(observacoes);
 	}
 	
-	//TODO: adicionar função valor()
+	public abstract float valor();
 }
