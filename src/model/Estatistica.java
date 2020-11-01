@@ -10,6 +10,7 @@ public abstract class Estatistica {
 	public Estatistica(String nome, List<Medicao> observacoes) {
 		this.nome = nome;
 		this.observacoes = observacoes;
+		Collections.sort(observacoes);
 	}
 	
 	public boolean inclui(Medicao observacao) {
@@ -17,12 +18,10 @@ public abstract class Estatistica {
 	}
 	
 	public LocalDate dataInicio() {
-		Collections.sort(observacoes);
 		return observacoes.get(0).getMomento().toLocalDate();
 	}
 	
 	public LocalDate dataFim() {
-		Collections.sort(observacoes);
 		return observacoes.get(observacoes.size()-1).getMomento().toLocalDate();
 	}
 
