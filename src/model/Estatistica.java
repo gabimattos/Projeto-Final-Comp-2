@@ -3,18 +3,23 @@ package model;
 import java.time.LocalDate;
 import java.util.*;
 
-public abstract class Estatistica {
+public abstract class Estatistica implements Comparable<Estatistica>{
 	private String nome;
 	private List<Medicao> observacoes;
+	protected float valorCache;
+	protected boolean cacheAtualizado;
 	
-	public Estatistica(String nome, List<Medicao> observacoes) {
+	public Estatistica(String nome) {
 		this.nome = nome;
-		this.observacoes = observacoes;
-		Collections.sort(observacoes);
+		this.observacoes = new ArrayList<>();
+		this.valorCache = 0;
+		this.cacheAtualizado = false;
 	}
 	
-	public boolean inclui(Medicao observacao) {
-		return observacoes.contains(observacao);
+	public void inclui(Medicao observacao) {
+		observacoes.add(observacao);
+		Collections.sort(observacoes);
+		cacheAtualizado = false;
 	}
 	
 	public LocalDate dataInicio() {
@@ -39,4 +44,8 @@ public abstract class Estatistica {
 	
 	public abstract float valor();
 	
+	@Override
+	public int compareTo(Estatistica o) {
+		return Float.compare(this.valor(), o.valor());
+	}
 }
