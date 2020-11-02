@@ -1,3 +1,4 @@
+  
 package model;
 
 public enum StatusCaso {
