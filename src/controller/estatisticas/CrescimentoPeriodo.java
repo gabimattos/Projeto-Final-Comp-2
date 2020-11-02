@@ -9,8 +9,8 @@ import model.Medicao;
 
 public class CrescimentoPeriodo extends Estatistica {
 
-	public CrescimentoPeriodo(String nome, List<Medicao> observacoes) {
-		super(nome, observacoes);
+	public CrescimentoPeriodo(String nome) {
+		super(nome);
 	}
 
 	@Override

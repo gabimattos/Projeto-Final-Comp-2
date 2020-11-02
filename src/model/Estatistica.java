@@ -7,14 +7,14 @@ public abstract class Estatistica {
 	private String nome;
 	private List<Medicao> observacoes;
 	
-	public Estatistica(String nome, List<Medicao> observacoes) {
+	public Estatistica(String nome) {
 		this.nome = nome;
-		this.observacoes = observacoes;
-		Collections.sort(observacoes);
+		observacoes = new ArrayList<>();
 	}
 	
-	public boolean inclui(Medicao observacao) {
-		return observacoes.contains(observacao);
+	public void inclui(Medicao observacao) {
+		observacoes.add(observacao);
+		Collections.sort(observacoes);
 	}
 	
 	public LocalDate dataInicio() {

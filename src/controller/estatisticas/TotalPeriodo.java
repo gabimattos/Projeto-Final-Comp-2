@@ -8,8 +8,8 @@ import model.Medicao;
 
 public class TotalPeriodo extends Estatistica {
 
-	public TotalPeriodo(String nome, List<Medicao> observacoes) {
-		super(nome, observacoes);
+	public TotalPeriodo(String nome) {
+		super(nome);
 	}
 	
 	@Override
