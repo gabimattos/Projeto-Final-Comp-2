@@ -12,11 +12,18 @@ public class TotalPeriodo extends Estatistica {
 	
 	@Override
 	public float valor() {
+		if (cacheAtualizado) return valorCache;
+		
 		ArrayList<Medicao> medicoes = new ArrayList<Medicao>(getObservacoes());
 		Medicao primeira = medicoes.get(0);
 		Medicao ultima = medicoes.get(medicoes.size() - 1);
 		
-		return ultima.getCasos() - primeira.getCasos();
+		Float valor = (float) ultima.getCasos() - primeira.getCasos();
+		
+		this.valorCache = valor;
+		this.cacheAtualizado = true;
+		
+		return valor;
 	}
 
 }

@@ -13,14 +13,19 @@ public class CrescimentoPeriodo extends Estatistica {
 
 	@Override
 	public float valor() {
+		if (cacheAtualizado) return valorCache;
+		
 		ArrayList<Medicao> medicoes = new ArrayList<Medicao>(getObservacoes());
 		Medicao primeira = medicoes.get(0);
 		Medicao ultima = medicoes.get(medicoes.size() - 1);
 		long dias = primeira.getMomento().until(ultima.getMomento(), ChronoUnit.DAYS);
 		
-		if (dias == 0) return 0;
+		Float valor = (dias == 0)? 0f :
+				((float) ultima.getCasos() - primeira.getCasos())/dias;
 		
-		return ((float) ultima.getCasos() - primeira.getCasos())/dias;
+		this.valorCache = valor;
+		this.cacheAtualizado = true;
+		return valor;
 	}
 
 }

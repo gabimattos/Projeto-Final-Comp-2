@@ -12,6 +12,8 @@ public class MortalidadePeriodo extends Estatistica {
 
 	@Override
 	public float valor() {
+		if (cacheAtualizado) return valorCache;
+		
 		int inicioConfirmados = 0;
 		int inicioMortos = 0;
 		int fimConfirmados = 0;
@@ -35,8 +37,11 @@ public class MortalidadePeriodo extends Estatistica {
 		int totalMortos = fimMortos - inicioMortos;
 		int totalCasos = fimConfirmados - inicioConfirmados;
 		
-		if (totalCasos == 0) return -1;
+		Float valor = (totalCasos == 0)? -1f : ((float) totalMortos)/totalCasos;
 		
-		return ((float) totalMortos)/totalCasos;
+		this.valorCache = valor;
+		this.cacheAtualizado = true;
+		
+		return valor;
 	}
 }

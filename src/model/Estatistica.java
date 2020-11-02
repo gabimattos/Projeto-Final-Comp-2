@@ -6,15 +6,20 @@ import java.util.*;
 public abstract class Estatistica implements Comparable<Estatistica>{
 	private String nome;
 	private List<Medicao> observacoes;
+	protected float valorCache;
+	protected boolean cacheAtualizado;
 	
 	public Estatistica(String nome) {
 		this.nome = nome;
-		observacoes = new ArrayList<>();
+		this.observacoes = new ArrayList<>();
+		this.valorCache = 0;
+		this.cacheAtualizado = false;
 	}
 	
 	public void inclui(Medicao observacao) {
 		observacoes.add(observacao);
 		Collections.sort(observacoes);
+		cacheAtualizado = false;
 	}
 	
 	public LocalDate dataInicio() {
