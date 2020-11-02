@@ -3,7 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.util.*;
 
-public abstract class Estatistica {
+public abstract class Estatistica implements Comparable<Estatistica>{
 	private String nome;
 	private List<Medicao> observacoes;
 	
@@ -38,4 +38,9 @@ public abstract class Estatistica {
 	}
 	
 	public abstract float valor();
+	
+	@Override
+	public int compareTo(Estatistica o) {
+		return Float.compare(this.valor(), o.valor());
+	}
 }
