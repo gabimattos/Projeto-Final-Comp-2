@@ -1,14 +1,11 @@
-package controller.estatisticas;
+package controller;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+
+import controller.estatisticas.*;
 
 import model.*;
 
@@ -98,4 +95,10 @@ public class ControllerEstatistica {
 		}
 		
 	  
+		/*public List <Estatistica> rankingLocaisProximos (List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
+			List <Estatistica> rankingCrescimento = rankingCrescimento (dadosCasos, inicio, fim);
+			List <Estatistica> rankingLocaisProximos;
+			
+		}*/
+		
 }
