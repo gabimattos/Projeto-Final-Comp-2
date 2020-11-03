@@ -28,7 +28,7 @@ public class MedicaoController {
 	private void carregaMedicoes() {
 		List<Pais> paises = PaisController.getInstance().getPaises();
 		
-		System.out.println("Baixando medições dos países...");
+		System.out.println("Baixando mediï¿½ï¿½es dos paï¿½ses...");
 		long inicio = new Date().getTime();
 		
 		List<Medicao> confirmados = new ArrayList<>();
@@ -59,7 +59,10 @@ public class MedicaoController {
 			int baixado = paises.indexOf(pais)+1;
 			
 			int porcentagem = (int) (baixado/((float)total)*100);
-			System.out.printf("Progresso %d/%d(%d%%) de medições de países.\n", baixado, total, porcentagem);
+			System.out.printf("Progresso %d/%d(%d%%) de mediï¿½ï¿½es de paï¿½ses.\n", baixado, total, porcentagem);
+//			if (pais.getSlug().equals("puerto-rico")) {
+//				break;
+//			}
 		}
 		
 		this.setConfirmados(confirmados);
@@ -69,7 +72,7 @@ public class MedicaoController {
 		long fim = new Date().getTime();
 		float duracao = (float)(fim - inicio)/1000.0f;
 		
-		System.out.printf("Medições dos países baixados em %.2f segundos\n", duracao);
+		System.out.printf("Mediï¿½ï¿½es dos paï¿½ses baixados em %.2f segundos\n", duracao);
 	}
 
 	public List<Medicao> getConfirmados() {
@@ -95,7 +98,5 @@ public class MedicaoController {
 	public void setRecuperados(List<Medicao> recuperados) {
 		this.recuperados = new ArrayList<Medicao>(recuperados);
 	}
-	
-	
 	
 }

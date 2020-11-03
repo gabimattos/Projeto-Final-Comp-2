@@ -49,7 +49,9 @@ public class Medicao implements Comparable<Medicao>{
 
 	@Override
 	public int compareTo(Medicao o) {
-		return this.getMomento().compareTo(o.getMomento());
+		return  (pais.compareTo(o.pais) == 0)?
+				this.getMomento().compareTo(o.getMomento()) :
+				pais.compareTo(o.pais);
 	}
 	
 	

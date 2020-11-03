@@ -12,6 +12,7 @@ public class TotalPeriodo extends Estatistica {
 	
 	@Override
 	public float valor() {
+		if (getObservacoes().size() < 2) return 0;
 		if (cacheAtualizado) return valorCache;
 		
 		ArrayList<Medicao> medicoes = new ArrayList<Medicao>(getObservacoes());

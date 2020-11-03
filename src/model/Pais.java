@@ -1,6 +1,6 @@
 package model;
 
-public class Pais {
+public class Pais implements Comparable<Pais>{
 	private String nome;
 	private String codigo;
 	private String slug;
@@ -54,6 +54,11 @@ public class Pais {
 
 	public void setLongitude(float longitude) {
 		this.longitude = longitude;
+	}
+
+	@Override
+	public int compareTo(Pais o) {
+		return slug.compareTo(o.slug);
 	}
 	
 }

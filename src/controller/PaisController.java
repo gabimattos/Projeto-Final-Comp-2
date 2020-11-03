@@ -40,7 +40,7 @@ public class PaisController {
 	}
 	
 	private void carregaPaises() {
-		System.out.println("Baixando países...");
+		System.out.println("Baixando paï¿½ses...");
 		long inicio = new Date().getTime();
 		
 		List<String> countriesSlug = this.getCountriesSlug();
@@ -74,12 +74,15 @@ public class PaisController {
 			int baixado = countriesSlug.indexOf(slug)+1;
 			
 			int porcentagem = (int) (baixado/((float)total)*100);
-			System.out.printf("Progresso %d/%d(%d%%) de países\n", baixado, total, porcentagem);
+			System.out.printf("Progresso %d/%d(%d%%) de paï¿½ses\n", baixado, total, porcentagem);
+//			if (slug.equals("puerto-rico")) {
+//				break;
+//			}
 		}
 		long fim = new Date().getTime();
 		float duracao = (float)(fim - inicio)/1000.0f;
 		
-		System.out.printf("Países baixados em %.2f segundos\n", duracao);
+		System.out.printf("Paï¿½ses baixados em %.2f segundos\n", duracao);
 		this.setPaises(paises);
 	}
 	
