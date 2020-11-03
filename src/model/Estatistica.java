@@ -46,10 +46,10 @@ public abstract class Estatistica implements Comparable<Estatistica>{
 	
 	@Override
 	public int compareTo(Estatistica o) {
-		return Float.compare(this.valor(), o.valor());
+		return Float.compare(o.valor(), this.valor());
 	}
 	
-	public String toCSV() {
-		return nome + "," + valor();
+	public String toTSV() {
+		return nome + "\t" + valor();
 	}
 }
