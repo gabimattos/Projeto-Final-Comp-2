@@ -104,19 +104,22 @@ public class EstatisticaController {
 		}*/
 		
 		/**
-		 * Recebe uma lista de string que será escrita no arquivo, o caminho do arquivo
+		 * Recebe uma lista de estatisticas que será escrita no arquivo, o caminho do arquivo
 		 * e escreve cada conteúdo da lista em uma arquivo, pulando linha a cada nova posição.
 		 * 
 		 * @param data Dados que serão escritos no arquivo.
 		 * @param path Caminho do arquivo.
 		 * @throws IOException Exceção de falha na escrita do arquivo.
 		 */
-		public void write(List <String> data, String path) throws IOException {
+		public void write(List <Estatistica> data, String path) throws IOException {
+			String header = "País	Valor";
+			FileWriter writer = new FileWriter(path);
+			writer.write(header + System.lineSeparator());
 			
-			FileWriter writer = new FileWriter(path); 
-			for(String str: data) {
-			  writer.write(str + System.lineSeparator());
+			for (Estatistica e : data) {
+				writer.write(e.toCSV() + System.lineSeparator());
 			}
+
 			writer.close();
 
 		}
