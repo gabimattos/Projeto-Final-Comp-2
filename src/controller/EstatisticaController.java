@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +11,7 @@ import controller.estatisticas.*;
 
 import model.*;
 
-public class ControllerEstatistica {
+public class EstatisticaController {
 		public List<Estatistica> rankingMaiorValor (List <Medicao> dadosTotal, LocalDateTime inicio, LocalDateTime fim){
 			List <Estatistica> rankingMaiorValor = new ArrayList<>();
 			
@@ -100,5 +102,23 @@ public class ControllerEstatistica {
 			List <Estatistica> rankingLocaisProximos;
 			
 		}*/
+		
+		/**
+		 * Recebe uma lista de string que será escrita no arquivo, o caminho do arquivo
+		 * e escreve cada conteúdo da lista em uma arquivo, pulando linha a cada nova posição.
+		 * 
+		 * @param data Dados que serão escritos no arquivo.
+		 * @param path Caminho do arquivo.
+		 * @throws IOException Exceção de falha na escrita do arquivo.
+		 */
+		public void write(List <String> data, String path) throws IOException {
+			
+			FileWriter writer = new FileWriter(path); 
+			for(String str: data) {
+			  writer.write(str + System.lineSeparator());
+			}
+			writer.close();
+
+		}
 		
 }
