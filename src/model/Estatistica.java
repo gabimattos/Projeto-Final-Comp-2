@@ -49,7 +49,7 @@ public abstract class Estatistica implements Comparable<Estatistica>{
 		return Float.compare(this.valor(), o.valor());
 	}
 	
-	public String toCSV() {
-		return nome + "," + valor();
+	public String toTSV() {
+		return nome + "\t" + valor();
 	}
 }
