@@ -48,4 +48,8 @@ public abstract class Estatistica implements Comparable<Estatistica>{
 	public int compareTo(Estatistica o) {
 		return Float.compare(this.valor(), o.valor());
 	}
+	
+	public String toCSV() {
+		return nome + "," + valor();
+	}
 }
