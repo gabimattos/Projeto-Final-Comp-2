@@ -1,14 +1,14 @@
 package model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.TreeMap;
 
 public class Consulta implements Serializable {
 	private static final long serialVersionUID = 6523835329789813037L;
 	
-	private LocalDateTime inicioPeriodo;
-	private LocalDateTime fimPeriodo;
+	private LocalDate inicioPeriodo;
+	private LocalDate fimPeriodo;
 	
 	private TreeMap<StatusCaso, Boolean> numeroDe = new TreeMap<>();
 	private TreeMap<StatusCaso, Boolean> crescimentoDe = new TreeMap<>();
@@ -31,19 +31,19 @@ public class Consulta implements Serializable {
 		status.put(key, !b);
 	}
 	
-	public LocalDateTime getInicioPeriodo() {
+	public LocalDate getInicioPeriodo() {
 		return inicioPeriodo;
 	}
 
-	public void setInicioPeriodo(LocalDateTime inicioPeriodo) {
+	public void setInicioPeriodo(LocalDate inicioPeriodo) {
 		this.inicioPeriodo = inicioPeriodo;
 	}
 
-	public LocalDateTime getFimPeriodo() {
+	public LocalDate getFimPeriodo() {
 		return fimPeriodo;
 	}
 
-	public void setFimPeriodo(LocalDateTime fimPeriodo) {
+	public void setFimPeriodo(LocalDate fimPeriodo) {
 		this.fimPeriodo = fimPeriodo;
 	}
 

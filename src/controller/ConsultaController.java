@@ -1,12 +1,17 @@
 package controller;
 
 import java.io.*;
-import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
+
+import javax.swing.text.DateFormatter;
 
 import model.*;
 
-/** Classe controller do histórico de consultas.
+/** Classe controller do histï¿½rico de consultas.
  * 
  * @author Raphael Mesquita &lt;raphafm.rf@gmail.com&gt;
  */
@@ -28,7 +33,7 @@ public class ConsultaController {
 	
 	
 	/**
-	 * Atualiza a consulta atual em termos do número de casos, recuperados ou mortos.
+	 * Atualiza a consulta atual em termos do nï¿½mero de casos, recuperados ou mortos.
 	 * <p>
 	 * 	Recebe o nome da JCheckBox e nega seu boolean associado.
 	 * </p>
@@ -74,7 +79,7 @@ public class ConsultaController {
 	/**
 	 * Atualiza a consulta atual em termos de mortalidade.
 	 * <p>
-	 * 	Nega o boolean associado à mortalidade na consulta atual.
+	 * 	Nega o boolean associado ï¿½ mortalidade na consulta atual.
 	 * </p>
 	 */
 	public void atualizaMortalidade() {
@@ -84,9 +89,9 @@ public class ConsultaController {
 	}
 	
 	/**
-	 * Atualiza a consulta atual em termos de locais mais próximos.
+	 * Atualiza a consulta atual em termos de locais mais prï¿½ximos.
 	 * <p>
-	 * 	Nega o boolean associado aos locais mais próximos na consulta atual.
+	 * 	Nega o boolean associado aos locais mais prï¿½ximos na consulta atual.
 	 * </p>
 	 */
 	public void atualizaLocaisMaisProximos() {
@@ -96,18 +101,27 @@ public class ConsultaController {
 	}
 	
 	/**
-	 * Atualiza a consulta atual em termos de período inicial ou final.
+	 * Atualiza a consulta atual em termos de perï¿½odo inicial ou final.
 	 * <p>
-	 * 	Recebe o nome da label associada ao período inicial ou final e a data. 
-	 * 	Em seguida converte a data em <code>LocalDateTime</code> e atribui ao período associado à label.
+	 * 	Recebe o nome da label associada ao perï¿½odo inicial ou final e a data. 
+	 * 	Em seguida converte a data em <code>LocalDateTime</code> e atribui ao perï¿½odo associado ï¿½ label.
 	 * </p>
-	 * @param labelPeriodo O nome da label associada ao período inicial ou final
-	 * @param data A data do período.
+	 * @param labelPeriodo O nome da label associada ao perï¿½odo inicial ou final
+	 * @param data A data do perï¿½odo.
 	 */
 	public void atualizaPeriodo(String labelPeriodo, String data) {
+		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		LocalDate periodo = null;
+		
+		try {
+			periodo = LocalDate.parse(data, formato);
+		} catch (DateTimeParseException e) {
+			 System.out.println("Data invÃ¡lida");
+			 e.printStackTrace();
+		}
+		
 		Consulta consultaAtual = this.consultas.get(indexAtual);
 		
-		LocalDateTime periodo = LocalDateTime.parse(data);
 		switch(labelPeriodo) {
 			case "Data Inicial":
 				consultaAtual.setInicioPeriodo(periodo);
@@ -119,7 +133,7 @@ public class ConsultaController {
 	}
 	
 	/**
-	 * Carrega, a partir do arquivo "consultas.ser", todas as consultas salvas até o momento.
+	 * Carrega, a partir do arquivo "consultas.ser", todas as consultas salvas atï¿½ o momento.
 	 */
 	@SuppressWarnings("unchecked")
 	public void carregaConsultas() {
@@ -127,23 +141,23 @@ public class ConsultaController {
 			this.setConsultas((List<Consulta>)oos.readObject());
 			
 		} catch (FileNotFoundException e) {
-			System.err.println("Arquivo \"consultas.ser\" não encontrado em resources/");
+			System.err.println("Arquivo \"consultas.ser\" nï¿½o encontrado em resources/");
 		} catch (IOException e) {
 			System.err.println("Problema ao escrever arquivo. Verifique sua integridade.");
 		} catch (ClassNotFoundException e) {
-			System.err.println("Classe \"Consulta\" não existente.");
+			System.err.println("Classe \"Consulta\" nï¿½o existente.");
 		}
 	}
 	
 	/**
-	 * Guarda o histórico de consultas realizadas no arquivo "consultas.ser".
+	 * Guarda o histï¿½rico de consultas realizadas no arquivo "consultas.ser".
 	 */
 	public void guardarConsultas() {
 		try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("resources"+File.separator+"consultas.ser"))) {
 			oos.writeObject(this.getConsultas());
 			
 		} catch (FileNotFoundException e) {
-			System.err.println("Arquivo \"consultas.ser\" não encontrado em resources/");
+			System.err.println("Arquivo \"consultas.ser\" nï¿½o encontrado em resources/");
 		} catch (IOException e) {
 			System.err.println("Problema ao escrever arquivo. Verifique sua integridade.");
 		}
