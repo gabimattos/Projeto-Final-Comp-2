@@ -1,11 +1,8 @@
 package controller;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import controller.estatisticas.*;
 
@@ -126,6 +123,29 @@ public class EstatisticaController {
 
 		}
 		
+		public boolean toTSV(List<Estatistica> dados, String nome) {
+			File pasta = new File("rankings");
+			File arquivo = new File(pasta, nome + ".tsv");
+			Collections.sort(dados);
+			
+			try {
+				if (!pasta.exists()) pasta.mkdir();
+				arquivo.createNewFile();
+				PrintStream out = new PrintStream(arquivo);
+				
+				out.println("Pais\tValor");
+				for (Estatistica dado : dados) {
+					out.println(dado.toTSV());
+				}
+				out.close();
+				
+			} catch(IOException e) {
+				return false;
+			}
+			
+			return true;
+		}
+		
 		public static void main(String[] args) {
 			EstatisticaController controler = new EstatisticaController();
 			LocalDateTime inicio = LocalDateTime.parse("2020-01-01T00:00:01");
@@ -143,6 +163,7 @@ public class EstatisticaController {
 			for (Estatistica est : lista) {
 				System.out.println(est.toTSV());
 			}
+			System.out.println(controler.toTSV(lista, "teste"));
 		}
 		
 }
