@@ -75,6 +75,7 @@ public class PaisController {
 			
 			int porcentagem = (int) (baixado/((float)total)*100);
 			System.out.printf("Progresso %d/%d(%d%%) de pa�ses\n", baixado, total, porcentagem);
+
 			if (slug.equals("greenland")) {
 				break;
 			}

@@ -1,6 +1,9 @@
 package model;
 
-public class Pais implements Comparable<Pais>{
+import java.io.Serializable;
+
+public class Pais implements Comparable<Pais>, Serializable{
+	private static final long serialVersionUID = 2000L;
 	private String nome;
 	private String codigo;
 	private String slug;

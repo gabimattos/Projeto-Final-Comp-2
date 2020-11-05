@@ -13,7 +13,7 @@ public class EstatisticaController {
 			new EstatisticaController();
 	
 	private EstatisticaController() { };
-
+	
 	public List<Estatistica> rankingMaiorValor (List <Medicao> dadosTotal,
 			LocalDateTime inicio, LocalDateTime fim){
 		Collections.sort(dadosTotal);
@@ -22,7 +22,7 @@ public class EstatisticaController {
 		TotalPeriodo currEstatistica = null;
 		
 		for (int i = 0; i<dadosTotal.size(); i++) {
-			//Atualiza qual pais está sendo lido.
+			//Atualiza qual pais est� sendo lido.
 			if (dadosTotal.get(i).getPais() != currPais) {
 				if (currEstatistica != null) rankingMaiorValor.add(currEstatistica);
 				currPais = dadosTotal.get(i).getPais();
@@ -31,7 +31,7 @@ public class EstatisticaController {
 			//pega todas as medicoes de um pais nesse intervalo de tempo
 			if (dadosTotal.get(i).getMomento().isAfter(inicio) && 
 					dadosTotal.get(i).getMomento().isBefore(fim)) {
-				currEstatistica.inclui(dadosTotal.get(i)); //inclui medições  dentro do periodo definido.
+				currEstatistica.inclui(dadosTotal.get(i)); //inclui medi��es  dentro do periodo definido.
 			}
 		}
 		Collections.sort(rankingMaiorValor);
@@ -78,25 +78,24 @@ public class EstatisticaController {
 		return rankingMortalidade;
 	}
 	
-	
-	
-	
 	public List<Estatistica> rankingCrescimento (List <Medicao> dadosCasos,
 			LocalDateTime inicio, LocalDateTime fim){
+		Collections.sort(dadosCasos);
 		List <Estatistica> rankingCrescimento = new ArrayList<>();
+		Pais currPais = null;
+		CrescimentoPeriodo currEstatistica = null;
 		
 		for (int i = 0; i<dadosCasos.size(); i++) {
+			//Atualiza qual pais est� sendo lido.
+			if (dadosCasos.get(i).getPais() != currPais) {
+				if (currEstatistica != null) rankingCrescimento.add(currEstatistica);
+				currPais = dadosCasos.get(i).getPais();
+				currEstatistica = new CrescimentoPeriodo(currPais.getNome());
+			}
 			//pega todas as medicoes de um pais nesse intervalo de tempo
-			if (dadosCasos.get(i).getMomento().equals(inicio)) {
-				CrescimentoPeriodo estatistica = new CrescimentoPeriodo(dadosCasos.get(i).getPais().getNome());
-				estatistica.inclui(dadosCasos.get(i)); //inclui a data de inicio da medicao
-				while (dadosCasos.get(i).getPais().getNome().equals(estatistica.getNome()) 
-						&& dadosCasos.get(i).getMomento().isBefore(fim)) {
-					i++;
-
-				}
-				estatistica.inclui(dadosCasos.get(i-1));
-				rankingCrescimento.add(estatistica); //inclui a estatistica do pais no ranking
+			if (dadosCasos.get(i).getMomento().isAfter(inicio) && 
+					dadosCasos.get(i).getMomento().isBefore(fim)) {
+				currEstatistica.inclui(dadosCasos.get(i)); //inclui medi��es  dentro do periodo definido.
 			}
 		}
 		Collections.sort(rankingCrescimento);
@@ -104,29 +103,21 @@ public class EstatisticaController {
 	}
 	
   
-	/*public List <Estatistica> rankingLocaisProximos (List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
+	public List <Estatistica> rankingLocaisProximos (List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
 		List <Estatistica> rankingCrescimento = rankingCrescimento (dadosCasos, inicio, fim);
-		List <Estatistica> rankingLocaisProximos;
+		Estatistica maiorCrescimento = rankingCrescimento.get(0);
+		List <Estatistica> rankingLocaisProximos = null;
 		
-	}*/
-	
-	/**
-	 * Recebe uma lista de string que ser� escrita no arquivo, o caminho do arquivo
-	 * e escreve cada conte�do da lista em uma arquivo, pulando linha a cada nova posi��o.
-	 * 
-	 * @param data Dados que ser�o escritos no arquivo.
-	 * @param path Caminho do arquivo.
-	 * @throws IOException Exce��o de falha na escrita do arquivo.
-	 */
-	public void write(List <String> data, String path) throws IOException {
-		
-		FileWriter writer = new FileWriter(path); 
-		for(String str: data) {
-		  writer.write(str + System.lineSeparator());
+		for (Estatistica e : rankingCrescimento) {
+			Distancia currDist = null;
+			currDist.inclui(maiorCrescimento.getObservacoes().get(0));
+			currDist.inclui(e.getObservacoes().get(0));
+			rankingLocaisProximos.add(currDist);
 		}
-		writer.close();
-
+		Collections.sort(rankingLocaisProximos);
+		return rankingLocaisProximos;
 	}
+	
 	
 	public boolean toTSV(List<Estatistica> dados, String nome) {
 		File pasta = new File("rankings");
@@ -162,7 +153,7 @@ public class EstatisticaController {
 			System.out.println(e.getMessage());
 		}
 		ArrayList<Medicao> casos = new ArrayList<>(cont.getConfirmados());
-		ArrayList<Estatistica> lista = new ArrayList<>(controler.rankingMaiorValor(casos, inicio, fim));
+		ArrayList<Estatistica> lista = new ArrayList<>(controler.rankingCrescimento(casos, inicio, fim));
 		
 		System.out.println(lista.size());
 		for (Estatistica est : lista) {
@@ -172,3 +163,4 @@ public class EstatisticaController {
 	}
 	
 }
+
