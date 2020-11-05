@@ -44,36 +44,29 @@ public class EstatisticaController {
 	
 	public List<Estatistica> rankingMortalidade (List <Medicao> dadosMortes,
 			List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
+		
+		List <Medicao> dados = new ArrayList<>(dadosCasos);
+		dados.addAll(dadosMortes);
+		Collections.sort(dados);
 		List <Estatistica> rankingMortalidade = new ArrayList<>();
+		Pais currPais = null;
+		MortalidadePeriodo currEstatisticaMortalidade = null;
 
-		for (int i = 0; i<dadosMortes.size(); i++) {
+		for (int i = 0; i<dados.size(); i++) {
+			//Atualiza qual pais está sendo lido.
+			if (currPais == null || !dados.get(i).getPais().getSlug()
+					.equals(currPais.getSlug())) {
+				if (currEstatisticaMortalidade != null) rankingMortalidade.add(currEstatisticaMortalidade);
+				currPais = dados.get(i).getPais();
+				currEstatisticaMortalidade = new MortalidadePeriodo(currPais.getNome());
+			}
 			//pega todas as medicoes de um pais nesse intervalo de tempo
-			if (dadosMortes.get(i).getMomento().equals(inicio)) {
-				MortalidadePeriodo estatistica = new MortalidadePeriodo(dadosMortes.get(i).getPais().getNome());
-				estatistica.inclui(dadosMortes.get(i)); //inclui a data de inicio da medicao
-				while (dadosMortes.get(i).getPais().getNome().equals(estatistica.getNome()) 
-						&& dadosMortes.get(i).getMomento().isBefore(fim)) {
-					i++;
-
-				}
-				estatistica.inclui(dadosMortes.get(i-1));
-				rankingMortalidade.add(estatistica); //inclui a estatistica do pais no ranking
+			if (dados.get(i).getMomento().isAfter(inicio) && 
+					dados.get(i).getMomento().isBefore(fim)) {
+				currEstatisticaMortalidade.inclui(dados.get(i)); //inclui medições  dentro do periodo definido.
 			}
 		}
-		for (int i = 0; i<dadosCasos.size(); i++) {
-			//pega todas as medicoes de um pais nesse intervalo de tempo
-			if (dadosCasos.get(i).getMomento().equals(inicio)) {
-				MortalidadePeriodo estatistica = new MortalidadePeriodo(dadosCasos.get(i).getPais().getNome());
-				estatistica.inclui(dadosCasos.get(i)); //inclui a data de inicio da medicao
-				while (dadosCasos.get(i).getPais().getNome().equals(estatistica.getNome()) 
-						&& dadosCasos.get(i).getMomento().isBefore(fim)) {
-					i++;
 
-				}
-				estatistica.inclui(dadosCasos.get(i-1));
-				rankingMortalidade.add(estatistica); //inclui a estatistica do pais no ranking
-			}
-		}
 		Collections.sort(rankingMortalidade);
 		return rankingMortalidade;
 	}
@@ -106,10 +99,10 @@ public class EstatisticaController {
 	public List <Estatistica> rankingLocaisProximos (List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
 		List <Estatistica> rankingCrescimento = rankingCrescimento (dadosCasos, inicio, fim);
 		Estatistica maiorCrescimento = rankingCrescimento.get(0);
-		List <Estatistica> rankingLocaisProximos = null;
+		List <Estatistica> rankingLocaisProximos = new ArrayList<>();
 		
 		for (Estatistica e : rankingCrescimento) {
-			Distancia currDist = null;
+			Distancia currDist = new Distancia(e.getNome());
 			currDist.inclui(maiorCrescimento.getObservacoes().get(0));
 			currDist.inclui(e.getObservacoes().get(0));
 			rankingLocaisProximos.add(currDist);
@@ -153,7 +146,8 @@ public class EstatisticaController {
 			System.out.println(e.getMessage());
 		}
 		ArrayList<Medicao> casos = new ArrayList<>(cont.getConfirmados());
-		ArrayList<Estatistica> lista = new ArrayList<>(controler.rankingCrescimento(casos, inicio, fim));
+		ArrayList<Medicao> mortos = new ArrayList<>(cont.getMortos());
+		ArrayList<Estatistica> lista = new ArrayList<>(controler.rankingLocaisProximos(casos, inicio, fim));
 		
 		System.out.println(lista.size());
 		for (Estatistica est : lista) {

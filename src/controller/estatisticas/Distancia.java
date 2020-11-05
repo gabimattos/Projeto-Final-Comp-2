@@ -41,5 +41,10 @@ public class Distancia extends Estatistica {
 		
 		return (float) distancia;
 	}
+	
+	@Override
+	public int compareTo(Estatistica o) {
+		return Float.compare(this.valor(), o.valor());
+	}
 
 }

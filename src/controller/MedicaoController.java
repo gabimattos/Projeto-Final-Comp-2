@@ -34,20 +34,18 @@ public class MedicaoController {
 	}
 
 	private void carregaMedicoes() {
-		File confirmadosFile = new File("medicoes/" + LocalDate.now() + " - confirmados.ser");
-		File mortosFile = new File("medicoes/" + LocalDate.now() + " - mortos.ser");
-		File recuperadosFile = new File("medicoes/" + LocalDate.now() + " - recuperados.ser");
+		File pasta = new File("cache/medicoes/");
+		File confirmadosFile = new File("cache/medicoes/" + LocalDate.now() + " - confirmados.ser");
+		File mortosFile = new File("cache/medicoes/" + LocalDate.now() + " - mortos.ser");
+		File recuperadosFile = new File("cache/medicoes/" + LocalDate.now() + " - recuperados.ser");
+		
+		if(!pasta.exists()) pasta.mkdir();
 
 		if (confirmadosFile.isFile() && mortosFile.isFile() &&  recuperadosFile.isFile()) {
 			System.out.println("Carregando dados j� baixados.");
-			this.setConfirmados(deserialize(recuperadosFile));
+			this.setConfirmados(deserialize(confirmadosFile));
 			this.setMortos(deserialize(mortosFile));
 			this.setRecuperados(deserialize(recuperadosFile));
-			for (Medicao m : this.getConfirmados()) {
-				if (m.getPais().getSlug().equals("brazil")) {
-					System.out.println(m.getCasos());
-				}
-			}
 		}
 
 		else {
@@ -87,7 +85,7 @@ public class MedicaoController {
 
 				int porcentagem = (int) (baixado / ((float) total) * 100);
 				System.out.printf("Progresso %d/%d(%d%%) de medi��es de pa�ses.\n", baixado, total, porcentagem);
-				if (pais.getSlug().equals("greenland")) {
+				if (pais.getSlug().equals("comoros")) {
 					break;
 				}
 			}
@@ -95,12 +93,6 @@ public class MedicaoController {
 			this.setConfirmados(confirmados);
 			this.setMortos(mortos);
 			this.setRecuperados(recuperados);
-			
-			for (Medicao m : this.getConfirmados()) {
-				if (m.getPais().getSlug().equals("brazil")) {
-					System.out.println(m.getCasos());
-				}
-			}
 			
 			serialize(confirmadosFile, this.getConfirmados());
 			serialize(mortosFile, this.getMortos());
