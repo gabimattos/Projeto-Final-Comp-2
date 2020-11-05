@@ -32,9 +32,18 @@ public class TelaInicial {
     private JTextField dataInicial;
     private JTextField dataFinal;
     
-    private JLabel headerLabel;
-    private JLabel statusLabel;
-    private JPanel controlPanel;
+    private JLabel status1;
+    private JLabel status2;
+    private JLabel status3;
+    private JLabel status4;
+    private JLabel status5;
+    private JLabel status6;
+    private JLabel status7;
+    private JLabel statusGeral;
+    
+    private JFrame erro;
+    private JLabel lblerror;
+
     
     public TelaInicial(){
         initWindow();
@@ -50,30 +59,75 @@ public class TelaInicial {
     public class AcaoBotaoEnviar implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            try (PrintStream out = new PrintStream(new FileOutputStream("mensagem.txt"))){
-                out.print(dataInicial.getText());
-                out.print(dataFinal.getText());
+        	
+        	if(status1.getText().equals("numcasos0 ") && status2.getText().equals("numrecuperados0 ")
+        	&& status3.getText().equals("nummortes0 ") && status4.getText().equals("crescasos0 ")
+        	&& status5.getText().equals("cresrecuperados0 ") && status6.getText().equals("cresmortes0 ")
+        	&& status7.getText().equals("mortalidade0 ")) {
+        		
+        		
+        		erro = new JFrame("ERRO");
+                erro.setSize(400, 200);
                 
-                System.out.println(dataInicial.getText());
-                System.out.println(dataFinal.getText());
-            }
-            catch (FileNotFoundException fnfe) {
-                System.out.println("Não foi possível gravar no arquivo mensagem.txt");
-            }
+                lblerror = new JLabel("ERRO!\n Nenhuma opção selecionada!");
+                erro.add(lblerror);
+                erro.setVisible(true);
+        	}
+        	else if(dataInicial.getText().equals("")|| dataFinal.getText().equals("")) {
+        		erro = new JFrame("ERRO");
+                erro.setSize(400, 200);
+              
+                lblerror = new JLabel("ERRO!\n Alguma data não foi preenchida!");
+                erro.add(lblerror);
+                erro.setVisible(true);
+        	}
+        	
+        	else {
+        	
+	            try (PrintStream out = new PrintStream(new FileOutputStream("mensagem.txt"))){
+	                out.print(dataInicial.getText());
+	                out.print(dataFinal.getText());
+	                out.print(status1.getText());
+	                out.print(status2.getText());
+	                out.print(status3.getText());
+	                out.print(status4.getText());
+	                out.print(status5.getText());
+	                out.print(status6.getText());
+	                out.print(status7.getText());
+	                
+	                System.out.println(dataInicial.getText());
+	                System.out.println(dataFinal.getText());
+	                System.out.println(status1.getText());
+	                System.out.println(status2.getText());
+	                System.out.println(status3.getText());
+	                System.out.println(status4.getText());
+	                System.out.println(status5.getText());
+	                System.out.println(status6.getText());
+	                System.out.println(status7.getText());
+	            }
+	            catch (FileNotFoundException fnfe) {
+	                System.out.println("Não foi possível gravar no arquivo mensagem.txt");
+	            }
+        	} 
         }
     }
     
     private void initWindow() {
     	
     	 janela = new JFrame("Coronavírus no mundo.");
-         janela.setSize(800, 600);
+         janela.setSize(900, 600);
          
-        
-         
-         statusLabel = new JLabel("",JLabel.CENTER);
-         statusLabel.setSize(350,100);
-         janelinha = new JPanel();
-         janelinha.setLayout(new FlowLayout());
+         statusGeral = new JLabel("",JLabel.CENTER);
+         statusGeral.setSize(350,100);
+               
+         status1 = new JLabel("numcasos0 ");
+         status2 = new JLabel("numrecuperados0 ");
+         status3 = new JLabel("nummortes0 ");
+         status4 = new JLabel("crescasos0 ");   
+         status5 = new JLabel("cresrecuperados0 ");
+         status6 = new JLabel("cresmortes0 ");
+         status7 = new JLabel("mortalidade0 ");
+
          janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          
          btnEnviar = new JButton("Enviar");
@@ -100,46 +154,62 @@ public class TelaInicial {
          cbOpcao5.setMnemonic(KeyEvent.VK_5);
          cbOpcao6.setMnemonic(KeyEvent.VK_6);
          cbOpcao7.setMnemonic(KeyEvent.VK_7);
+         
+         
          cbOpcao1.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-               statusLabel.setText("Número de casos: " + (e.getStateChange()==1?"checked":"unchecked"));
-               System.out.println(statusLabel.getText());
+            	
+            	status1.setText("numcasos" + (e.getStateChange()==1?"1 ":"0 "));
+            	statusGeral.setText("Número de casos: " + (e.getStateChange()==1?"checked":"unchecked"));
+            	//System.out.println(status1.getText());
             }
          });
          cbOpcao2.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-               statusLabel.setText("Número de recuperados: " + (e.getStateChange()==1?"checked":"unchecked"));
-               System.out.println(statusLabel.getText());
+            
+            	status2.setText("numrecuperados" + (e.getStateChange()==1?"1 ":"0 "));
+            	statusGeral.setText("Número de recuperados: " + (e.getStateChange()==1?"checked":"unchecked"));
+            	//System.out.println(status2.getText());
             }
          });
          cbOpcao3.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-               statusLabel.setText("Número de mortes "+ (e.getStateChange()==1?"checked":"unchecked"));
-               System.out.println(statusLabel.getText());
+            
+            	status3.setText("nummortes"+ (e.getStateChange()==1?"1 ":"0 "));
+            	statusGeral.setText("Número de mortes: " + (e.getStateChange()==1?"checked":"unchecked"));
+            	//System.out.println(status3.getText());
             }
          });
          cbOpcao4.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-               statusLabel.setText("Crescimento de casos " + (e.getStateChange()==1?"checked":"unchecked"));
-               System.out.println(statusLabel.getText());
+            	
+            	status4.setText("crescasos" + (e.getStateChange()==1?"1 ":"0 "));
+            	statusGeral.setText("Crescimento de casos: " + (e.getStateChange()==1?"checked":"unchecked"));
+               //System.out.println(status4.getText());
             }
          });
          cbOpcao5.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-               statusLabel.setText("Crescimento de recuperados "+ (e.getStateChange()==1?"checked":"unchecked"));
-               System.out.println(statusLabel.getText());
+            	
+            	status5.setText("cresrecuperados"+ (e.getStateChange()==1?"1 ":"0 "));
+            	statusGeral.setText("Crescimento de recuperados: " + (e.getStateChange()==1?"checked":"unchecked"));
+               //System.out.println(status5.getText());
             }
          });
          cbOpcao6.addItemListener(new ItemListener() {
              public void itemStateChanged(ItemEvent e) {
-                statusLabel.setText("Crescimento de mortes "+ (e.getStateChange()==1?"checked":"unchecked"));
-                System.out.println(statusLabel.getText());
+       
+            	 status6.setText("cresmortes"+ (e.getStateChange()==1?"1":"0"));
+            	 statusGeral.setText("Crescimento de recuperados: " + (e.getStateChange()==1?"checked":"unchecked"));
+                //System.out.println(status6.getText());
              }
           });
          cbOpcao7.addItemListener(new ItemListener() {
              public void itemStateChanged(ItemEvent e) {
-                statusLabel.setText("Taxa de mortalidade "+ (e.getStateChange()==1?"checked":"unchecked"));
-                System.out.println(statusLabel.getText());
+            	 
+            	 status7.setText("mortalidade"+ (e.getStateChange()==1?"1":"0"));
+            	 statusGeral.setText("Taxa de mortalidade: " + (e.getStateChange()==1?"checked":"unchecked"));
+                
              }
           });
          
@@ -203,18 +273,24 @@ public class TelaInicial {
          janela.add(BorderLayout.NORTH, mb);
          janela.add(conteinerRanking, BorderLayout.WEST);
          
-         headerLabel = new JLabel("", JLabel.CENTER);
-         statusLabel = new JLabel("",JLabel.CENTER);
-         statusLabel.setSize(350,100);
-         controlPanel = new JPanel();
-         controlPanel.setLayout(new FlowLayout());
-         janela.add(headerLabel);
-         janela.add(controlPanel);
-         janela.add(statusLabel);
+
+         statusGeral = new JLabel("",JLabel.CENTER);
+         statusGeral.setSize(350,100);
+         
+  
+                
+         janela.add(status1);   
+         janela.add(status2);   
+         janela.add(status3);   
+         janela.add(status4);   
+         janela.add(status5);   
+         janela.add(status6);   
+         janela.add(status7);
+         janela.add(statusGeral);
          
          janela.setVisible(true);
     }
 
-    }
+}
 
 
