@@ -1,261 +1,174 @@
 package controller;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import controller.estatisticas.*;
 
 import model.*;
 
 public class EstatisticaController {
-<<<<<<< HEAD
-		public List<Estatistica> rankingMaiorValor (List <Medicao> dadosTotal, LocalDateTime inicio, LocalDateTime fim){
-			List <Estatistica> rankingMaiorValor = new ArrayList<>();
-			
-			for (int i = 0; i<dadosTotal.size(); i++) {
-				//pega todas as medicoes de um pais nesse intervalo de tempo
-				if (dadosTotal.get(i).getMomento().equals(inicio)) {
-					TotalPeriodo estatistica = new TotalPeriodo(dadosTotal.get(i).getPais().getNome());
-					estatistica.inclui(dadosTotal.get(i)); //inclui a data de inicio da medicao
-					while (dadosTotal.get(i).getPais().getNome().equals(estatistica.getNome()) 
-							&& dadosTotal.get(i).getMomento().isBefore(fim)) {
-						i++;
+	private static final EstatisticaController estatisticaController =
+			new EstatisticaController();
+	
+	private EstatisticaController() { };
 
-					}
-					estatistica.inclui(dadosTotal.get(i-1));
-					rankingMaiorValor.add(estatistica); //inclui a estatistica do pais no ranking
-				}
+	public List<Estatistica> rankingMaiorValor (List <Medicao> dadosTotal,
+			LocalDateTime inicio, LocalDateTime fim){
+		Collections.sort(dadosTotal);
+		List <Estatistica> rankingMaiorValor = new ArrayList<>();
+		Pais currPais = null;
+		TotalPeriodo currEstatistica = null;
+		
+		for (int i = 0; i<dadosTotal.size(); i++) {
+			//Atualiza qual pais está sendo lido.
+			if (dadosTotal.get(i).getPais() != currPais) {
+				if (currEstatistica != null) rankingMaiorValor.add(currEstatistica);
+				currPais = dadosTotal.get(i).getPais();
+				currEstatistica = new TotalPeriodo(currPais.getNome());
 			}
-			Collections.sort(rankingMaiorValor);
-			return rankingMaiorValor;
+			//pega todas as medicoes de um pais nesse intervalo de tempo
+			if (dadosTotal.get(i).getMomento().isAfter(inicio) && 
+					dadosTotal.get(i).getMomento().isBefore(fim)) {
+				currEstatistica.inclui(dadosTotal.get(i)); //inclui medições  dentro do periodo definido.
+			}
+		}
+		Collections.sort(rankingMaiorValor);
+		return rankingMaiorValor;
+	}
+	
+	public static EstatisticaController getInstance() {
+		return EstatisticaController.estatisticaController;
+	}
+	
+	public List<Estatistica> rankingMortalidade (List <Medicao> dadosMortes,
+			List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
+		
+		Collections.sort(dadosMortes);
+		Collections.sort(dadosCasos);
+		List <Estatistica> rankingMortalidade = new ArrayList<>();
+		Pais currPais = null;
+		MortalidadePeriodo currEstatisticaMortalidade = null;
+		TotalPeriodo currEstatisticaTotal = null;
+
+		for (int i = 0; i<dadosMortes.size(); i++) {
+			//Atualiza qual pais está sendo lido.
+			if (dadosMortes.get(i).getPais() != currPais) {
+				if (currEstatisticaMortalidade != null) rankingMortalidade.add(currEstatisticaMortalidade);
+				currPais = dadosMortes.get(i).getPais();
+				currEstatisticaMortalidade = new MortalidadePeriodo(currPais.getNome());
+			}
+			//pega todas as medicoes de um pais nesse intervalo de tempo
+			if (dadosMortes.get(i).getMomento().isAfter(inicio) && 
+					dadosMortes.get(i).getMomento().isBefore(fim)) {
+				currEstatisticaMortalidade.inclui(dadosMortes.get(i)); //inclui medições  dentro do periodo definido.
+			}
 		}
 		
-		
-		
-		
-		
-		public List<Estatistica> rankingMortalidade (List <Medicao> dadosMortes, List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
-			List <Estatistica> rankingMortalidade = new ArrayList<>();
-
-			for (int i = 0; i<dadosMortes.size(); i++) {
-				//pega todas as medicoes de um pais nesse intervalo de tempo
-				if (dadosMortes.get(i).getMomento().equals(inicio)) {
-					MortalidadePeriodo estatistica = new MortalidadePeriodo(dadosMortes.get(i).getPais().getNome());
-					estatistica.inclui(dadosMortes.get(i)); //inclui a data de inicio da medicao
-					while (dadosMortes.get(i).getPais().getNome().equals(estatistica.getNome()) 
-							&& dadosMortes.get(i).getMomento().isBefore(fim)) {
-						i++;
-
-					}
-					estatistica.inclui(dadosMortes.get(i-1));
-					rankingMortalidade.add(estatistica); //inclui a estatistica do pais no ranking
-				}
+		for (int i = 0; i<dadosCasos.size(); i++) {
+			//Atualiza qual pais está sendo lido.
+			if (dadosCasos.get(i).getPais() != currPais) {
+				if (currEstatisticaTotal != null) rankingMortalidade.add(currEstatisticaTotal);
+				currPais = dadosCasos.get(i).getPais();
+				currEstatisticaTotal = new TotalPeriodo(currPais.getNome());
 			}
-			for (int i = 0; i<dadosCasos.size(); i++) {
-				//pega todas as medicoes de um pais nesse intervalo de tempo
-				if (dadosCasos.get(i).getMomento().equals(inicio)) {
-					MortalidadePeriodo estatistica = new MortalidadePeriodo(dadosCasos.get(i).getPais().getNome());
-					estatistica.inclui(dadosCasos.get(i)); //inclui a data de inicio da medicao
-					while (dadosCasos.get(i).getPais().getNome().equals(estatistica.getNome()) 
-							&& dadosCasos.get(i).getMomento().isBefore(fim)) {
-						i++;
-
-					}
-					estatistica.inclui(dadosCasos.get(i-1));
-					rankingMortalidade.add(estatistica); //inclui a estatistica do pais no ranking
-				}
+			//pega todas as medicoes de um pais nesse intervalo de tempo
+			if (dadosCasos.get(i).getMomento().isAfter(inicio) && 
+					dadosCasos.get(i).getMomento().isBefore(fim)) {
+				currEstatisticaTotal.inclui(dadosCasos.get(i)); //inclui medições  dentro do periodo definido.
 			}
-			Collections.sort(rankingMortalidade);
-			return rankingMortalidade;
+		}
+
+		Collections.sort(rankingMortalidade);
+		return rankingMortalidade;
+	}
+	
+	
+	
+	
+	public List<Estatistica> rankingCrescimento (List <Medicao> dadosCasos,
+			LocalDateTime inicio, LocalDateTime fim){
+		Collections.sort(dadosCasos);
+		List <Estatistica> rankingCrescimento = new ArrayList<>();
+		Pais currPais = null;
+		CrescimentoPeriodo currEstatistica = null;
+		
+		for (int i = 0; i<dadosCasos.size(); i++) {
+			//Atualiza qual pais está sendo lido.
+			if (dadosCasos.get(i).getPais() != currPais) {
+				if (currEstatistica != null) rankingCrescimento.add(currEstatistica);
+				currPais = dadosCasos.get(i).getPais();
+				currEstatistica = new CrescimentoPeriodo(currPais.getNome());
+			}
+			//pega todas as medicoes de um pais nesse intervalo de tempo
+			if (dadosCasos.get(i).getMomento().isAfter(inicio) && 
+					dadosCasos.get(i).getMomento().isBefore(fim)) {
+				currEstatistica.inclui(dadosCasos.get(i)); //inclui medições  dentro do periodo definido.
+			}
+		}
+		Collections.sort(rankingCrescimento);
+		return rankingCrescimento;
+	}
+	
+  
+	public List <Estatistica> rankingLocaisProximos (List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
+		List <Estatistica> rankingCrescimento = rankingCrescimento (dadosCasos, inicio, fim);
+		Estatistica maiorCrescimento = rankingCrescimento.get(0);
+		List <Estatistica> rankingLocaisProximos = null;
+		
+		for (Estatistica e : rankingCrescimento) {
+			Distancia currDist = null;
+			currDist.inclui(maiorCrescimento.getObservacoes().get(0));
+			currDist.inclui(e.getObservacoes().get(0));
+			rankingLocaisProximos.add(currDist);
+		}
+		Collections.sort(rankingLocaisProximos);
+		return rankingLocaisProximos;
+	}
+	
+	
+	public boolean toTSV(List<Estatistica> dados, String nome) {
+		File pasta = new File("rankings");
+		File arquivo = new File(pasta, nome + ".tsv");
+		Collections.sort(dados);
+		
+		try {
+			if (!pasta.exists()) pasta.mkdir();
+			arquivo.createNewFile();
+			PrintStream out = new PrintStream(arquivo);
+			
+			out.println("Pais\tValor");
+			for (Estatistica dado : dados) {
+				out.println(dado.toTSV());
+			}
+			out.close();
+			
+		} catch(IOException e) {
+			return false;
 		}
 		
-		
-		
-		
-		public List<Estatistica> rankingCrescimento (List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
-			List <Estatistica> rankingCrescimento = new ArrayList<>();
-			
-			for (int i = 0; i<dadosCasos.size(); i++) {
-				//pega todas as medicoes de um pais nesse intervalo de tempo
-				if (dadosCasos.get(i).getMomento().equals(inicio)) {
-					CrescimentoPeriodo estatistica = new CrescimentoPeriodo(dadosCasos.get(i).getPais().getNome());
-					estatistica.inclui(dadosCasos.get(i)); //inclui a data de inicio da medicao
-					while (dadosCasos.get(i).getPais().getNome().equals(estatistica.getNome()) 
-							&& dadosCasos.get(i).getMomento().isBefore(fim)) {
-						i++;
-
-					}
-					estatistica.inclui(dadosCasos.get(i-1));
-					rankingCrescimento.add(estatistica); //inclui a estatistica do pais no ranking
-				}
-			}
-			Collections.sort(rankingCrescimento);
-			return rankingCrescimento;
+		return true;
+	}
+	
+	public static void main(String[] args) {
+		EstatisticaController controler = EstatisticaController.getInstance();
+		LocalDateTime inicio = LocalDateTime.parse("2020-01-01T00:00:01");
+		LocalDateTime fim = LocalDateTime.parse("2021-01-02T23:59:59");
+		MedicaoController cont = null;
+		try {
+			cont = MedicaoController.getInstance();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
+		ArrayList<Medicao> casos = new ArrayList<>(cont.getConfirmados());
+		ArrayList<Estatistica> lista = new ArrayList<>(controler.rankingCrescimento(casos, inicio, fim));
 		
-	  
-		/*public List <Estatistica> rankingLocaisProximos (List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
-			List <Estatistica> rankingCrescimento = rankingCrescimento (dadosCasos, inicio, fim);
-			List <Estatistica> rankingLocaisProximos;
-			
-		}*/
-		
-		/**
-		 * Recebe uma lista de estatisticas que será escrita no arquivo, o caminho do arquivo
-		 * e escreve cada conteúdo da lista em uma arquivo, pulando linha a cada nova posição.
-		 * 
-		 * @param data Dados que serão escritos no arquivo.
-		 * @param path Caminho do arquivo.
-		 * @throws IOException Exceção de falha na escrita do arquivo.
-		 */
-		public void write(List <Estatistica> data, String path) throws IOException {
-			String header = "País	Valor";
-			FileWriter writer = new FileWriter(path);
-			writer.write(header + System.lineSeparator());
-			
-			for (Estatistica e : data) {
-				writer.write(e.toCSV() + System.lineSeparator());
-			}
-
-			writer.close();
-
-=======
-		public List<Estatistica> rankingMaiorValor (List <Medicao> dadosTotal,
-				LocalDateTime inicio, LocalDateTime fim){
-			Collections.sort(dadosTotal);
-			List <Estatistica> rankingMaiorValor = new ArrayList<>();
-			Pais currPais = null;
-			TotalPeriodo currEstatistica = null;
-			
-			for (int i = 0; i<dadosTotal.size(); i++) {
-				//Atualiza qual pais estÃ¡ sendo lido.
-				if (dadosTotal.get(i).getPais() != currPais) {
-					if (currEstatistica != null) rankingMaiorValor.add(currEstatistica);
-					currPais = dadosTotal.get(i).getPais();
-					currEstatistica = new TotalPeriodo(currPais.getNome());
-				}
-				//pega todas as medicoes de um pais nesse intervalo de tempo
-				if (dadosTotal.get(i).getMomento().isAfter(inicio) && 
-						dadosTotal.get(i).getMomento().isBefore(fim)) {
-					currEstatistica.inclui(dadosTotal.get(i)); //inclui mediÃ§Ãµes  dentro do periodo definido.
-				}
-			}
-			Collections.sort(rankingMaiorValor);
-			return rankingMaiorValor;
+		System.out.println(lista.size());
+		for (Estatistica est : lista) {
+			System.out.println(est.toTSV());
 		}
-		
-		
-		
-		
-		
-		public List<Estatistica> rankingMortalidade (List <Medicao> dadosMortes,
-				List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
-			List <Estatistica> rankingMortalidade = new ArrayList<>();
-
-			for (int i = 0; i<dadosMortes.size(); i++) {
-				//pega todas as medicoes de um pais nesse intervalo de tempo
-				if (dadosMortes.get(i).getMomento().equals(inicio)) {
-					MortalidadePeriodo estatistica = new MortalidadePeriodo(dadosMortes.get(i).getPais().getNome());
-					estatistica.inclui(dadosMortes.get(i)); //inclui a data de inicio da medicao
-					while (dadosMortes.get(i).getPais().getNome().equals(estatistica.getNome()) 
-							&& dadosMortes.get(i).getMomento().isBefore(fim)) {
-						i++;
-
-					}
-					estatistica.inclui(dadosMortes.get(i-1));
-					rankingMortalidade.add(estatistica); //inclui a estatistica do pais no ranking
-				}
-			}
-			for (int i = 0; i<dadosCasos.size(); i++) {
-				//pega todas as medicoes de um pais nesse intervalo de tempo
-				if (dadosCasos.get(i).getMomento().equals(inicio)) {
-					MortalidadePeriodo estatistica = new MortalidadePeriodo(dadosCasos.get(i).getPais().getNome());
-					estatistica.inclui(dadosCasos.get(i)); //inclui a data de inicio da medicao
-					while (dadosCasos.get(i).getPais().getNome().equals(estatistica.getNome()) 
-							&& dadosCasos.get(i).getMomento().isBefore(fim)) {
-						i++;
-
-					}
-					estatistica.inclui(dadosCasos.get(i-1));
-					rankingMortalidade.add(estatistica); //inclui a estatistica do pais no ranking
-				}
-			}
-			Collections.sort(rankingMortalidade);
-			return rankingMortalidade;
-		}
-		
-		
-		
-		
-		public List<Estatistica> rankingCrescimento (List <Medicao> dadosCasos,
-				LocalDateTime inicio, LocalDateTime fim){
-			List <Estatistica> rankingCrescimento = new ArrayList<>();
-			
-			for (int i = 0; i<dadosCasos.size(); i++) {
-				//pega todas as medicoes de um pais nesse intervalo de tempo
-				if (dadosCasos.get(i).getMomento().equals(inicio)) {
-					CrescimentoPeriodo estatistica = new CrescimentoPeriodo(dadosCasos.get(i).getPais().getNome());
-					estatistica.inclui(dadosCasos.get(i)); //inclui a data de inicio da medicao
-					while (dadosCasos.get(i).getPais().getNome().equals(estatistica.getNome()) 
-							&& dadosCasos.get(i).getMomento().isBefore(fim)) {
-						i++;
-
-					}
-					estatistica.inclui(dadosCasos.get(i-1));
-					rankingCrescimento.add(estatistica); //inclui a estatistica do pais no ranking
-				}
-			}
-			Collections.sort(rankingCrescimento);
-			return rankingCrescimento;
-		}
-		
-	  
-		/*public List <Estatistica> rankingLocaisProximos (List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
-			List <Estatistica> rankingCrescimento = rankingCrescimento (dadosCasos, inicio, fim);
-			List <Estatistica> rankingLocaisProximos;
-			
-		}*/
-		
-		/**
-		 * Recebe uma lista de string que serï¿½ escrita no arquivo, o caminho do arquivo
-		 * e escreve cada conteï¿½do da lista em uma arquivo, pulando linha a cada nova posiï¿½ï¿½o.
-		 * 
-		 * @param data Dados que serï¿½o escritos no arquivo.
-		 * @param path Caminho do arquivo.
-		 * @throws IOException Exceï¿½ï¿½o de falha na escrita do arquivo.
-		 */
-		public void write(List <String> data, String path) throws IOException {
-			
-			FileWriter writer = new FileWriter(path); 
-			for(String str: data) {
-			  writer.write(str + System.lineSeparator());
-			}
-			writer.close();
-
-		}
-		
-		public static void main(String[] args) {
-			EstatisticaController controler = new EstatisticaController();
-			LocalDateTime inicio = LocalDateTime.parse("2020-01-01T00:00:01");
-			LocalDateTime fim = LocalDateTime.parse("2021-01-02T23:59:59");
-			MedicaoController cont = null;
-			try {
-				cont = MedicaoController.getInstance();
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
-			ArrayList<Medicao> casos = new ArrayList<>(cont.getConfirmados());
-			ArrayList<Estatistica> lista = new ArrayList<>(controler.rankingMaiorValor(casos, inicio, fim));
-			
-			System.out.println(lista.size());
-			for (Estatistica est : lista) {
-				System.out.println(est.toTSV());
-			}
->>>>>>> refs/remotes/origin/gabriel_controller
-		}
-		
+		System.out.println(controler.toTSV(lista, "teste"));
+	}
+	
 }
