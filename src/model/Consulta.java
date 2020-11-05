@@ -26,9 +26,8 @@ public class Consulta implements Serializable {
 		crescimentoDe.put(StatusCaso.RECUPERADOS, false);
 	}
 
-	public void alternateMapBoolean(TreeMap<StatusCaso, Boolean> status, StatusCaso key) {
-		boolean b = status.get(key);
-		status.put(key, !b);
+	public void alternateMapBoolean(TreeMap<StatusCaso, Boolean> status, StatusCaso key, boolean checked) {
+		status.put(key, checked);
 	}
 	
 	public LocalDate getInicioPeriodo() {

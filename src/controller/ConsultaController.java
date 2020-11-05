@@ -39,17 +39,19 @@ public class ConsultaController {
 	 * </p>
 	 * @param checkBoxName O nome da JCheckbox.
 	 */
-	public void atualizaNumeroDe(String checkBoxName) {
+	public void atualizaNumeroDe(String checkBoxName, int stateChange) {
 		Consulta consultaAtual = this.consultas.get(indexAtual);
+		boolean checked = stateChange == 1 ? true : false;
+		
 		switch(checkBoxName) {
 			case "de casos":
-				consultaAtual.alternateMapBoolean(consultaAtual.getNumeroDe(), StatusCaso.CONFIRMADOS);
+				consultaAtual.alternateMapBoolean(consultaAtual.getNumeroDe(), StatusCaso.CONFIRMADOS, checked);
 				break;
 			case "de recuperados":
-				consultaAtual.alternateMapBoolean(consultaAtual.getNumeroDe(), StatusCaso.RECUPERADOS);
+				consultaAtual.alternateMapBoolean(consultaAtual.getNumeroDe(), StatusCaso.RECUPERADOS, checked);
 				break;
 			case "de mortos":
-				consultaAtual.alternateMapBoolean(consultaAtual.getNumeroDe(), StatusCaso.MORTOS);
+				consultaAtual.alternateMapBoolean(consultaAtual.getNumeroDe(), StatusCaso.MORTOS, checked);
 				break;
 		}
 	}
@@ -61,17 +63,18 @@ public class ConsultaController {
 	 * </p>
 	 * @param checkBoxName O nome da JCheckbox.
 	 */
-	public void atualizaCrescimentoDe(String checkBoxName) {
+	public void atualizaCrescimentoDe(String checkBoxName, int stateChange) {
 		Consulta consultaAtual = this.consultas.get(indexAtual);
+		boolean checked = stateChange == 1 ? true : false;
 		switch(checkBoxName) {
 			case "de casos":
-				consultaAtual.alternateMapBoolean(consultaAtual.getCrescimentoDe(), StatusCaso.CONFIRMADOS);
+				consultaAtual.alternateMapBoolean(consultaAtual.getCrescimentoDe(), StatusCaso.CONFIRMADOS, checked);
 				break;
 			case "de recuperados":
-				consultaAtual.alternateMapBoolean(consultaAtual.getCrescimentoDe(), StatusCaso.RECUPERADOS);
+				consultaAtual.alternateMapBoolean(consultaAtual.getCrescimentoDe(), StatusCaso.RECUPERADOS, checked);
 				break;
 			case "de mortos":
-				consultaAtual.alternateMapBoolean(consultaAtual.getCrescimentoDe(), StatusCaso.MORTOS);
+				consultaAtual.alternateMapBoolean(consultaAtual.getCrescimentoDe(), StatusCaso.MORTOS, checked);
 				break;
 			}
 	}
@@ -82,10 +85,10 @@ public class ConsultaController {
 	 * 	Nega o boolean associado � mortalidade na consulta atual.
 	 * </p>
 	 */
-	public void atualizaMortalidade() {
+	public void atualizaMortalidade(int stateChange) {
 		Consulta consultaAtual = this.consultas.get(indexAtual);
-		
-		consultaAtual.setMortalidade(!consultaAtual.getMortalidade());
+		boolean checked = stateChange == 1 ? true : false;
+		consultaAtual.setMortalidade(checked);
 	}
 	
 	/**
@@ -94,10 +97,10 @@ public class ConsultaController {
 	 * 	Nega o boolean associado aos locais mais pr�ximos na consulta atual.
 	 * </p>
 	 */
-	public void atualizaLocaisMaisProximos() {
+	public void atualizaLocaisMaisProximos(int stateChange) {
 		Consulta consultaAtual = this.consultas.get(indexAtual);
-		
-		consultaAtual.setLocaisMaisProximos(!consultaAtual.getLocaisMaisProximos());
+		boolean checked = stateChange == 1 ? true : false;
+		consultaAtual.setLocaisMaisProximos(checked);
 	}
 	
 	/**
