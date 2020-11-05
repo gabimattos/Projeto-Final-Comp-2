@@ -34,12 +34,13 @@ public class MedicaoController {
 	}
 
 	private void carregaMedicoes() {
-		File pasta = new File("cache/medicoes/");
+		File pasta = new File("cache/medicoes");
+		if(!pasta.exists()) pasta.mkdirs();
+		
 		File confirmadosFile = new File("cache/medicoes/" + LocalDate.now() + " - confirmados.ser");
 		File mortosFile = new File("cache/medicoes/" + LocalDate.now() + " - mortos.ser");
 		File recuperadosFile = new File("cache/medicoes/" + LocalDate.now() + " - recuperados.ser");
 		
-		if(!pasta.exists()) pasta.mkdir();
 
 		if (confirmadosFile.isFile() && mortosFile.isFile() &&  recuperadosFile.isFile()) {
 			System.out.println("Carregando dados j� baixados.");
@@ -85,9 +86,9 @@ public class MedicaoController {
 
 				int porcentagem = (int) (baixado / ((float) total) * 100);
 				System.out.printf("Progresso %d/%d(%d%%) de medi��es de pa�ses.\n", baixado, total, porcentagem);
-				if (pais.getSlug().equals("comoros")) {
-					break;
-				}
+//				if (pais.getSlug().equals("cameroon")) {
+//					break;
+//				}
 			}
 
 			this.setConfirmados(confirmados);

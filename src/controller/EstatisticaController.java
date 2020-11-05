@@ -147,13 +147,15 @@ public class EstatisticaController {
 		}
 		ArrayList<Medicao> casos = new ArrayList<>(cont.getConfirmados());
 		ArrayList<Medicao> mortos = new ArrayList<>(cont.getMortos());
-		ArrayList<Estatistica> lista = new ArrayList<>(controler.rankingLocaisProximos(casos, inicio, fim));
+		ArrayList<Estatistica> lista = new ArrayList<>(controler.rankingCrescimento(casos, inicio, fim));
+		ArrayList<Estatistica> lista2 = new ArrayList<>(controler.rankingLocaisProximos(casos, inicio, fim));
 		
 		System.out.println(lista.size());
 		for (Estatistica est : lista) {
 			System.out.println(est.toTSV());
 		}
 		System.out.println(controler.toTSV(lista, "teste"));
+		System.out.println(controler.toTSV(lista2, "teste2"));
 	}
 	
 }
