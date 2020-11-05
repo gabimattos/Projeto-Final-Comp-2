@@ -3,6 +3,7 @@ package controller;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -163,6 +164,89 @@ public class ConsultaController {
 			System.err.println("Arquivo \"consultas.ser\" nï¿½o encontrado em resources/");
 		} catch (IOException e) {
 			System.err.println("Problema ao escrever arquivo. Verifique sua integridade.");
+		}
+	}
+	
+	/**
+	 * Cria uma String que mostra os campos da consulta indicada pela index.
+	 * @param index O índice da consulta a obter a String.
+	 * @return A String que mostra os campos da consulta.
+	 */
+	public String consultaToString(int index) {
+		Consulta consulta = consultas.get(index);
+		
+		String consultaString = "";
+		
+		consultaString += String.format("Início do período: %s, Fim do período: %s", consulta.getInicioPeriodo().toString(), consulta.getFimPeriodo().toString());
+		
+		if(consulta.getNumeroDe().get(StatusCaso.CONFIRMADOS)) {
+			consultaString += "Número de casos, ";
+		}
+		if(consulta.getNumeroDe().get(StatusCaso.MORTOS)) {
+			consultaString += "Número de mortos, ";
+		}
+		if(consulta.getNumeroDe().get(StatusCaso.RECUPERADOS)) {
+			consultaString += "Número de recuperados, ";
+		}
+		
+		if(consulta.getCrescimentoDe().get(StatusCaso.CONFIRMADOS)) {
+			consultaString += "Crescimento de casos, ";
+		}
+		if(consulta.getCrescimentoDe().get(StatusCaso.MORTOS)) {
+			consultaString += "Crescimento de mortos, ";
+		}
+		if(consulta.getCrescimentoDe().get(StatusCaso.RECUPERADOS)) {
+			consultaString += "Crescimento de recuperados, ";
+		}
+		
+		if(consulta.getMortalidade()) {
+			consultaString += "Mortalidade, ";
+		}
+		if(consulta.getLocaisMaisProximos()) {
+			consultaString += "Locais mais próximos, ";
+		}
+		
+		return consultaString;
+	}
+	
+	public void realizarConsulta(int index) {
+		Consulta consulta = consultas.get(index);
+		
+		EstatisticaController estatisticas = EstatisticaController.getInstance();
+		MedicaoController medicoes = MedicaoController.getInstance();
+		
+		List<Medicao> casos = new ArrayList<>(medicoes.getConfirmados());
+		List<Medicao> mortos = new ArrayList<>(medicoes.getMortos());
+		List<Medicao> recuperados = new ArrayList<>(medicoes.getRecuperados());
+		
+		LocalDateTime inicio = consulta.getInicioPeriodo().atStartOfDay();
+		LocalDateTime fim = consulta.getFimPeriodo().atStartOfDay();
+		
+		if(consulta.getNumeroDe().get(StatusCaso.CONFIRMADOS)) {
+			estatisticas.rankingMaiorValor(casos, inicio, fim);
+		}
+		if(consulta.getNumeroDe().get(StatusCaso.MORTOS)) {
+			estatisticas.rankingMaiorValor(mortos, inicio, fim);
+		}
+		if(consulta.getNumeroDe().get(StatusCaso.RECUPERADOS)) {
+			estatisticas.rankingMaiorValor(recuperados, inicio, fim);
+		}
+		
+		if(consulta.getCrescimentoDe().get(StatusCaso.CONFIRMADOS)) {
+			estatisticas.rankingCrescimento(casos, inicio, fim);
+		}
+		if(consulta.getCrescimentoDe().get(StatusCaso.MORTOS)) {
+			estatisticas.rankingCrescimento(mortos, inicio, fim);
+		}
+		if(consulta.getCrescimentoDe().get(StatusCaso.RECUPERADOS)) {
+			estatisticas.rankingCrescimento(recuperados, inicio, fim);
+		}
+		
+		if(consulta.getMortalidade()) {
+			estatisticas.rankingMortalidade(mortos, casos, inicio, fim);
+		}
+		if(consulta.getLocaisMaisProximos()) {
+			//ranking de locais mais proximos
 		}
 	}
 	
