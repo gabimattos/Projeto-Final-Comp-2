@@ -1,11 +1,20 @@
 package view;
 
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
+import java.util.*;
+import java.awt.event.*;
+import java.io.*;
 
 public class TelaInicial {
 	
+
 	private JFrame janela;
+	private JPanel janelinha;
     private JButton btnEnviar;
     private JLabel lblRanking;
     private JLabel lblTopico1;
@@ -23,10 +32,48 @@ public class TelaInicial {
     private JTextField dataInicial;
     private JTextField dataFinal;
     
+    private JLabel headerLabel;
+    private JLabel statusLabel;
+    private JPanel controlPanel;
+    
+    public TelaInicial(){
+        initWindow();
+     }
+
+    
+    public static void main(String[] args) {
+    	   TelaInicial swingControlDemo = new TelaInicial();
+    	     
+ 
+    }
+    
+    public class AcaoBotaoEnviar implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try (PrintStream out = new PrintStream(new FileOutputStream("mensagem.txt"))){
+                out.print(dataInicial.getText());
+                out.print(dataFinal.getText());
+                
+                System.out.println(dataInicial.getText());
+                System.out.println(dataFinal.getText());
+            }
+            catch (FileNotFoundException fnfe) {
+                System.out.println("Não foi possível gravar no arquivo mensagem.txt");
+            }
+        }
+    }
+    
     private void initWindow() {
     	
     	 janela = new JFrame("Coronavírus no mundo.");
          janela.setSize(800, 600);
+         
+        
+         
+         statusLabel = new JLabel("",JLabel.CENTER);
+         statusLabel.setSize(350,100);
+         janelinha = new JPanel();
+         janelinha.setLayout(new FlowLayout());
          janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          
          btnEnviar = new JButton("Enviar");
@@ -38,13 +85,63 @@ public class TelaInicial {
          lblTopico3 = new JLabel("Mortalidade");
          lblDataInicial = new JLabel("Data Inicial");
          lblDataFinal = new JLabel("Data Final");
-         cbOpcao1 = new JCheckBox("de casos");
-         cbOpcao2 = new JCheckBox("de recuperados");
-         cbOpcao3 = new JCheckBox("de mortos");
-         cbOpcao4 = new JCheckBox("de casos");
-         cbOpcao5 = new JCheckBox("de recuperados");
-         cbOpcao6 = new JCheckBox("de mortos");
-         cbOpcao7 = new JCheckBox("taxa de mortalidade");
+         final JCheckBox cbOpcao1 = new JCheckBox("de casos");
+         final JCheckBox cbOpcao2 = new JCheckBox("de recuperados");
+         final JCheckBox cbOpcao3 = new JCheckBox("de mortos");
+         final JCheckBox cbOpcao4 = new JCheckBox("de casos");
+         final JCheckBox cbOpcao5 = new JCheckBox("de recuperados");
+         final JCheckBox cbOpcao6 = new JCheckBox("de mortos");
+         final JCheckBox cbOpcao7 = new JCheckBox("taxa de mortalidade");
+         
+         cbOpcao1.setMnemonic(KeyEvent.VK_1);
+         cbOpcao2.setMnemonic(KeyEvent.VK_2);
+         cbOpcao3.setMnemonic(KeyEvent.VK_3);
+         cbOpcao4.setMnemonic(KeyEvent.VK_4);
+         cbOpcao5.setMnemonic(KeyEvent.VK_5);
+         cbOpcao6.setMnemonic(KeyEvent.VK_6);
+         cbOpcao7.setMnemonic(KeyEvent.VK_7);
+         cbOpcao1.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+               statusLabel.setText("Número de casos: " + (e.getStateChange()==1?"checked":"unchecked"));
+               System.out.println(statusLabel.getText());
+            }
+         });
+         cbOpcao2.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+               statusLabel.setText("Número de recuperados: " + (e.getStateChange()==1?"checked":"unchecked"));
+               System.out.println(statusLabel.getText());
+            }
+         });
+         cbOpcao3.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+               statusLabel.setText("Número de mortes "+ (e.getStateChange()==1?"checked":"unchecked"));
+               System.out.println(statusLabel.getText());
+            }
+         });
+         cbOpcao4.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+               statusLabel.setText("Crescimento de casos " + (e.getStateChange()==1?"checked":"unchecked"));
+               System.out.println(statusLabel.getText());
+            }
+         });
+         cbOpcao5.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+               statusLabel.setText("Crescimento de recuperados "+ (e.getStateChange()==1?"checked":"unchecked"));
+               System.out.println(statusLabel.getText());
+            }
+         });
+         cbOpcao6.addItemListener(new ItemListener() {
+             public void itemStateChanged(ItemEvent e) {
+                statusLabel.setText("Crescimento de mortes "+ (e.getStateChange()==1?"checked":"unchecked"));
+                System.out.println(statusLabel.getText());
+             }
+          });
+         cbOpcao7.addItemListener(new ItemListener() {
+             public void itemStateChanged(ItemEvent e) {
+                statusLabel.setText("Taxa de mortalidade "+ (e.getStateChange()==1?"checked":"unchecked"));
+                System.out.println(statusLabel.getText());
+             }
+          });
          
          JMenuBar mb = new JMenuBar();
          JMenu m1 = new JMenu("Salvar Consultas");
@@ -101,16 +198,23 @@ public class TelaInicial {
          
          conteinerRanking.add(jpRanking);
          
+         btnEnviar.addActionListener(new AcaoBotaoEnviar());
+         
          janela.add(BorderLayout.NORTH, mb);
          janela.add(conteinerRanking, BorderLayout.WEST);
          
+         headerLabel = new JLabel("", JLabel.CENTER);
+         statusLabel = new JLabel("",JLabel.CENTER);
+         statusLabel.setSize(350,100);
+         controlPanel = new JPanel();
+         controlPanel.setLayout(new FlowLayout());
+         janela.add(headerLabel);
+         janela.add(controlPanel);
+         janela.add(statusLabel);
+         
          janela.setVisible(true);
     }
-     
-    public static void main(String[] args) {
-        new TelaInicial().initWindow();
- 
-    }
-    
 
-}
+    }
+
+
