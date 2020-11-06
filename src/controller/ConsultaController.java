@@ -1,14 +1,11 @@
 package controller;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
-
-import javax.swing.text.DateFormatter;
 
 import model.*;
 
@@ -209,6 +206,10 @@ public class ConsultaController {
 		return consultaString;
 	}
 	
+	/**
+	 * Chama os métodos de rankings a partir da consulta relacionado ao indice passado pelo parametro.
+	 * @param index O indice da consulta a se realizar.
+	 */
 	public void realizarConsulta(int index) {
 		Consulta consulta = consultas.get(index);
 		
@@ -246,7 +247,7 @@ public class ConsultaController {
 			estatisticas.rankingMortalidade(mortos, casos, inicio, fim);
 		}
 		if(consulta.getLocaisMaisProximos()) {
-			//ranking de locais mais proximos
+			estatisticas.rankingLocaisProximos(casos, inicio, fim);
 		}
 	}
 	
