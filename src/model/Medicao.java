@@ -1,8 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Medicao implements Comparable<Medicao>{
+public class Medicao implements Comparable<Medicao>, Serializable{
+	private static final long serialVersionUID = 1000L;
 	private Pais pais;
 	private LocalDateTime momento;
 	private int casos;
