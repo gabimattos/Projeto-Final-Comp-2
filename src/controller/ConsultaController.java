@@ -16,7 +16,7 @@ import model.*;
 public class ConsultaController {
 	private static final ConsultaController consultaController = new ConsultaController();
 	
-	private List<Consulta> consultas;
+	private List<Consulta> consultas = new ArrayList<Consulta>();
 	private int indexAtual;
 	
 	private ConsultaController(){
@@ -138,7 +138,17 @@ public class ConsultaController {
 	 */
 	@SuppressWarnings("unchecked")
 	public void carregaConsultas() {
-		try(ObjectInputStream oos = new ObjectInputStream(new FileInputStream("resources"+File.separator+"consultas.ser"))) {
+		File arq = new File("resources"+File.separator+"consultas.ser");
+		if(!arq.exists()) {
+			try {
+				arq.createNewFile();
+			} catch (IOException e) {
+				System.err.println("Nao foi possivel criar o arquivo consultas.ser");
+			}
+			return;
+		}
+		
+		try(ObjectInputStream oos = new ObjectInputStream(new FileInputStream(arq))) {
 			this.setConsultas((List<Consulta>)oos.readObject());
 			
 		} catch (FileNotFoundException e) {
@@ -263,3 +273,9 @@ public class ConsultaController {
 		this.consultas = new ArrayList<Consulta>(consultas);
 	}
 }
+
+
+
+
+
+

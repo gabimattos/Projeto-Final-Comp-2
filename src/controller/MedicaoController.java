@@ -123,13 +123,14 @@ public class MedicaoController {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private ArrayList<Medicao> deserialize(File file) {
 		ArrayList<Medicao> medicoes = new ArrayList<>();
 
 		try {
 			FileInputStream fileIn = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
-			medicoes = (ArrayList) in.readObject();
+			medicoes = (ArrayList<Medicao>) in.readObject();
 			in.close();
 			fileIn.close();
 		} catch (FileNotFoundException e) {
