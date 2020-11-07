@@ -86,7 +86,7 @@ public class MedicaoController {
 
 				int porcentagem = (int) (baixado / ((float) total) * 100);
 				System.out.printf("Progresso %d/%d(%d%%) de medi��es de pa�ses.\n", baixado, total, porcentagem);
-//				if (pais.getSlug().equals("cameroon")) {
+//				if (pais.getSlug().equals("haiti")) {
 //					break;
 //				}
 			}
