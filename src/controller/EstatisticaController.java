@@ -85,8 +85,6 @@ public class EstatisticaController {
 	}
 	
 	
-	
-	
 	public List<Estatistica> rankingCrescimento (List <Medicao> dadosCasos,
 			LocalDateTime inicio, LocalDateTime fim){
 		Collections.sort(dadosCasos);
@@ -115,7 +113,7 @@ public class EstatisticaController {
 	public List <Estatistica> rankingLocaisProximos (List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
 		List <Estatistica> rankingCrescimento = rankingCrescimento (dadosCasos, inicio, fim);
 		Estatistica maiorCrescimento = rankingCrescimento.get(0);
-		List <Estatistica> rankingLocaisProximos = null;
+		List <Estatistica> rankingLocaisProximos = new ArrayList<>();
 		
 		for (Estatistica e : rankingCrescimento) {
 			Distancia currDist = null;

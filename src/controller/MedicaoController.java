@@ -40,7 +40,7 @@ public class MedicaoController {
 
 		if (confirmadosFile.isFile() && mortosFile.isFile() &&  recuperadosFile.isFile()) {
 			System.out.println("Carregando dados já baixados.");
-			this.setConfirmados(deserialize(recuperadosFile));
+			this.setConfirmados(deserialize(confirmadosFile));
 			this.setMortos(deserialize(mortosFile));
 			this.setRecuperados(deserialize(recuperadosFile));
 			for (Medicao m : this.getConfirmados()) {
@@ -130,13 +130,14 @@ public class MedicaoController {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private ArrayList<Medicao> deserialize(File file) {
 		ArrayList<Medicao> medicoes = new ArrayList<>();
 
 		try {
 			FileInputStream fileIn = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
-			medicoes = (ArrayList) in.readObject();
+			medicoes = (ArrayList<Medicao>) in.readObject();
 			in.close();
 			fileIn.close();
 		} catch (FileNotFoundException e) {
