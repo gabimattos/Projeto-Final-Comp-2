@@ -14,14 +14,16 @@ public class TelaInicial {
 	
 
 	private JFrame janela;
-	private JPanel janelinha;
-    private JButton btnEnviar;
+	//private JPanel conteinerKm;
+    private JButton btnEnviarRanking;
+    private JButton btnEnviarKm;
     private JLabel lblRanking;
     private JLabel lblTopico1;
     private JLabel lblTopico2;
     private JLabel lblTopico3;
     private JLabel lblDataInicial;
     private JLabel lblDataFinal;
+    private JLabel lblKm;
     private JCheckBox cbOpcao1;
     private JCheckBox cbOpcao2;
     private JCheckBox cbOpcao3;
@@ -31,6 +33,7 @@ public class TelaInicial {
     private JCheckBox cbOpcao7;
     private JTextField dataInicial;
     private JTextField dataFinal;
+    private JTextField km;
     
     private JLabel status1;
     private JLabel status2;
@@ -56,7 +59,7 @@ public class TelaInicial {
  
     }
     
-    public class AcaoBotaoEnviar implements ActionListener {
+    public class AcaoBotaoEnviarRanking implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
         	
@@ -94,19 +97,40 @@ public class TelaInicial {
 	                out.print(status5.getText());
 	                out.print(status6.getText());
 	                out.print(status7.getText());
-	                
-	                System.out.println(dataInicial.getText());
-	                System.out.println(dataFinal.getText());
-	                System.out.println(status1.getText());
-	                System.out.println(status2.getText());
-	                System.out.println(status3.getText());
-	                System.out.println(status4.getText());
-	                System.out.println(status5.getText());
-	                System.out.println(status6.getText());
-	                System.out.println(status7.getText());
+	               
 	            }
 	            catch (FileNotFoundException fnfe) {
 	                System.out.println("Não foi possível gravar no arquivo mensagem.txt");
+	            }
+        	} 
+        }
+    }
+    
+    public class AcaoBotaoEnviarKm implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        	
+        	if(km.getText().equals(" ")) {
+        		
+        		
+        		erro = new JFrame("ERRO");
+                erro.setSize(400, 200);
+                
+                lblerror = new JLabel("ERRO!\n Você não inseriu o raio em km!");
+                erro.add(lblerror);
+                erro.setVisible(true);
+        	}
+
+        	else {
+        	
+	            try (PrintStream out = new PrintStream(new FileOutputStream("km.txt"))){
+	                out.print(km.getText());
+	                System.out.println(km.getText());
+
+	               
+	            }
+	            catch (FileNotFoundException fnfe) {
+	                System.out.println("Não foi possível gravar no arquivo km.txt");
 	            }
         	} 
         }
@@ -130,8 +154,12 @@ public class TelaInicial {
 
          janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          
-         btnEnviar = new JButton("Enviar");
-         btnEnviar.setSize(20,30);
+         btnEnviarRanking = new JButton("Enviar");
+         btnEnviarRanking.setSize(10,20);
+         
+         btnEnviarKm = new JButton("Enviar");
+         btnEnviarKm.setSize(5,2);
+
          
          lblRanking = new JLabel("Rankings Internacionais.");
          lblTopico1 = new JLabel("Número");
@@ -139,6 +167,9 @@ public class TelaInicial {
          lblTopico3 = new JLabel("Mortalidade");
          lblDataInicial = new JLabel("Data Inicial");
          lblDataFinal = new JLabel("Data Final");
+         
+         lblKm = new JLabel("Entre com um raio em KM:");
+         
          final JCheckBox cbOpcao1 = new JCheckBox("de casos");
          final JCheckBox cbOpcao2 = new JCheckBox("de recuperados");
          final JCheckBox cbOpcao3 = new JCheckBox("de mortos");
@@ -158,6 +189,8 @@ public class TelaInicial {
          
          cbOpcao1.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
+            	
+            	//atualizarNumeroDe(cbOpcao1, e.getStateChange());
             	
             	status1.setText("numcasos" + (e.getStateChange()==1?"1 ":"0 "));
             	statusGeral.setText("Número de casos: " + (e.getStateChange()==1?"checked":"unchecked"));
@@ -220,6 +253,10 @@ public class TelaInicial {
          dataInicial = new JTextField();
          dataFinal = new JTextField();
          
+         km = new JTextField();
+         km.setSize(1, 1);
+         
+         JPanel conteinerEAST = new JPanel();
          JPanel conteinerRanking = new JPanel();
          JPanel jpRanking = new JPanel();
          JPanel jpOpcoes1 = new JPanel();
@@ -228,16 +265,23 @@ public class TelaInicial {
          JPanel jpDatas = new JPanel();
          JPanel jpBotao = new JPanel();
          
+         JPanel conteinerKm = new JPanel();
+         JPanel conteinerStatus = new JPanel();
+         
+         conteinerEAST.setLayout(new GridLayout(0,1,0,0));
          conteinerRanking.setLayout(new GridLayout(0,1,0,0));
          jpRanking.setLayout(new GridLayout(0,1,0,0));
          jpOpcoes1.setLayout(new GridLayout(0,3,0,1));
          jpOpcoes2.setLayout(new GridLayout(0,3,0,2));
          jpOpcoes3.setLayout(new GridLayout(0,2,0,0));
          jpDatas.setLayout(new GridLayout(0,2,0,0));
-         jpBotao.setLayout(new GridLayout(0,2,0,0));
+         jpBotao.setLayout(new GridLayout(0,1,0,0));
+         
+         conteinerKm.setLayout(new GridLayout(0,1,1,0));
          
          jpRanking.setBorder(BorderFactory.createEmptyBorder(0, 50, 10, 70));
          conteinerRanking.setBorder(BorderFactory.createEtchedBorder());
+         conteinerEAST.setBorder(BorderFactory.createEtchedBorder());
          
          jpRanking.add(lblRanking);
          jpRanking.add(lblTopico1);
@@ -262,13 +306,18 @@ public class TelaInicial {
          jpDatas.add(dataFinal);  
          jpRanking.add(jpDatas);
          
-         jpBotao.add(btnEnviar);
+         jpBotao.add(btnEnviarRanking);
          jpRanking.add(jpBotao);
          
          
          conteinerRanking.add(jpRanking);
          
-         btnEnviar.addActionListener(new AcaoBotaoEnviar());
+         conteinerKm.add(lblKm);
+         conteinerKm.add(km);
+         conteinerKm.add(btnEnviarKm);
+         
+         btnEnviarRanking.addActionListener(new AcaoBotaoEnviarRanking());
+         btnEnviarKm.addActionListener(new AcaoBotaoEnviarKm());
          
          janela.add(BorderLayout.NORTH, mb);
          janela.add(conteinerRanking, BorderLayout.WEST);
@@ -277,16 +326,14 @@ public class TelaInicial {
          statusGeral = new JLabel("",JLabel.CENTER);
          statusGeral.setSize(350,100);
          
-  
-                
-         janela.add(status1);   
-         janela.add(status2);   
-         janela.add(status3);   
-         janela.add(status4);   
-         janela.add(status5);   
-         janela.add(status6);   
-         janela.add(status7);
-         janela.add(statusGeral);
+         conteinerStatus.add(statusGeral);
+         
+         conteinerEAST.add(conteinerStatus, BorderLayout.NORTH);
+         conteinerEAST.add(conteinerKm, BorderLayout.NORTH);
+         conteinerEAST.add(conteinerStatus);
+         janela.add(conteinerEAST);
+         janela.add(conteinerEAST);
+         
          
          janela.setVisible(true);
     }
