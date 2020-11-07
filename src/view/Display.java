@@ -1,5 +1,5 @@
-package main;
-import java.awt.BorderLayout;
+package view;
+
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -11,7 +11,7 @@ public class Display {
 	JTable table = null;
 	JScrollPane scroll = null;
 	FlowLayout layout = new FlowLayout();
-	public  void Display(String Titulo, String[][] dados, String[] colunas) {
+	public void display(String Titulo, String[][] dados, String[] colunas) {
 		
 		frame = new JFrame();
 		table = new JTable(dados,colunas);
@@ -20,7 +20,7 @@ public class Display {
 		frame.setLocationRelativeTo(null);
 		frame.setTitle(Titulo);
 		frame.setResizable(false);
-		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		table.setPreferredScrollableViewportSize(new Dimension(700,400));
 		table.setFillsViewportHeight(true);
 		table.setEnabled(false);
@@ -75,6 +75,6 @@ public class Display {
 		};
 		
 		Display display = new Display();
-		display.Display("Ranking", dados, colunas);
+		display.display("Ranking", dados, colunas);
 	}
 }

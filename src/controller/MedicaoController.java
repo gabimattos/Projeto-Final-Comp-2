@@ -17,6 +17,7 @@ import org.json.simple.parser.*;
 
 import model.*;
 import utils.APIConsumer;
+import view.mainTest;
 
 public class MedicaoController {
 	private static final MedicaoController medicaoController = new MedicaoController();
@@ -86,6 +87,7 @@ public class MedicaoController {
 				int baixado = paises.indexOf(pais) + 1;
 
 				int porcentagem = (int) (baixado / ((float) total) * 100);
+				
 				System.out.printf("Progresso %d/%d(%d%%) de medições de países.\n", baixado, total, porcentagem);
 				if (pais.getSlug().equals("greenland")) {
 					break;
