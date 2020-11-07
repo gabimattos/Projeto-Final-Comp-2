@@ -1,5 +1,6 @@
 package view;
 
+import controller.ConsultaController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,23 +13,18 @@ import java.io.*;
 
 public class TelaInicial {
 	
+	ConsultaController consulta = ConsultaController.getInstance();
+	
 
 	private JFrame janela;
-	//private JPanel conteinerKm;
     private JButton btnEnviarRanking;
-    private JButton btnEnviarKm;
     private JLabel lblRanking;
     private JLabel lblTopico1;
     private JLabel lblTopico2;
     private JLabel lblTopico3;
+    private JLabel lblTopico4;
     private JLabel lblDataInicial;
     private JLabel lblDataFinal;
-    private JLabel lblKmConteiner;
-    
-    private JLabel lblkm;
-    private JLabel lblDtFinal;
-    private JLabel lblDtInicial;
-    
     private JCheckBox cbOpcao1;
     private JCheckBox cbOpcao2;
     private JCheckBox cbOpcao3;
@@ -36,12 +32,10 @@ public class TelaInicial {
     private JCheckBox cbOpcao5;
     private JCheckBox cbOpcao6;
     private JCheckBox cbOpcao7;
+    private JCheckBox cbOpcao8;
     private JTextField dataInicial;
     private JTextField dataFinal;
     
-    private JTextField km;
-    private JTextField dtInicial;
-    private JTextField dtFinal;
     
     private JLabel status1;
     private JLabel status2;
@@ -50,21 +44,21 @@ public class TelaInicial {
     private JLabel status5;
     private JLabel status6;
     private JLabel status7;
+    private JLabel status8;
     private JLabel statusGeral;
     
     private JFrame erro;
     private JLabel lblerror;
 
-    
+   /* 
     public TelaInicial(){
         initWindow();
-     }
+     }*/
 
     
     public static void main(String[] args) {
-    	   TelaInicial swingControlDemo = new TelaInicial();
-    	     
- 
+    	   //TelaInicial swingControlDemo = new TelaInicial();  	     
+    		new TelaInicial().initWindow();
     }
     
     public class AcaoBotaoEnviarRanking implements ActionListener {
@@ -74,7 +68,7 @@ public class TelaInicial {
         	if(status1.getText().equals("numcasos0 ") && status2.getText().equals("numrecuperados0 ")
         	&& status3.getText().equals("nummortes0 ") && status4.getText().equals("crescasos0 ")
         	&& status5.getText().equals("cresrecuperados0 ") && status6.getText().equals("cresmortes0 ")
-        	&& status7.getText().equals("mortalidade0 ")) {
+        	&& status7.getText().equals("mortalidade0 ") && status7.getText().equals("locais0 ")) {
         		
         		
         		erro = new JFrame("ERRO");
@@ -105,6 +99,7 @@ public class TelaInicial {
 	                out.print(status5.getText());
 	                out.print(status6.getText());
 	                out.print(status7.getText());
+	                out.print(status8.getText());
 	               
 	            }
 	            catch (FileNotFoundException fnfe) {
@@ -114,37 +109,7 @@ public class TelaInicial {
         }
     }
     
-    public class AcaoBotaoEnviarKm implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-        	
-        	if(km.getText().equals("") || dtInicial.getText().equals("") || dtFinal.getText().equals("")) {
-        		
-        		
-        		erro = new JFrame("ERRO");
-                erro.setSize(400, 200);
-                
-                lblerror = new JLabel("ERRO!\n Você deixou de preencher algum campo!");
-                erro.add(lblerror);
-                erro.setVisible(true);
-        	}
-
-        	else {
-        	
-	            try (PrintStream out = new PrintStream(new FileOutputStream("infoLocais.txt"))){
-	                out.print(km.getText());
-	                out.print(dtInicial.getText());
-	                out.print(dtFinal.getText());
-	                //System.out.println(km.getText());
-
-	               
-	            }
-	            catch (FileNotFoundException fnfe) {
-	                System.out.println("Não foi possível gravar no arquivo infoLocais.txt");
-	            }
-        	} 
-        }
-    }
+    
     
     private void initWindow() {
     	
@@ -161,31 +126,21 @@ public class TelaInicial {
          status5 = new JLabel("cresrecuperados0 ");
          status6 = new JLabel("cresmortes0 ");
          status7 = new JLabel("mortalidade0 ");
+         status8 = new JLabel("locais0 ");
 
          janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          
          btnEnviarRanking = new JButton("Enviar");
          btnEnviarRanking.setSize(10,20);
-         
-         btnEnviarKm = new JButton("Enviar");
-         btnEnviarKm.setSize(5,2);
-
-         
+                
          lblRanking = new JLabel("Rankings Internacionais.");
          lblTopico1 = new JLabel("Número");
          lblTopico2 = new JLabel("Crescimento");
          lblTopico3 = new JLabel("Mortalidade");
+         lblTopico4 = new JLabel("Locais Próximos");
          lblDataInicial = new JLabel("Data Inicial");
          lblDataFinal = new JLabel("Data Final");
-         
-         lblkm = new JLabel("Raio em km");
-         lblDtInicial = new JLabel("Data Inicial");
-         lblDtFinal = new JLabel("Data Final");
-         
-         JPanel pnlKm = new JPanel();
-         
-         lblKmConteiner = new JLabel("Locais próximos do local com maior crescimento de casos.");
-         //pnlKm.add(lblKmConteiner);
+        
          
          final JCheckBox cbOpcao1 = new JCheckBox("de casos");
          final JCheckBox cbOpcao2 = new JCheckBox("de recuperados");
@@ -194,6 +149,7 @@ public class TelaInicial {
          final JCheckBox cbOpcao5 = new JCheckBox("de recuperados");
          final JCheckBox cbOpcao6 = new JCheckBox("de mortos");
          final JCheckBox cbOpcao7 = new JCheckBox("taxa de mortalidade");
+         final JCheckBox cbOpcao8 = new JCheckBox("locais próximos");
          
          cbOpcao1.setMnemonic(KeyEvent.VK_1);
          cbOpcao2.setMnemonic(KeyEvent.VK_2);
@@ -202,52 +158,63 @@ public class TelaInicial {
          cbOpcao5.setMnemonic(KeyEvent.VK_5);
          cbOpcao6.setMnemonic(KeyEvent.VK_6);
          cbOpcao7.setMnemonic(KeyEvent.VK_7);
+         cbOpcao8.setMnemonic(KeyEvent.VK_8);
          
          
          cbOpcao1.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
             	
-            	//atualizarNumeroDe(cbOpcao1, e.getStateChange());
+            	consulta.atualizaNumeroDe("de casos", e.getStateChange());
             	
             	status1.setText("numcasos" + (e.getStateChange()==1?"1 ":"0 "));
             	statusGeral.setText("Número de casos: " + (e.getStateChange()==1?"checked":"unchecked"));
-            	//System.out.println(status1.getText());
+            	
             }
          });
          cbOpcao2.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
+            	
+            	consulta.atualizaNumeroDe("de recuperados", e.getStateChange());
             
             	status2.setText("numrecuperados" + (e.getStateChange()==1?"1 ":"0 "));
             	statusGeral.setText("Número de recuperados: " + (e.getStateChange()==1?"checked":"unchecked"));
-            	//System.out.println(status2.getText());
+            	
             }
          });
          cbOpcao3.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
+            	
+            	consulta.atualizaNumeroDe("de mortos", e.getStateChange());
             
             	status3.setText("nummortes"+ (e.getStateChange()==1?"1 ":"0 "));
             	statusGeral.setText("Número de mortes: " + (e.getStateChange()==1?"checked":"unchecked"));
-            	//System.out.println(status3.getText());
+            	
             }
          });
          cbOpcao4.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
             	
+            	consulta.atualizaCrescimentoDe("de casos", e.getStateChange());
+            	
             	status4.setText("crescasos" + (e.getStateChange()==1?"1 ":"0 "));
             	statusGeral.setText("Crescimento de casos: " + (e.getStateChange()==1?"checked":"unchecked"));
-               //System.out.println(status4.getText());
+               
             }
          });
          cbOpcao5.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
             	
+            	consulta.atualizaCrescimentoDe("de recuperados", e.getStateChange());
+            	
             	status5.setText("cresrecuperados"+ (e.getStateChange()==1?"1 ":"0 "));
             	statusGeral.setText("Crescimento de recuperados: " + (e.getStateChange()==1?"checked":"unchecked"));
-               //System.out.println(status5.getText());
+               
             }
          });
          cbOpcao6.addItemListener(new ItemListener() {
              public void itemStateChanged(ItemEvent e) {
+            	 
+            	 consulta.atualizaCrescimentoDe("de mortos", e.getStateChange());
        
             	 status6.setText("cresmortes"+ (e.getStateChange()==1?"1":"0"));
             	 statusGeral.setText("Crescimento de recuperados: " + (e.getStateChange()==1?"checked":"unchecked"));
@@ -257,8 +224,21 @@ public class TelaInicial {
          cbOpcao7.addItemListener(new ItemListener() {
              public void itemStateChanged(ItemEvent e) {
             	 
+            	 consulta.atualizaMortalidade(e.getStateChange());
+            	 
             	 status7.setText("mortalidade"+ (e.getStateChange()==1?"1":"0"));
             	 statusGeral.setText("Taxa de mortalidade: " + (e.getStateChange()==1?"checked":"unchecked"));
+                
+             }
+          });
+         
+         cbOpcao8.addItemListener(new ItemListener() {
+             public void itemStateChanged(ItemEvent e) {
+            	 
+            	 consulta.atualizaLocaisMaisProximos(e.getStateChange());
+            	 
+            	 status7.setText("mortalidade"+ (e.getStateChange()==1?"1":"0"));
+            	 statusGeral.setText("Locais mais próximos: " + (e.getStateChange()==1?"checked":"unchecked"));
                 
              }
           });
@@ -269,18 +249,14 @@ public class TelaInicial {
          
          dataInicial = new JTextField();
          dataFinal = new JTextField();
-         
-         km = new JTextField();
-         dtInicial = new JTextField();
-         dtFinal = new JTextField();
-         
-         
+
          JPanel conteinerEAST = new JPanel();
          JPanel conteinerRanking = new JPanel();
          JPanel jpRanking = new JPanel();
          JPanel jpOpcoes1 = new JPanel();
          JPanel jpOpcoes2 = new JPanel();
          JPanel jpOpcoes3 = new JPanel();
+         JPanel jpOpcoes4 = new JPanel();
          JPanel jpDatas = new JPanel();
          JPanel jpBotaoRanking = new JPanel();
          JPanel jpBotaoLocais = new JPanel();
@@ -327,6 +303,10 @@ public class TelaInicial {
          jpOpcoes3.add(cbOpcao7);
          jpRanking.add(jpOpcoes3);
          
+         jpRanking.add(lblTopico4);
+         jpOpcoes3.add(cbOpcao8);
+         jpRanking.add(jpOpcoes4);
+         
          jpDatas.add(lblDataInicial);
          jpDatas.add(lblDataFinal);
          jpDatas.add(dataInicial);
@@ -335,26 +315,12 @@ public class TelaInicial {
          
          jpBotaoRanking.add(btnEnviarRanking);
          jpRanking.add(jpBotaoRanking);
-         
-         
+                  
          conteinerRanking.add(jpRanking);
-         
-         conteinerKm.add(lblKmConteiner);
-         
-         jpCampos.add(lblkm);
-         jpCampos.add(lblDtInicial);
-         jpCampos.add(lblDtFinal);
-         jpCampos.add(km);
-         jpCampos.add(dtInicial);
-         jpCampos.add(dtFinal);
-         
-         jpBotaoLocais.add(btnEnviarKm);
-         
-         conteinerKm.add(jpCampos);
-         conteinerKm.add(jpBotaoLocais);
+
          
          btnEnviarRanking.addActionListener(new AcaoBotaoEnviarRanking());
-         btnEnviarKm.addActionListener(new AcaoBotaoEnviarKm());
+
          
          janela.add(BorderLayout.NORTH, mb);
          janela.add(conteinerRanking, BorderLayout.WEST);
@@ -364,11 +330,9 @@ public class TelaInicial {
          statusGeral.setSize(350,100);
          
          conteinerStatus.add(statusGeral);
-         conteinerEAST.add(conteinerKm, BorderLayout.NORTH);
-         conteinerEAST.add(conteinerStatus, BorderLayout.NORTH);
          
        
-         janela.add(conteinerEAST);
+         janela.add(conteinerStatus);
          
          janela.setVisible(true);
     }
