@@ -23,7 +23,12 @@ public class TelaInicial {
     private JLabel lblTopico3;
     private JLabel lblDataInicial;
     private JLabel lblDataFinal;
-    private JLabel lblKm;
+    private JLabel lblKmConteiner;
+    
+    private JLabel lblkm;
+    private JLabel lblDtFinal;
+    private JLabel lblDtInicial;
+    
     private JCheckBox cbOpcao1;
     private JCheckBox cbOpcao2;
     private JCheckBox cbOpcao3;
@@ -33,7 +38,10 @@ public class TelaInicial {
     private JCheckBox cbOpcao7;
     private JTextField dataInicial;
     private JTextField dataFinal;
+    
     private JTextField km;
+    private JTextField dtInicial;
+    private JTextField dtFinal;
     
     private JLabel status1;
     private JLabel status2;
@@ -110,27 +118,29 @@ public class TelaInicial {
         @Override
         public void actionPerformed(ActionEvent e) {
         	
-        	if(km.getText().equals(" ")) {
+        	if(km.getText().equals("") || dtInicial.getText().equals("") || dtFinal.getText().equals("")) {
         		
         		
         		erro = new JFrame("ERRO");
                 erro.setSize(400, 200);
                 
-                lblerror = new JLabel("ERRO!\n Você não inseriu o raio em km!");
+                lblerror = new JLabel("ERRO!\n Você deixou de preencher algum campo!");
                 erro.add(lblerror);
                 erro.setVisible(true);
         	}
 
         	else {
         	
-	            try (PrintStream out = new PrintStream(new FileOutputStream("km.txt"))){
+	            try (PrintStream out = new PrintStream(new FileOutputStream("infoLocais.txt"))){
 	                out.print(km.getText());
-	                System.out.println(km.getText());
+	                out.print(dtInicial.getText());
+	                out.print(dtFinal.getText());
+	                //System.out.println(km.getText());
 
 	               
 	            }
 	            catch (FileNotFoundException fnfe) {
-	                System.out.println("Não foi possível gravar no arquivo km.txt");
+	                System.out.println("Não foi possível gravar no arquivo infoLocais.txt");
 	            }
         	} 
         }
@@ -168,7 +178,14 @@ public class TelaInicial {
          lblDataInicial = new JLabel("Data Inicial");
          lblDataFinal = new JLabel("Data Final");
          
-         lblKm = new JLabel("Entre com um raio em KM:");
+         lblkm = new JLabel("Raio em km");
+         lblDtInicial = new JLabel("Data Inicial");
+         lblDtFinal = new JLabel("Data Final");
+         
+         JPanel pnlKm = new JPanel();
+         
+         lblKmConteiner = new JLabel("Locais próximos do local com maior crescimento de casos.");
+         //pnlKm.add(lblKmConteiner);
          
          final JCheckBox cbOpcao1 = new JCheckBox("de casos");
          final JCheckBox cbOpcao2 = new JCheckBox("de recuperados");
@@ -254,7 +271,9 @@ public class TelaInicial {
          dataFinal = new JTextField();
          
          km = new JTextField();
-         km.setSize(1, 1);
+         dtInicial = new JTextField();
+         dtFinal = new JTextField();
+         
          
          JPanel conteinerEAST = new JPanel();
          JPanel conteinerRanking = new JPanel();
@@ -263,7 +282,9 @@ public class TelaInicial {
          JPanel jpOpcoes2 = new JPanel();
          JPanel jpOpcoes3 = new JPanel();
          JPanel jpDatas = new JPanel();
-         JPanel jpBotao = new JPanel();
+         JPanel jpBotaoRanking = new JPanel();
+         JPanel jpBotaoLocais = new JPanel();
+         JPanel jpCampos = new JPanel();
          
          JPanel conteinerKm = new JPanel();
          JPanel conteinerStatus = new JPanel();
@@ -275,11 +296,17 @@ public class TelaInicial {
          jpOpcoes2.setLayout(new GridLayout(0,3,0,2));
          jpOpcoes3.setLayout(new GridLayout(0,2,0,0));
          jpDatas.setLayout(new GridLayout(0,2,0,0));
-         jpBotao.setLayout(new GridLayout(0,1,0,0));
+         jpBotaoRanking.setLayout(new GridLayout(0,1,0,0));
+         jpBotaoLocais.setLayout(new GridLayout(0,1,0,0));
+         
+         jpCampos.setLayout(new GridLayout(0,3,0,2));
          
          conteinerKm.setLayout(new GridLayout(0,1,1,0));
          
-         jpRanking.setBorder(BorderFactory.createEmptyBorder(0, 50, 10, 70));
+         jpCampos.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 30));
+         jpRanking.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 30));
+         jpBotaoRanking.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 30));
+         jpBotaoLocais.setBorder(BorderFactory.createEmptyBorder(0, 30, 50, 30));
          conteinerRanking.setBorder(BorderFactory.createEtchedBorder());
          conteinerEAST.setBorder(BorderFactory.createEtchedBorder());
          
@@ -306,15 +333,25 @@ public class TelaInicial {
          jpDatas.add(dataFinal);  
          jpRanking.add(jpDatas);
          
-         jpBotao.add(btnEnviarRanking);
-         jpRanking.add(jpBotao);
+         jpBotaoRanking.add(btnEnviarRanking);
+         jpRanking.add(jpBotaoRanking);
          
          
          conteinerRanking.add(jpRanking);
          
-         conteinerKm.add(lblKm);
-         conteinerKm.add(km);
-         conteinerKm.add(btnEnviarKm);
+         conteinerKm.add(lblKmConteiner);
+         
+         jpCampos.add(lblkm);
+         jpCampos.add(lblDtInicial);
+         jpCampos.add(lblDtFinal);
+         jpCampos.add(km);
+         jpCampos.add(dtInicial);
+         jpCampos.add(dtFinal);
+         
+         jpBotaoLocais.add(btnEnviarKm);
+         
+         conteinerKm.add(jpCampos);
+         conteinerKm.add(jpBotaoLocais);
          
          btnEnviarRanking.addActionListener(new AcaoBotaoEnviarRanking());
          btnEnviarKm.addActionListener(new AcaoBotaoEnviarKm());
@@ -327,13 +364,11 @@ public class TelaInicial {
          statusGeral.setSize(350,100);
          
          conteinerStatus.add(statusGeral);
-         
-         conteinerEAST.add(conteinerStatus, BorderLayout.NORTH);
          conteinerEAST.add(conteinerKm, BorderLayout.NORTH);
-         conteinerEAST.add(conteinerStatus);
-         janela.add(conteinerEAST);
-         janela.add(conteinerEAST);
+         conteinerEAST.add(conteinerStatus, BorderLayout.NORTH);
          
+       
+         janela.add(conteinerEAST);
          
          janela.setVisible(true);
     }
