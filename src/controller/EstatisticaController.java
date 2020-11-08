@@ -164,7 +164,7 @@ public class EstatisticaController {
 			arquivo.createNewFile();
 			PrintStream out = new PrintStream(arquivo);
 			
-			out.println("Pais\tValor");
+			out.println(String.join("\t", this.getHeader(dados.get(0))));
 			for (Estatistica dado : dados) {
 				out.println(dado.toTSV());
 			}
@@ -179,7 +179,7 @@ public class EstatisticaController {
 	
 	public static void main(String[] args) {
 		EstatisticaController controler = EstatisticaController.getInstance();
-		LocalDateTime inicio = LocalDateTime.parse("2021-05-01T00:00:00");
+		LocalDateTime inicio = LocalDateTime.parse("2019-05-01T00:00:00");
 		LocalDateTime fim = LocalDateTime.parse("2020-05-02T00:00:00");
 		MedicaoController cont = null;
 		try {
