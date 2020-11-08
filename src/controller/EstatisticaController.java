@@ -117,7 +117,7 @@ public class EstatisticaController {
 	
 	/**
 	 * Recebe um ranking (lista de Estatisticas) e cria um array bidimensional
-	 * cos os valores desse ranking. A primeira linha representa o Header do
+	 * com os valores desse ranking. A primeira linha representa o Header do
 	 * ranking e as demais representam as entradas.
 	 * 
 	 * @param ranking	Ranking a ser estatistica.
@@ -152,7 +152,7 @@ public class EstatisticaController {
 		if (exemplo instanceof TotalPeriodo) {
 			valor = "Total " + tipo;
 		} else if (exemplo instanceof CrescimentoPeriodo) {
-			valor = "Taxa de crescimeto " + tipo;
+			valor = "Taxa de crescimento " + tipo;
 		} else if(exemplo instanceof MortalidadePeriodo) {
 			valor = "Taxa de mortalidade";
 		} else {
@@ -163,27 +163,25 @@ public class EstatisticaController {
 	}
 	
 	/**
-	 * Recebe um ranking (lista de Estatisticas) e salva o seu conteudo em um
-	 * arquivo TSV, cujo nome tambem deve ser fornecido. O arquivo gerado é
+	 * Recebe um ranking (array bidimensional) e salva o seu conteudo em um
+	 * arquivo TSV, cujo nome tambem deve ser fornecido. O arquivo gerado eh
 	 * colocado na pasta rankings.
 	 * 
 	 * @param dados	Dados do ranking a serem convertidos em TSV.
 	 * @param nome	Nome do arquivo a ser gerado
 	 * @return	true se a operacao foi bem sucedida, caso contrario retorna false.
 	 */
-	public boolean toTSV(List<Estatistica> dados, String nome) {
+	public boolean toTSV(String[][] dados, String nome) {
 		File pasta = new File("rankings");
 		File arquivo = new File(pasta, nome + ".tsv");
-		Collections.sort(dados);
 		
 		try {
 			if (!pasta.exists()) pasta.mkdir();
 			arquivo.createNewFile();
 			PrintStream out = new PrintStream(arquivo);
-			
-			out.println(String.join("\t", this.getHeader(dados.get(0))));
-			for (Estatistica dado : dados) {
-				out.println(dado.toTSV());
+
+			for (String[] dado : dados) {
+				out.println(dado[0]+"\t"+dado[1]);
 			}
 			out.close();
 			
@@ -216,8 +214,8 @@ public class EstatisticaController {
 		for (Estatistica est : lista) {
 			System.out.println(est.toTSV());
 		}
-		System.out.println(controler.toTSV(lista, "teste"));
-		System.out.println(controler.toTSV(lista2, "teste2"));
+//		System.out.println(controler.toTSV(lista, "teste"));
+//		System.out.println(controler.toTSV(lista2, "teste2"));
 		
 		for (String[] linha : controler.rankingToArray(lista)) {
 			System.out.println(linha[0]+ "\t" + linha[1]);

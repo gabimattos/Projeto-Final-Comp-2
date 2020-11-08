@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import controller.EstatisticaController;
+
 public class Display {
 	private JPanel topPanel;
 	private JPanel btnPanel;
@@ -18,11 +20,11 @@ public class Display {
 	FlowLayout layout = new FlowLayout();
 
 	
-	public void display(String Titulo, String[][] dados, String[] colunas) {
+	public void display(String Titulo, String[][] newDados, String[] colunas, String dados[][]) {
 		topPanel = new JPanel();
 		btnPanel = new JPanel();
 		frame = new JFrame();
-		table = new JTable(dados, colunas);
+		table = new JTable(newDados, colunas);
 		scroll = new JScrollPane(table);
 
 		frame.setLayout(layout);
@@ -44,7 +46,7 @@ public class Display {
 		frame.getContentPane().add(btnPanel, BorderLayout.SOUTH);
 
 		backButton();
-		exportButton();
+		exportButton(dados, colunas);
 
 		frame.setVisible(true);
 	}
@@ -70,7 +72,7 @@ public class Display {
 		});
 	}
 
-	public void exportButton() {
+	public void exportButton(String dados[][], String[] colunas) {
 		JButton export = new JButton("Exportar");
 		// frame.add(export);
 		// layout.setAlignment(FlowLayout.RIGHT);
@@ -80,6 +82,7 @@ public class Display {
 		export.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				EstatisticaController.getInstance().toTSV(dados, colunas[1]);
 			}
 		});
 	}
@@ -101,7 +104,7 @@ public class Display {
 			newDados[i-1] = dados[i];
 		}
 		
-		display(colunas[1],newDados,colunas);
+		display(colunas[1],newDados,colunas,dados);
 	}
 
 //	public static void main(String[] args) {
