@@ -142,7 +142,7 @@ public class EstatisticaController {
 				"" : "de " + exemplo.getObservacoes().get(0).getStatus().getNome();
 		
 		if (exemplo instanceof TotalPeriodo) {
-			valor = "Total de " + tipo;
+			valor = "Total " + tipo;
 		} else if (exemplo instanceof CrescimentoPeriodo) {
 			valor = "Taxa de crescimeto " + tipo;
 		} else if(exemplo instanceof MortalidadePeriodo) {
@@ -179,7 +179,7 @@ public class EstatisticaController {
 	
 	public static void main(String[] args) {
 		EstatisticaController controler = EstatisticaController.getInstance();
-		LocalDateTime inicio = LocalDateTime.parse("2020-05-01T00:00:00");
+		LocalDateTime inicio = LocalDateTime.parse("2021-05-01T00:00:00");
 		LocalDateTime fim = LocalDateTime.parse("2020-05-02T00:00:00");
 		MedicaoController cont = null;
 		try {

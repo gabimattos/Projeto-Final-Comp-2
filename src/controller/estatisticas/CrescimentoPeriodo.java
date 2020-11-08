@@ -1,6 +1,5 @@
 package controller.estatisticas;
 
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import model.Estatistica;
 import model.Medicao;
