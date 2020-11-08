@@ -1,10 +1,8 @@
 package controller;
 
 import java.io.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.time.*;
+import java.time.format.*;
 import java.util.*;
 
 import model.*;
@@ -75,7 +73,6 @@ public class ConsultaController {
 				consultaAtual.alternateMapBoolean(consultaAtual.getCrescimentoDe(), StatusCaso.MORTOS, checked);
 				break;
 			}
-		consultaAtual.setCrescimentoDe(consultaAtual.getCrescimentoDe());
 	}
 	
 	/**
@@ -118,8 +115,7 @@ public class ConsultaController {
 		try {
 			periodo = LocalDate.parse(data, formato);
 		} catch (DateTimeParseException e) {
-			 System.out.println("Data invÃ¡lida");
-			 e.printStackTrace();
+			 System.out.println("Data invalida");
 		}
 		
 		Consulta consultaAtual = this.consultas.get(indexAtual);
@@ -200,7 +196,7 @@ public class ConsultaController {
 		
 		String consultaString = "";
 		
-		consultaString += String.format("Início do período: %s, Fim do período: %s", consulta.getInicioPeriodo().toString(), consulta.getFimPeriodo().toString());
+		consultaString += String.format("Início do período: %s, Fim do período: %s ", consulta.getInicioPeriodo().toString(), consulta.getFimPeriodo().toString());
 		
 		if(consulta.getNumeroDe().get(StatusCaso.CONFIRMADOS)) {
 			consultaString += "Número de casos, ";
@@ -229,7 +225,7 @@ public class ConsultaController {
 			consultaString += "Locais mais próximos, ";
 		}
 		
-		return consultaString;
+		return consultaString.substring(0, consultaString.length()-2);
 	}
 	
 	/**
@@ -246,13 +242,11 @@ public class ConsultaController {
 		ArrayList<Medicao> mortos = new ArrayList<>(medicoes.getMortos());
 		ArrayList<Medicao> recuperados = new ArrayList<>(medicoes.getRecuperados());
 		
-//		LocalDateTime inicio = consulta.getInicioPeriodo().atStartOfDay();
-//		LocalDateTime fim = consulta.getFimPeriodo().atStartOfDay();
-		LocalDateTime inicio = LocalDateTime.parse("2020-11-01T00:00:00");
-		LocalDateTime fim = LocalDateTime.parse("2020-11-03T00:00:00");
+		LocalDateTime inicio = consulta.getInicioPeriodo().atStartOfDay();
+		LocalDateTime fim = consulta.getFimPeriodo().atStartOfDay();
 		
 		List<String[][]> data = new ArrayList<>();
-		System.out.println(inicio.toString()+" "+fim.toString());
+		
 		if(consulta.getNumeroDe().get(StatusCaso.CONFIRMADOS)) {
 			data.add(estatisticas.rankingToArray(estatisticas.rankingMaiorValor(casos, inicio, fim)));
 		}
@@ -279,7 +273,7 @@ public class ConsultaController {
 		if(consulta.getLocaisMaisProximos()) {
 			data.add(estatisticas.rankingToArray(estatisticas.rankingLocaisProximos(casos, inicio, fim)));
 		}
-		
+
 		return data;
 	}
 	

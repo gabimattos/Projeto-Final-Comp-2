@@ -1,21 +1,14 @@
 package view;
 
-import controller.ConsultaController;
-
 import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+import java.awt.event.*;
 
 import controller.ConsultaController;
 import controller.MedicaoController;
-import model.Consulta;
-import model.StatusCaso;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
-import java.util.List;
-import java.awt.event.*;
-import java.io.*;
+import model.*;
 
 public class TelaInicial {
 	
@@ -77,32 +70,29 @@ public class TelaInicial {
         	&& !consultaAtual.getMortalidade() && !consultaAtual.getLocaisMaisProximos()) {        		
        		
         		erro = new JFrame("ERRO");
-                erro.setSize(400, 200);
+                erro.setSize(450, 200);
                 
-                lblerror = new JLabel("ERRO!\n Nenhuma opcao selecionada!");
+                lblerror = new JLabel("ERRO!\n Nenhuma opcao selecionada!", JLabel.CENTER);
                 erro.add(lblerror);
                 erro.setVisible(true);
         	}
         	else if(consultaAtual.getInicioPeriodo() == null || consultaAtual.getFimPeriodo() == null) {
         		erro = new JFrame("ERRO");
-                erro.setSize(400, 200);
+                erro.setSize(450, 200);
               
-                lblerror = new JLabel("ERRO!\n Alguma data nao foi preenchida!");
+                lblerror = new JLabel("ERRO!\n Alguma data nao foi preenchida corretamente! (Ex.: 08/11/2020)", JLabel.CENTER);
                 erro.add(lblerror);
                 erro.setVisible(true);
         	}
         	
         	else {
-
-        		System.out.println("teste");
-	            List<String[][]> datas = consulta.realizarConsulta(consulta.getIndexAtual());
-	            
-	            for(String[][] data: datas) {
-	            	for(int i = 0; i < data.length; i++) {
-	            		System.out.println(data[i][0]+" "+data[i][1]);
-	            	}
-
-	            }
+            List<String[][]> datas = consulta.realizarConsulta(consulta.getIndexAtual());
+            
+            for(String[][] data: datas) {
+            	for(int i = 0; i < data.length; i++) {
+            		System.out.println(data[i][0]+"\t"+data[i][1]);
+            	}
+            }
         	} 
         }
     }
