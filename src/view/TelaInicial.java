@@ -24,8 +24,10 @@ public class TelaInicial {
 
 	private JFrame janela;
 	private JFrame erro;
+	private JFrame erro2;
 	
     private JButton btnEnviarRanking;
+    private JButton btnEnviarSalvar;
     
     private JLabel lblRanking;
     private JLabel lblTopico1;
@@ -45,14 +47,6 @@ public class TelaInicial {
     private JLabel statusGeral;
     private JLabel lblerror;
     
-    private JCheckBox cbOpcao1;
-    private JCheckBox cbOpcao2;
-    private JCheckBox cbOpcao3;
-    private JCheckBox cbOpcao4;
-    private JCheckBox cbOpcao5;
-    private JCheckBox cbOpcao6;
-    private JCheckBox cbOpcao7;
-    private JCheckBox cbOpcao8;
     
     private JTextField dataInicial;
     private JTextField dataFinal;
@@ -107,6 +101,52 @@ public class TelaInicial {
         }
     }
     
+    public class AcaoBotaoEnviarSalvar implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        	Consulta consultaAtual = consulta.getConsultaAtual();
+
+        	consulta.atualizaPeriodo("Data Inicial", dataInicial.getText());
+        	consulta.atualizaPeriodo("Data Final", dataFinal.getText());
+        	
+        	if(!consultaAtual.getNumeroDe().get(StatusCaso.CONFIRMADOS) && !consultaAtual.getNumeroDe().get(StatusCaso.RECUPERADOS)
+        	&& !consultaAtual.getNumeroDe().get(StatusCaso.MORTOS) && !consultaAtual.getCrescimentoDe().get(StatusCaso.CONFIRMADOS)
+        	&& !consultaAtual.getCrescimentoDe().get(StatusCaso.RECUPERADOS) && !consultaAtual.getCrescimentoDe().get(StatusCaso.MORTOS)
+        	&& !consultaAtual.getMortalidade() && !consultaAtual.getLocaisMaisProximos()) {        		
+       		
+        		erro = new JFrame("ERRO");
+                erro.setSize(400, 200);
+                
+                lblerror = new JLabel("ERRO!\n Nenhuma opcao selecionada!");
+                erro.add(lblerror);
+                erro.setVisible(true);
+        	}
+        	else if(consultaAtual.getInicioPeriodo() == null || consultaAtual.getFimPeriodo() == null) {
+        		erro = new JFrame("ERRO");
+                erro.setSize(400, 200);
+              
+                lblerror = new JLabel("ERRO!\n Alguma data nao foi preenchida!");
+                erro.add(lblerror);
+                erro.setVisible(true);
+        	}
+        	
+        	else {
+
+        		System.out.println("teste");
+	            List<String[][]> datas = consulta.realizarConsulta(consulta.getIndexAtual());
+	            
+	            consulta.guardarConsultas();
+	            
+	            for(String[][] data: datas) {
+	            	for(int i = 0; i < data.length; i++) {
+	            		System.out.println(data[i][0]+" "+data[i][1]);
+	            	}
+
+	            }
+        	} 
+        }
+    }
+    
     
     private void initWindow() {
     	
@@ -129,6 +169,7 @@ public class TelaInicial {
 
                 
          btnEnviarRanking = new JButton("Enviar");
+         btnEnviarSalvar = new JButton("Enviar e Salvar");
                 
          lblRanking = new JLabel("Rankings Internacionais.");
          lblTopico1 = new JLabel("Número");
@@ -246,10 +287,7 @@ public class TelaInicial {
              }
           });
          
-         JMenuBar mb = new JMenuBar();
-         JMenu m1 = new JMenu("Salvar Consultas");
-         mb.add(m1);
-         
+
        
          JPanel conteinerRanking = new JPanel();
          JPanel jpRanking = new JPanel();
@@ -269,7 +307,7 @@ public class TelaInicial {
          jpOpcoes3.setLayout(new GridLayout(0,2,0,0));
          jpOpcoes4.setLayout(new GridLayout(0,2,0,0));
          jpDatas.setLayout(new GridLayout(0,2,0,0));
-         jpBotaoRanking.setLayout(new GridLayout(0,1,0,0));   
+         jpBotaoRanking.setLayout(new GridLayout(0,2,0,0));   
          
          jpRanking.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 30));
          jpBotaoRanking.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 30));
@@ -304,14 +342,16 @@ public class TelaInicial {
          jpRanking.add(jpDatas);
          
          jpBotaoRanking.add(btnEnviarRanking);
+         jpBotaoRanking.add(btnEnviarSalvar);
          jpRanking.add(jpBotaoRanking);
                   
          conteinerRanking.add(jpRanking);
          conteinerStatus.add(statusGeral);
 
          btnEnviarRanking.addActionListener(new AcaoBotaoEnviarRanking()); 
+         btnEnviarSalvar.addActionListener(new AcaoBotaoEnviarSalvar()); 
          
-         janela.add(BorderLayout.NORTH, mb);
+         
          janela.add(conteinerRanking, BorderLayout.WEST); 
          janela.add(conteinerStatus);
          janela.setVisible(true);
