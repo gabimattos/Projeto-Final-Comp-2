@@ -25,6 +25,7 @@ public class MortalidadePeriodo extends Estatistica {
 	@Override
 	public float valor() {
 		if (cacheAtualizado) return valorCache;
+		if (this.getObservacoes().size() < 2) return 0;
 		
 		int inicioConfirmados = 0;
 		int inicioMortos = 0;
