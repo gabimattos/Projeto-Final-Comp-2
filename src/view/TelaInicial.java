@@ -23,7 +23,10 @@ public class TelaInicial {
 	
 
 	private JFrame janela;
+	private JFrame erro;
+	
     private JButton btnEnviarRanking;
+    
     private JLabel lblRanking;
     private JLabel lblTopico1;
     private JLabel lblTopico2;
@@ -31,18 +34,6 @@ public class TelaInicial {
     private JLabel lblTopico4;
     private JLabel lblDataInicial;
     private JLabel lblDataFinal;
-    private JCheckBox cbOpcao1;
-    private JCheckBox cbOpcao2;
-    private JCheckBox cbOpcao3;
-    private JCheckBox cbOpcao4;
-    private JCheckBox cbOpcao5;
-    private JCheckBox cbOpcao6;
-    private JCheckBox cbOpcao7;
-    private JCheckBox cbOpcao8;
-    private JTextField dataInicial;
-    private JTextField dataFinal;
-    
-    
     private JLabel status1;
     private JLabel status2;
     private JLabel status3;
@@ -52,22 +43,24 @@ public class TelaInicial {
     private JLabel status7;
     private JLabel status8;
     private JLabel statusGeral;
-    
-    private JFrame erro;
     private JLabel lblerror;
-
-
+    
+    private JCheckBox cbOpcao1;
+    private JCheckBox cbOpcao2;
+    private JCheckBox cbOpcao3;
+    private JCheckBox cbOpcao4;
+    private JCheckBox cbOpcao5;
+    private JCheckBox cbOpcao6;
+    private JCheckBox cbOpcao7;
+    private JCheckBox cbOpcao8;
+    
+    private JTextField dataInicial;
+    private JTextField dataFinal;
+     
     public MedicaoController medicao;
-    
-    
-    public TelaInicial(){
-        initWindow();
-     }
-
-    
+        
     public static void main(String[] args) {
-    	   TelaInicial swingControlDemo = new TelaInicial();  	     
-    		//new TelaInicial().initWindow();
+    	   new TelaInicial().initWindow();
     }
     
     public class AcaoBotaoEnviarRanking implements ActionListener {
@@ -82,8 +75,7 @@ public class TelaInicial {
         	&& !consultaAtual.getNumeroDe().get(StatusCaso.MORTOS) && !consultaAtual.getCrescimentoDe().get(StatusCaso.CONFIRMADOS)
         	&& !consultaAtual.getCrescimentoDe().get(StatusCaso.RECUPERADOS) && !consultaAtual.getCrescimentoDe().get(StatusCaso.MORTOS)
         	&& !consultaAtual.getMortalidade() && !consultaAtual.getLocaisMaisProximos()) {        		
-
-        		
+       		
         		erro = new JFrame("ERRO");
                 erro.setSize(400, 200);
                 
@@ -102,7 +94,7 @@ public class TelaInicial {
         	
         	else {
 
-        			System.out.println("teste");
+        		System.out.println("teste");
 	            List<String[][]> datas = consulta.realizarConsulta(consulta.getIndexAtual());
 	            
 	            for(String[][] data: datas) {
@@ -116,28 +108,27 @@ public class TelaInicial {
     }
     
     
-    
     private void initWindow() {
     	
     	 janela = new JFrame("Coronavírus no mundo.");
          janela.setSize(900, 600);
+         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          
          statusGeral = new JLabel("",JLabel.CENTER);
          statusGeral.setSize(350,100);
-               
-         status1 = new JLabel("numcasos0 ");
-         status2 = new JLabel("numrecuperados0 ");
-         status3 = new JLabel("nummortes0 ");
-         status4 = new JLabel("crescasos0 ");   
-         status5 = new JLabel("cresrecuperados0 ");
-         status6 = new JLabel("cresmortes0 ");
-         status7 = new JLabel("mortalidade0 ");
-         status8 = new JLabel("locais0 ");
-
-         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          
+               
+         status1 = new JLabel("");
+         status2 = new JLabel("");
+         status3 = new JLabel("");
+         status4 = new JLabel("");   
+         status5 = new JLabel("");
+         status6 = new JLabel("");
+         status7 = new JLabel("");
+         status8 = new JLabel("");
+
+                
          btnEnviarRanking = new JButton("Enviar");
-         btnEnviarRanking.setSize(10,20);
                 
          lblRanking = new JLabel("Rankings Internacionais.");
          lblTopico1 = new JLabel("Número");
@@ -146,6 +137,9 @@ public class TelaInicial {
          lblTopico4 = new JLabel("Locais Próximos");
          lblDataInicial = new JLabel("Data Inicial");
          lblDataFinal = new JLabel("Data Final");
+         
+         dataInicial = new JTextField();
+         dataFinal = new JTextField();
         
          
          final JCheckBox cbOpcao1 = new JCheckBox("de casos");
@@ -224,12 +218,10 @@ public class TelaInicial {
              public void itemStateChanged(ItemEvent e) {
             	 
             	 consulta.atualizaCrescimentoDe("de mortos", e.getStateChange());
-       
-            	 consulta.atualizaCrescimentoDe("de mortos", e.getStateChange());
             	 
             	 status6.setText("cresmortes"+ (e.getStateChange()==1?"1":"0"));
             	 statusGeral.setText("Crescimento de recuperados: " + (e.getStateChange()==1?"checked":"unchecked"));
-                //System.out.println(status6.getText());
+
              }
           });
          cbOpcao7.addItemListener(new ItemListener() {
@@ -258,10 +250,7 @@ public class TelaInicial {
          JMenu m1 = new JMenu("Salvar Consultas");
          mb.add(m1);
          
-         dataInicial = new JTextField();
-         dataFinal = new JTextField();
-
-         JPanel conteinerEAST = new JPanel();
+       
          JPanel conteinerRanking = new JPanel();
          JPanel jpRanking = new JPanel();
          JPanel jpOpcoes1 = new JPanel();
@@ -270,32 +259,24 @@ public class TelaInicial {
          JPanel jpOpcoes4 = new JPanel();
          JPanel jpDatas = new JPanel();
          JPanel jpBotaoRanking = new JPanel();
-         JPanel jpBotaoLocais = new JPanel();
-         JPanel jpCampos = new JPanel();
-         
-         JPanel conteinerKm = new JPanel();
          JPanel conteinerStatus = new JPanel();
          
-         conteinerEAST.setLayout(new GridLayout(0,1,0,0));
+   
          conteinerRanking.setLayout(new GridLayout(0,1,0,0));
          jpRanking.setLayout(new GridLayout(0,1,0,0));
          jpOpcoes1.setLayout(new GridLayout(0,3,0,1));
          jpOpcoes2.setLayout(new GridLayout(0,3,0,2));
          jpOpcoes3.setLayout(new GridLayout(0,2,0,0));
+         jpOpcoes4.setLayout(new GridLayout(0,2,0,0));
          jpDatas.setLayout(new GridLayout(0,2,0,0));
-         jpBotaoRanking.setLayout(new GridLayout(0,1,0,0));
-         jpBotaoLocais.setLayout(new GridLayout(0,1,0,0));
-         
-         jpCampos.setLayout(new GridLayout(0,3,0,2));
-         
-         conteinerKm.setLayout(new GridLayout(0,1,1,0));
-         
+         jpBotaoRanking.setLayout(new GridLayout(0,1,0,0));   
          
          jpRanking.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 30));
          jpBotaoRanking.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 30));
          conteinerRanking.setBorder(BorderFactory.createEtchedBorder());
          
          jpRanking.add(lblRanking);
+         
          jpRanking.add(lblTopico1);
          jpOpcoes1.add(cbOpcao1);
          jpOpcoes1.add(cbOpcao2);
@@ -326,23 +307,13 @@ public class TelaInicial {
          jpRanking.add(jpBotaoRanking);
                   
          conteinerRanking.add(jpRanking);
+         conteinerStatus.add(statusGeral);
 
-         
-         btnEnviarRanking.addActionListener(new AcaoBotaoEnviarRanking());
-
+         btnEnviarRanking.addActionListener(new AcaoBotaoEnviarRanking()); 
          
          janela.add(BorderLayout.NORTH, mb);
-         janela.add(conteinerRanking, BorderLayout.WEST);
-         
-
-         statusGeral = new JLabel("",JLabel.CENTER);
-         statusGeral.setSize(350,100);
-         
-         conteinerStatus.add(statusGeral);
-         
-       
+         janela.add(conteinerRanking, BorderLayout.WEST); 
          janela.add(conteinerStatus);
-         
          janela.setVisible(true);
          
          this.medicao = MedicaoController.getInstance();
