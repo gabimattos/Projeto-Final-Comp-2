@@ -25,7 +25,7 @@ public class CrescimentoPeriodo extends Estatistica {
 	@Override
 	public float valor() {
 		if (cacheAtualizado) return valorCache;
-		if (getObservacoes().size() == 0) return 0;
+		if (getObservacoes().size() < 2) return 0;
 		
 		ArrayList<Medicao> medicoes = new ArrayList<Medicao>(getObservacoes());
 		float primeiro = (medicoes.get(0).getCasos() == 0)?
