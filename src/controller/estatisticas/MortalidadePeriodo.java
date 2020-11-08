@@ -50,7 +50,7 @@ public class MortalidadePeriodo extends Estatistica {
 		int totalMortos = fimMortos - inicioMortos;
 		int totalCasos = fimConfirmados - inicioConfirmados;
 		
-		Float valor = (totalCasos == 0)? -1f : ((float) totalMortos)/totalCasos;
+		Float valor = (totalCasos == 0)? 0f : ((float) totalMortos)/totalCasos;
 		
 		this.valorCache = valor;
 		this.cacheAtualizado = true;
