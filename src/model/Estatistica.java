@@ -101,7 +101,7 @@ public abstract class Estatistica implements Comparable<Estatistica>{
 	/**
 	 * Converte a estatistica para uma entrada TSV.
 	 * 
-	 * @return	entrda TSV que representa a estatisttica.
+	 * @return	entrada TSV que representa a estatisttica.
 	 */
 	public String toTSV() {
 		return nome + "\t" + valor();

@@ -1,15 +1,8 @@
 package controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.http.HttpResponse;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.*;
 
 import org.json.simple.*;
@@ -17,6 +10,7 @@ import org.json.simple.parser.*;
 
 import model.*;
 import utils.APIConsumer;
+import view.TelaInicial;
 
 public class MedicaoController {
 	private static final MedicaoController medicaoController = new MedicaoController();
@@ -43,9 +37,7 @@ public class MedicaoController {
 		
 
 		if (confirmadosFile.isFile() && mortosFile.isFile() &&  recuperadosFile.isFile()) {
-
-			System.out.println("Carregando dados já baixados.");
-
+			System.out.println("Carregando dados ja baixados.");
 			this.setConfirmados(deserialize(confirmadosFile));
 			this.setMortos(deserialize(mortosFile));
 			this.setRecuperados(deserialize(recuperadosFile));
@@ -53,8 +45,9 @@ public class MedicaoController {
 
 		else {
 			List<Pais> paises = PaisController.getInstance().getPaises();
-
-			System.out.println("Baixando mediï¿½ï¿½es dos paï¿½ses...");
+			int total = paises.size();
+			
+			System.out.println("Baixando medicoes dos paises...");
 			long inicio = new Date().getTime();
 
 			List<Medicao> confirmados = new ArrayList<>();
@@ -83,15 +76,14 @@ public class MedicaoController {
 					System.err.println("Problemas ao converter JSON em objeto.");
 				}
 				System.out.println(pais.getSlug());
-				int total = paises.size();
 				int baixado = paises.indexOf(pais) + 1;
 
 				int porcentagem = (int) (baixado / ((float) total) * 100);
-				
-				System.out.printf("Progresso %d/%d(%d%%) de medições de países.\n", baixado, total, porcentagem);
-				if (pais.getSlug().equals("greenland")) {
-					break;
-				}
+				TelaInicial.barra.updateBarMedicoes(baixado, total, porcentagem);
+				System.out.printf("Progresso %d/%d(%d%%) de medicoes de paises.\n", baixado, total, porcentagem);
+//				if (pais.getSlug().equals("france")) {
+//					break;
+//				}
 			}
 
 			this.setConfirmados(confirmados);
@@ -101,11 +93,13 @@ public class MedicaoController {
 			serialize(confirmadosFile, this.getConfirmados());
 			serialize(mortosFile, this.getMortos());
 			serialize(recuperadosFile, this.getRecuperados());
+			
+			TelaInicial.barra.updateBarMedicoes(total, total, 100);
 
 			long fim = new Date().getTime();
 			float duracao = (float) (fim - inicio) / 1000.0f;
 
-			System.out.printf("Mediï¿½ï¿½es dos paï¿½ses baixados em %.2f segundos\n", duracao);
+			System.out.printf("Medicoes dos paises baixados em %.2f segundos\n", duracao);
 		}
 	}
 
@@ -116,7 +110,7 @@ public class MedicaoController {
 			out.writeObject(objects);
 			out.close();
 			fileOut.close();
-			System.out.println("\nSerializaï¿½ï¿½o realizada com sucesso\n");
+			System.out.println("\nSerializacao realizada com sucesso\n");
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

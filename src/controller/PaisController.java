@@ -8,7 +8,7 @@ import org.json.simple.parser.*;
 
 import model.Pais;
 import utils.APIConsumer;
-import view.BarraProgresso;
+import view.TelaInicial;
 
 public class PaisController {
 	private static final PaisController paisController = new PaisController();
@@ -41,7 +41,7 @@ public class PaisController {
 	}
 	
 	private void carregaPaises() {
-		System.out.println("Baixando paï¿½ses...");
+		System.out.println("Baixando paises...");
 		long inicio = new Date().getTime();
 		
 		List<String> countriesSlug = this.getCountriesSlug();
@@ -75,19 +75,17 @@ public class PaisController {
 			int baixado = countriesSlug.indexOf(slug)+1;
 			
 			int porcentagem = (int) (baixado/((float)total)*100);
-			
-			BarraProgresso.barra.updateBar(baixado, total, porcentagem);
-			BarraProgresso.barra.update(BarraProgresso.barra.getGraphics());
-			
-			System.out.printf("Progresso %d/%d(%d%%) de países\n", baixado, total, porcentagem);
-			if (slug.equals("greenland")) {
-				break;
-			}
+			TelaInicial.barra.updateBarPaises(baixado, total, porcentagem);
+			System.out.printf("Progresso %d/%d(%d%%) de paises\n", baixado, total, porcentagem);
+
+//			if (slug.equals("france")) {
+//				break;
+//			}
 		}
 		long fim = new Date().getTime();
 		float duracao = (float)(fim - inicio)/1000.0f;
 		
-		System.out.printf("Paï¿½ses baixados em %.2f segundos\n", duracao);
+		System.out.printf("Paises baixados em %.2f segundos\n", duracao);
 		this.setPaises(paises);
 	}
 	

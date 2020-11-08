@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import controller.EstatisticaController;
+
 public class Display {
 	private JPanel topPanel;
 	private JPanel btnPanel;
@@ -16,12 +18,18 @@ public class Display {
 	JTable table = null;
 	JScrollPane scroll = null;
 	FlowLayout layout = new FlowLayout();
+	
+	private JFrame janela;
 
-	public void display(String Titulo, String[][] dados, String[] colunas) {
+	public Display(JFrame janela) {
+		this.janela = janela;
+	}
+	
+	public void display(String Titulo, String[][] newDados, String[] colunas, String dados[][]) {
 		topPanel = new JPanel();
 		btnPanel = new JPanel();
 		frame = new JFrame();
-		table = new JTable(dados, colunas);
+		table = new JTable(newDados, colunas);
 		scroll = new JScrollPane(table);
 
 		frame.setLayout(layout);
@@ -43,10 +51,9 @@ public class Display {
 		frame.getContentPane().add(btnPanel, BorderLayout.SOUTH);
 
 		backButton();
-		exportButton();
+		exportButton(dados, colunas);
 
 		frame.setVisible(true);
-
 	}
 
 	private JTable centralizeText(JTable table, String[] header) {
@@ -66,29 +73,34 @@ public class Display {
 		back.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				janela.setVisible(true);
+				frame.setVisible(false);
 			}
 		});
 	}
 
-	public void exportButton() {
+	public void exportButton(String dados[][], String[] colunas) {
 		JButton export = new JButton("Exportar");
-		// frame.add(export);
-		// layout.setAlignment(FlowLayout.RIGHT);
-		// layout.setAlignment(FlowLayout.CENTER);
 		btnPanel.add(export);
 
 		export.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				EstatisticaController.getInstance().toTSV(dados, colunas[1]);
 			}
 		});
 	}
-
-	public static void main(String[] args) {
-		String colunas[] = { "Paises", "Numero de mortos" };
-		String dados[][] = { { "Estados unidos", "22" }, { "Brasil", "32" }, { "Inglaterra", "25" } };
-
-		Display display = new Display();
-		display.display("Ranking", dados, colunas);
+	
+	public void trataDados(String dados[][]) {		
+		String colunas[] = null;
+		colunas = dados[0];
+		
+		String newDados[][] = new String[dados.length-1][2];
+		
+		for(int i = 1; i<dados.length; i++) {
+			newDados[i-1] = dados[i];
+		}
+		
+		display(colunas[1],newDados,colunas,dados);
 	}
 }
