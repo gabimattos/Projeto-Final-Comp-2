@@ -8,7 +8,7 @@ import java.net.http.HttpClient.Version;
 
 /**
  * Classe que implementa o método GET para COVID19 API.
- * @author Raphael Mesquita
+ * @author Raphael Mesquita &lt;raphafm.rf@gmail.com&gt;
  *
  */
 public class APIConsumer {

@@ -1,7 +1,7 @@
 package controller;
 
 import java.io.*;
-import java.net.http.HttpResponse;
+import java.net.http.*;
 import java.time.*;
 import java.util.*;
 
@@ -11,6 +11,11 @@ import org.json.simple.parser.*;
 import model.*;
 import utils.APIConsumer;
 
+/**
+ * Classe que baixa, salva e carrega as medicoes dos paises.
+ * @author Raphael Mesquita &lt;raphafm.rf@gmail.com&gt;
+ *
+ */
 public class MedicaoController {
 	private static final MedicaoController medicaoController = new MedicaoController();
 
@@ -22,10 +27,20 @@ public class MedicaoController {
 		this.carregaMedicoes();
 	}
 
+	/**
+	 * Metodo que retorna uma instancia unica da classe MedicaoController.
+	 * @return A instancia unica da classe MedicaoController.
+	 */
 	public static MedicaoController getInstance() {
 		return MedicaoController.medicaoController;
 	}
 
+	/**
+	 *	Metodo que carrega as medicoes dos paises de todos os dias atraves da classe APIConsumer.
+	 *<p>
+	 *	
+	 *</p>
+	 */
 	private void carregaMedicoes() {
 		File pasta = new File("cache/medicoes");
 		if(!pasta.exists()) pasta.mkdirs();
@@ -36,7 +51,7 @@ public class MedicaoController {
 		
 
 		if (confirmadosFile.isFile() && mortosFile.isFile() &&  recuperadosFile.isFile()) {
-			System.out.println("Carregando dados j� baixados.");
+			System.out.println("Carregando dados ja baixados.");
 			this.setConfirmados(deserialize(confirmadosFile));
 			this.setMortos(deserialize(mortosFile));
 			this.setRecuperados(deserialize(recuperadosFile));
@@ -45,7 +60,7 @@ public class MedicaoController {
 		else {
 			List<Pais> paises = PaisController.getInstance().getPaises();
 
-			System.out.println("Baixando medi��es dos pa�ses...");
+			System.out.println("Baixando medicoes dos paises...");
 			long inicio = new Date().getTime();
 
 			List<Medicao> confirmados = new ArrayList<>();
@@ -78,10 +93,7 @@ public class MedicaoController {
 				int baixado = paises.indexOf(pais) + 1;
 
 				int porcentagem = (int) (baixado / ((float) total) * 100);
-				System.out.printf("Progresso %d/%d(%d%%) de medi��es de pa�ses.\n", baixado, total, porcentagem);
-//				if (pais.getSlug().equals("france")) {
-//					break;
-//				}
+				System.out.printf("Progresso %d/%d(%d%%) de medicoes de paises.\n", baixado, total, porcentagem);
 			}
 
 			this.setConfirmados(confirmados);
@@ -95,7 +107,7 @@ public class MedicaoController {
 			long fim = new Date().getTime();
 			float duracao = (float) (fim - inicio) / 1000.0f;
 
-			System.out.printf("Medi��es dos pa�ses baixados em %.2f segundos\n", duracao);
+			System.out.printf("Medicoes dos paises baixados em %.2f segundos\n", duracao);
 		}
 	}
 
@@ -106,7 +118,7 @@ public class MedicaoController {
 			out.writeObject(objects);
 			out.close();
 			fileOut.close();
-			System.out.println("\nSerializa��o realizada com sucesso\n");
+			System.out.println("\nSerializalizacao realizada com sucesso\n");
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
