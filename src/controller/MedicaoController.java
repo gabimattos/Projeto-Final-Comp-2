@@ -34,26 +34,27 @@ public class MedicaoController {
 	}
 
 	private void carregaMedicoes() {
-		File confirmadosFile = new File("medicoes/" + LocalDate.now() + " - confirmados.ser");
-		File mortosFile = new File("medicoes/" + LocalDate.now() + " - mortos.ser");
-		File recuperadosFile = new File("medicoes/" + LocalDate.now() + " - recuperados.ser");
+		File pasta = new File("cache/medicoes");
+		if(!pasta.exists()) pasta.mkdirs();
+		
+		File confirmadosFile = new File("cache/medicoes/" + LocalDate.now() + " - confirmados.ser");
+		File mortosFile = new File("cache/medicoes/" + LocalDate.now() + " - mortos.ser");
+		File recuperadosFile = new File("cache/medicoes/" + LocalDate.now() + " - recuperados.ser");
+		
 
 		if (confirmadosFile.isFile() && mortosFile.isFile() &&  recuperadosFile.isFile()) {
+
 			System.out.println("Carregando dados já baixados.");
+
 			this.setConfirmados(deserialize(confirmadosFile));
 			this.setMortos(deserialize(mortosFile));
 			this.setRecuperados(deserialize(recuperadosFile));
-			for (Medicao m : this.getConfirmados()) {
-				if (m.getPais().getSlug().equals("brazil")) {
-					System.out.println(m.getCasos());
-				}
-			}
 		}
 
 		else {
 			List<Pais> paises = PaisController.getInstance().getPaises();
 
-			System.out.println("Baixando medições dos países...");
+			System.out.println("Baixando mediï¿½ï¿½es dos paï¿½ses...");
 			long inicio = new Date().getTime();
 
 			List<Medicao> confirmados = new ArrayList<>();
@@ -97,12 +98,6 @@ public class MedicaoController {
 			this.setMortos(mortos);
 			this.setRecuperados(recuperados);
 			
-			for (Medicao m : this.getConfirmados()) {
-				if (m.getPais().getSlug().equals("brazil")) {
-					System.out.println(m.getCasos());
-				}
-			}
-			
 			serialize(confirmadosFile, this.getConfirmados());
 			serialize(mortosFile, this.getMortos());
 			serialize(recuperadosFile, this.getRecuperados());
@@ -110,7 +105,7 @@ public class MedicaoController {
 			long fim = new Date().getTime();
 			float duracao = (float) (fim - inicio) / 1000.0f;
 
-			System.out.printf("Medições dos países baixados em %.2f segundos\n", duracao);
+			System.out.printf("Mediï¿½ï¿½es dos paï¿½ses baixados em %.2f segundos\n", duracao);
 		}
 	}
 
@@ -121,7 +116,7 @@ public class MedicaoController {
 			out.writeObject(objects);
 			out.close();
 			fileOut.close();
-			System.out.println("\nSerialização realizada com sucesso\n");
+			System.out.println("\nSerializaï¿½ï¿½o realizada com sucesso\n");
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

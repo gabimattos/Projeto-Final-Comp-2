@@ -3,8 +3,20 @@ package controller.estatisticas;
 import model.Estatistica;
 import model.Medicao;
 
+/**
+ * Esta estatistica recebe duas medicoes calcula a distancia entre seus
+ * respectivos paises. A distancia calculada é dada em Km.
+ * 
+ * @author Gabriel Rodrigues Cunha - 119.143.696
+ *
+ */
 public class Distancia extends Estatistica {
 
+	/**
+	 * Cria uma nova Distancia com o nome fornecido.
+	 * 
+	 * @param nome	nome da Distancia;
+	 */
 	public Distancia(String nome) {
 		super(nome);
 	}
@@ -19,6 +31,7 @@ public class Distancia extends Estatistica {
 	@Override
 	public float valor() {
 		if (cacheAtualizado) return valorCache;
+		if (this.getObservacoes().size() < 2) return 0;
 		
 		int raio = 6371;
 		double long1 = Math.toRadians(this.getObservacoes().get(0)
@@ -40,6 +53,11 @@ public class Distancia extends Estatistica {
 		cacheAtualizado = true;
 		
 		return (float) distancia;
+	}
+	
+	@Override
+	public int compareTo(Estatistica o) {
+		return Float.compare(this.valor(), o.valor());
 	}
 
 }
