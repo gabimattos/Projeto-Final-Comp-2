@@ -4,8 +4,20 @@ import java.util.ArrayList;
 import model.Estatistica;
 import model.Medicao;
 
+/**
+ * Esta estatistica representa o total de casos que ocorreram no periodo
+ * determinado pelas medicoes fornecidas.
+ *
+ * @author Gabriel Rodrigues Cunha - 119.143.696
+ *
+ */
 public class TotalPeriodo extends Estatistica {
 
+	/**
+	 * Cria um novo TotalPeriodo com o nome fornecido.
+	 * 
+	 * @param nome	nome do TotalPeriodo;
+	 */
 	public TotalPeriodo(String nome) {
 		super(nome);
 	}

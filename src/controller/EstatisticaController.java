@@ -29,8 +29,8 @@ public class EstatisticaController {
 				currEstatistica = new TotalPeriodo(currPais.getNome());
 			}
 			//pega todas as medicoes de um pais nesse intervalo de tempo
-			if (dadosTotal.get(i).getMomento().isAfter(inicio) && 
-					dadosTotal.get(i).getMomento().isBefore(fim)) {
+			if (!dadosTotal.get(i).getMomento().isBefore(inicio) && 
+					!dadosTotal.get(i).getMomento().isAfter(fim)) {
 				currEstatistica.inclui(dadosTotal.get(i)); //inclui medi��es  dentro do periodo definido.
 			}
 		}
@@ -61,8 +61,8 @@ public class EstatisticaController {
 				currEstatisticaMortalidade = new MortalidadePeriodo(currPais.getNome());
 			}
 			//pega todas as medicoes de um pais nesse intervalo de tempo
-			if (dados.get(i).getMomento().isAfter(inicio) && 
-					dados.get(i).getMomento().isBefore(fim)) {
+			if (!dados.get(i).getMomento().isBefore(inicio) && 
+					!dados.get(i).getMomento().isAfter(fim)) {
 				currEstatisticaMortalidade.inclui(dados.get(i)); //inclui medições  dentro do periodo definido.
 			}
 		}
@@ -86,8 +86,8 @@ public class EstatisticaController {
 				currEstatistica = new CrescimentoPeriodo(currPais.getNome());
 			}
 			//pega todas as medicoes de um pais nesse intervalo de tempo
-			if (dadosCasos.get(i).getMomento().isAfter(inicio) && 
-					dadosCasos.get(i).getMomento().isBefore(fim)) {
+			if (!dadosCasos.get(i).getMomento().isBefore(inicio) && 
+					!dadosCasos.get(i).getMomento().isAfter(fim)) {
 				currEstatistica.inclui(dadosCasos.get(i)); //inclui medi��es  dentro do periodo definido.
 			}
 		}
@@ -102,6 +102,9 @@ public class EstatisticaController {
 		Estatistica maiorCrescimento = rankingCrescimento.get(0);
 		List <Estatistica> rankingLocaisProximos = new ArrayList<>();
 		
+		if  (maiorCrescimento.getObservacoes().size() == 0)
+			return new ArrayList<>();
+		
 		for (Estatistica e : rankingCrescimento) {
 			Distancia currDist = new Distancia(e.getNome());
 			currDist.inclui(maiorCrescimento.getObservacoes().get(0));
@@ -115,7 +118,8 @@ public class EstatisticaController {
 	public String[][] rankingToArray(List <Estatistica> ranking) {
 		String[][] rankingArr = new String[ranking.size() + 1][2];
 		boolean isInt = ranking.get(0) instanceof TotalPeriodo;
-		boolean isPorcento = ranking.get(0) instanceof MortalidadePeriodo;
+		boolean isPorcento = ranking.get(0) instanceof MortalidadePeriodo ||
+				ranking.get(0) instanceof CrescimentoPeriodo;
 		rankingArr[0] = getHeader(ranking.get(0));
 		
 		for (int i = 1; i < rankingArr.length; i++) {
@@ -134,11 +138,13 @@ public class EstatisticaController {
 	
 	private String[] getHeader(Estatistica exemplo) {
 		String valor = null;
+		String tipo = (exemplo.getObservacoes().size() == 0)?
+				"" : "de " + exemplo.getObservacoes().get(0).getStatus().getNome();
+		
 		if (exemplo instanceof TotalPeriodo) {
-			valor = "Total de " + exemplo.getObservacoes().get(0).getStatus().getNome();
+			valor = "Total " + tipo;
 		} else if (exemplo instanceof CrescimentoPeriodo) {
-			valor = "Crescimeto de " + exemplo.getObservacoes().get(0).getStatus().getNome() + 
-					" (Novos casos por dia)";
+			valor = "Taxa de crescimeto " + tipo;
 		} else if(exemplo instanceof MortalidadePeriodo) {
 			valor = "Taxa de mortalidade";
 		} else {
@@ -173,8 +179,8 @@ public class EstatisticaController {
 	
 	public static void main(String[] args) {
 		EstatisticaController controler = EstatisticaController.getInstance();
-		LocalDateTime inicio = LocalDateTime.parse("2020-01-01T00:00:01");
-		LocalDateTime fim = LocalDateTime.parse("2021-01-02T23:59:59");
+		LocalDateTime inicio = LocalDateTime.parse("2021-05-01T00:00:00");
+		LocalDateTime fim = LocalDateTime.parse("2020-05-02T00:00:00");
 		MedicaoController cont = null;
 		try {
 			cont = MedicaoController.getInstance();
@@ -185,7 +191,7 @@ public class EstatisticaController {
 		ArrayList<Medicao> mortos = new ArrayList<>(cont.getMortos());
 		ArrayList<Medicao> recuperados = new ArrayList<>(cont.getRecuperados());
 		ArrayList<Estatistica> lista = new ArrayList<>(controler.rankingMaiorValor(recuperados, inicio, fim));
-		ArrayList<Estatistica> lista2 = new ArrayList<>(controler.rankingCrescimento(mortos, inicio, fim));
+		ArrayList<Estatistica> lista2 = new ArrayList<>(controler.rankingCrescimento(casos, inicio, fim));
 		ArrayList<Estatistica> lista3 = new ArrayList<>(controler.rankingMortalidade(mortos, casos, inicio, fim));
 		ArrayList<Estatistica> lista4 = new ArrayList<>(controler.rankingLocaisProximos(casos, inicio, fim));
 		
@@ -196,7 +202,7 @@ public class EstatisticaController {
 		System.out.println(controler.toTSV(lista, "teste"));
 		System.out.println(controler.toTSV(lista2, "teste2"));
 		
-		for (String[] linha : controler.rankingToArray(lista2)) {
+		for (String[] linha : controler.rankingToArray(lista)) {
 			System.out.println(linha[0]+ "\t" + linha[1]);
 		}
 	}
