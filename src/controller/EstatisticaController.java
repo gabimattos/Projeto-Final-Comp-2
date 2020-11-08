@@ -164,12 +164,12 @@ public class EstatisticaController {
 	
 	/**
 	 * Recebe um ranking (lista de Estatisticas) e salva o seu conteudo em um
-	 * arquivo TSV, cujo nome também deve ser fornecido. O arquivo gerado é
+	 * arquivo TSV, cujo nome tambem deve ser fornecido. O arquivo gerado Ã©
 	 * colocado na pasta rankings.
 	 * 
 	 * @param dados	Dados do ranking a serem convertidos em TSV.
 	 * @param nome	Nome do arquivo a ser gerado
-	 * @return	true se a operacao foi bem sucedida, caso contrário retorna false.
+	 * @return	true se a operacao foi bem sucedida, caso contrario retorna false.
 	 */
 	public boolean toTSV(List<Estatistica> dados, String nome) {
 		File pasta = new File("rankings");
