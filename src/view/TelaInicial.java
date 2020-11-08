@@ -1,6 +1,17 @@
 package view;
-
 import controller.ConsultaController;
+
+/**
+ * Essa classe gera uma interface de interacao com o usuario, onde ele pode selecionar algumas opcoes e receber
+ * diferentes informacoes sobre a Covid19 em todo o mundo. Entre as opcoes existentes estao Ranking internacional
+ * de numero de (casos/recuperados/mortos), por periodo selecionado, Ranking internacional de crescimento de (casos/recuperados/mortos), 
+ * por periodo selecionado, Ranking internacional de mortalidade, por periodo selecionado, Locais mais proximos do local com maior crescimento 
+ * de casos confirmados em um periodo de tempo, ate um raio r (km). Alem disso o usuario tem a opcao de apenas enviar suas opcoes ou 
+ * de enviar e salvar suas opcoes.
+ * 
+ * @author Gabriela Mattos
+ */
+
 
 import javax.swing.*;
 
@@ -57,6 +68,19 @@ public class TelaInicial {
     	   new TelaInicial().initWindow();
     }
     
+    /**
+     * Classe 'AcaoBotaoEnviarRanking()'
+     * Classe interna da classe 'TelaInicial()' responsavel pelo funcionamento do botao 'btnEnviarRanking'. Dentro dessa classe verifica-se 
+     * se alguma opcao de consulta foi selecionada e se os campos das datas (dataInicial e dataFinal), por onde identifica-se o periodo em 
+     * que se deseja obter aquela informacao (ranking), foram preenchidos. Caso nenhuma opcao seja selecionada ou um dos campos de data nao sejam
+     * preenchidos eh notificado um erro e a consulta nao eh feita. Caso alguma opcao seja selecionada e o campo das datas sejam preenchidos 
+     * a consulta eh feita corretamente.
+     * 
+     * @author Gabriela Mattos
+     *
+     */
+
+
     public class AcaoBotaoEnviarRanking implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -101,6 +125,19 @@ public class TelaInicial {
         }
     }
     
+
+/**
+ * Classe 'AcaoBotaoEnviarSalvar()'
+ * 
+ * Classe interna da classe 'TelaInicial()' responsavel pelo funcionamento do botao 'btnEnviarSalvar'. Dentro dessa classe verifica-se 
+ * se alguma opcao de consulta foi selecionada e se os campos das datas (dataInicial e dataFinal), por onde identifica-se o periodo em 
+ * que se deseja obter aquela informacao (ranking), foram preenchidos. Caso nenhuma opcao seja selecionada ou um dos campos de data nao sejam
+ * preenchidos eh notificado um erro e a consulta nao eh feita. Caso alguma opcao seja selecionada e o campo das datas sejam preenchidos 
+ * a consulta eh feita corretamente e as opcoes selecionadas e as datas entradas (dataInicial e dataFinal) sao salvas. 
+ * 
+ * @author Gabriela Mattos
+ *
+ */
     public class AcaoBotaoEnviarSalvar implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -245,6 +282,7 @@ public class TelaInicial {
                
             }
          });
+        
          cbOpcao5.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
             	
