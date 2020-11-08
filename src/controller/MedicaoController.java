@@ -17,7 +17,6 @@ import org.json.simple.parser.*;
 
 import model.*;
 import utils.APIConsumer;
-import view.mainTest;
 
 public class MedicaoController {
 	private static final MedicaoController medicaoController = new MedicaoController();

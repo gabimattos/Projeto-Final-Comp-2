@@ -1,17 +1,17 @@
 package view;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.ProgressMonitor;
 import javax.swing.UIManager;
 
-public class BarraProgresso extends JPanel{
+import controller.MedicaoController;
 
+public class BarraProgresso extends JPanel{
+	public static BarraProgresso barra = new BarraProgresso();
 	private static final long serialVersionUID = 4L;
 	static final int MINIMO = 0;
 	static final int MAXIMO = 100;
-	ProgressMonitor barraProgresso;
+	private ProgressMonitor barraProgresso;
 
 	
 	public BarraProgresso() {
@@ -19,7 +19,7 @@ public class BarraProgresso extends JPanel{
 		    String note = "iniciando...";
 		    String title = "Baixando";
 		    UIManager.put("ProgressMonitor.progressText", title);
-		    barraProgresso = new ProgressMonitor(null, message, note, MINIMO, MAXIMO);
+		    ProgressMonitor barraProgresso = new ProgressMonitor(null, message, note, MINIMO, MAXIMO);
 		
 	}
 
@@ -33,5 +33,14 @@ public class BarraProgresso extends JPanel{
 		System.exit(0);
 		}
 	}
-
+	
+	public static void main(String[] args) {
+		
+		MedicaoController cont = null;
+		try {
+			cont = MedicaoController.getInstance();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+    }
 }

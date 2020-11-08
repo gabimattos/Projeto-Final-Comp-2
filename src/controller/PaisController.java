@@ -8,7 +8,7 @@ import org.json.simple.parser.*;
 
 import model.Pais;
 import utils.APIConsumer;
-import view.mainTest;
+import view.BarraProgresso;
 
 public class PaisController {
 	private static final PaisController paisController = new PaisController();
@@ -75,8 +75,8 @@ public class PaisController {
 			int baixado = countriesSlug.indexOf(slug)+1;
 			
 			int porcentagem = (int) (baixado/((float)total)*100);
-			mainTest.barraProgresso.updateBar(baixado, total, porcentagem);
-			mainTest.barraProgresso.update(mainTest.barraProgresso.getGraphics());
+			BarraProgresso.barra.updateBar(baixado, total, porcentagem);
+			BarraProgresso.barra.update(BarraProgresso.barra.getGraphics());
 			System.out.printf("Progresso %d/%d(%d%%) de países\n", baixado, total, porcentagem);
 			if (slug.equals("greenland")) {
 				break;
