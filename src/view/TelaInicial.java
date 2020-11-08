@@ -3,11 +3,17 @@ package view;
 import controller.ConsultaController;
 
 import javax.swing.*;
+
+import controller.ConsultaController;
+import controller.MedicaoController;
+import model.Consulta;
+import model.StatusCaso;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
-import java.util.*;
+import java.util.List;
 import java.awt.event.*;
 import java.io.*;
 
@@ -50,60 +56,60 @@ public class TelaInicial {
     private JFrame erro;
     private JLabel lblerror;
 
-   /* 
+
+    public MedicaoController medicao;
+    
+    
     public TelaInicial(){
         initWindow();
-     }*/
+     }
 
     
     public static void main(String[] args) {
-    	   //TelaInicial swingControlDemo = new TelaInicial();  	     
-    		new TelaInicial().initWindow();
+    	   TelaInicial swingControlDemo = new TelaInicial();  	     
+    		//new TelaInicial().initWindow();
     }
     
     public class AcaoBotaoEnviarRanking implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+        	Consulta consultaAtual = consulta.getConsultaAtual();
+
+        	consulta.atualizaPeriodo("Data Inicial", dataInicial.getText());
+        	consulta.atualizaPeriodo("Data Final", dataFinal.getText());
         	
-        	if(status1.getText().equals("numcasos0 ") && status2.getText().equals("numrecuperados0 ")
-        	&& status3.getText().equals("nummortes0 ") && status4.getText().equals("crescasos0 ")
-        	&& status5.getText().equals("cresrecuperados0 ") && status6.getText().equals("cresmortes0 ")
-        	&& status7.getText().equals("mortalidade0 ") && status7.getText().equals("locais0 ")) {
-        		
+        	if(!consultaAtual.getNumeroDe().get(StatusCaso.CONFIRMADOS) && !consultaAtual.getNumeroDe().get(StatusCaso.RECUPERADOS)
+        	&& !consultaAtual.getNumeroDe().get(StatusCaso.MORTOS) && !consultaAtual.getCrescimentoDe().get(StatusCaso.CONFIRMADOS)
+        	&& !consultaAtual.getCrescimentoDe().get(StatusCaso.RECUPERADOS) && !consultaAtual.getCrescimentoDe().get(StatusCaso.MORTOS)
+        	&& !consultaAtual.getMortalidade() && !consultaAtual.getLocaisMaisProximos()) {        		
+
         		
         		erro = new JFrame("ERRO");
                 erro.setSize(400, 200);
                 
-                lblerror = new JLabel("ERRO!\n Nenhuma opção selecionada!");
+                lblerror = new JLabel("ERRO!\n Nenhuma opcao selecionada!");
                 erro.add(lblerror);
                 erro.setVisible(true);
         	}
-        	else if(dataInicial.getText().equals("")|| dataFinal.getText().equals("")) {
+        	else if(consultaAtual.getInicioPeriodo() == null || consultaAtual.getFimPeriodo() == null) {
         		erro = new JFrame("ERRO");
                 erro.setSize(400, 200);
               
-                lblerror = new JLabel("ERRO!\n Alguma data não foi preenchida!");
+                lblerror = new JLabel("ERRO!\n Alguma data nao foi preenchida!");
                 erro.add(lblerror);
                 erro.setVisible(true);
         	}
         	
         	else {
-        	
-	            try (PrintStream out = new PrintStream(new FileOutputStream("mensagem.txt"))){
-	                out.print(dataInicial.getText());
-	                out.print(dataFinal.getText());
-	                out.print(status1.getText());
-	                out.print(status2.getText());
-	                out.print(status3.getText());
-	                out.print(status4.getText());
-	                out.print(status5.getText());
-	                out.print(status6.getText());
-	                out.print(status7.getText());
-	                out.print(status8.getText());
-	               
-	            }
-	            catch (FileNotFoundException fnfe) {
-	                System.out.println("Não foi possível gravar no arquivo mensagem.txt");
+
+        			System.out.println("teste");
+	            List<String[][]> datas = consulta.realizarConsulta(consulta.getIndexAtual());
+	            
+	            for(String[][] data: datas) {
+	            	for(int i = 0; i < data.length; i++) {
+	            		System.out.println(data[i][0]+" "+data[i][1]);
+	            	}
+
 	            }
         	} 
         }
@@ -176,6 +182,8 @@ public class TelaInicial {
             	
             	consulta.atualizaNumeroDe("de recuperados", e.getStateChange());
             
+            	consulta.atualizaNumeroDe("de recuperados", e.getStateChange());
+            	
             	status2.setText("numrecuperados" + (e.getStateChange()==1?"1 ":"0 "));
             	statusGeral.setText("Número de recuperados: " + (e.getStateChange()==1?"checked":"unchecked"));
             	
@@ -186,6 +194,7 @@ public class TelaInicial {
             	
             	consulta.atualizaNumeroDe("de mortos", e.getStateChange());
             
+            	consulta.atualizaNumeroDe("de mortos", e.getStateChange());
             	status3.setText("nummortes"+ (e.getStateChange()==1?"1 ":"0 "));
             	statusGeral.setText("Número de mortes: " + (e.getStateChange()==1?"checked":"unchecked"));
             	
@@ -216,6 +225,8 @@ public class TelaInicial {
             	 
             	 consulta.atualizaCrescimentoDe("de mortos", e.getStateChange());
        
+            	 consulta.atualizaCrescimentoDe("de mortos", e.getStateChange());
+            	 
             	 status6.setText("cresmortes"+ (e.getStateChange()==1?"1":"0"));
             	 statusGeral.setText("Crescimento de recuperados: " + (e.getStateChange()==1?"checked":"unchecked"));
                 //System.out.println(status6.getText());
@@ -237,7 +248,7 @@ public class TelaInicial {
             	 
             	 consulta.atualizaLocaisMaisProximos(e.getStateChange());
             	 
-            	 status7.setText("mortalidade"+ (e.getStateChange()==1?"1":"0"));
+            	 status8.setText("locais"+ (e.getStateChange()==1?"1":"0"));
             	 statusGeral.setText("Locais mais próximos: " + (e.getStateChange()==1?"checked":"unchecked"));
                 
              }
@@ -279,12 +290,10 @@ public class TelaInicial {
          
          conteinerKm.setLayout(new GridLayout(0,1,1,0));
          
-         jpCampos.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 30));
+         
          jpRanking.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 30));
          jpBotaoRanking.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 30));
-         jpBotaoLocais.setBorder(BorderFactory.createEmptyBorder(0, 30, 50, 30));
          conteinerRanking.setBorder(BorderFactory.createEtchedBorder());
-         conteinerEAST.setBorder(BorderFactory.createEtchedBorder());
          
          jpRanking.add(lblRanking);
          jpRanking.add(lblTopico1);
@@ -304,7 +313,7 @@ public class TelaInicial {
          jpRanking.add(jpOpcoes3);
          
          jpRanking.add(lblTopico4);
-         jpOpcoes3.add(cbOpcao8);
+         jpOpcoes4.add(cbOpcao8);
          jpRanking.add(jpOpcoes4);
          
          jpDatas.add(lblDataInicial);
@@ -335,6 +344,8 @@ public class TelaInicial {
          janela.add(conteinerStatus);
          
          janela.setVisible(true);
+         
+         this.medicao = MedicaoController.getInstance();
     }
 
 }

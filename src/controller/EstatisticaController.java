@@ -96,7 +96,8 @@ public class EstatisticaController {
 	}
 	
   
-	public List <Estatistica> rankingLocaisProximos (List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
+	public List <Estatistica> rankingLocaisProximos (List <Medicao> dadosCasos,
+			LocalDateTime inicio, LocalDateTime fim){
 		List <Estatistica> rankingCrescimento = rankingCrescimento (dadosCasos, inicio, fim);
 		Estatistica maiorCrescimento = rankingCrescimento.get(0);
 		List <Estatistica> rankingLocaisProximos = new ArrayList<>();
@@ -111,6 +112,41 @@ public class EstatisticaController {
 		return rankingLocaisProximos;
 	}
 	
+	public String[][] rankingToArray(List <Estatistica> ranking) {
+		String[][] rankingArr = new String[ranking.size() + 1][2];
+		boolean isInt = ranking.get(0) instanceof TotalPeriodo;
+		boolean isPorcento = ranking.get(0) instanceof MortalidadePeriodo;
+		rankingArr[0] = getHeader(ranking.get(0));
+		
+		for (int i = 1; i < rankingArr.length; i++) {
+			Estatistica curr = ranking.get(i - 1);
+			
+			String valor = "";
+			if (isInt) valor = (int) curr.valor() + "";
+			else if (isPorcento) valor = curr.valor()*100 + "%";
+			else valor = curr.valor() + "";
+			
+			rankingArr[i] = new String[] {curr.getNome(), valor};
+		}
+		
+		return rankingArr;
+	}
+	
+	private String[] getHeader(Estatistica exemplo) {
+		String valor = null;
+		if (exemplo instanceof TotalPeriodo) {
+			valor = "Total de " + exemplo.getObservacoes().get(0).getStatus().getNome();
+		} else if (exemplo instanceof CrescimentoPeriodo) {
+			valor = "Crescimeto de " + exemplo.getObservacoes().get(0).getStatus().getNome() + 
+					" (Novos casos por dia)";
+		} else if(exemplo instanceof MortalidadePeriodo) {
+			valor = "Taxa de mortalidade";
+		} else {
+			valor = "Distância do epicentro (Km)";
+		}
+		
+		return new String[] {"Pais", valor};
+	}
 	
 	public boolean toTSV(List<Estatistica> dados, String nome) {
 		File pasta = new File("rankings");
@@ -147,8 +183,11 @@ public class EstatisticaController {
 		}
 		ArrayList<Medicao> casos = new ArrayList<>(cont.getConfirmados());
 		ArrayList<Medicao> mortos = new ArrayList<>(cont.getMortos());
-		ArrayList<Estatistica> lista = new ArrayList<>(controler.rankingCrescimento(casos, inicio, fim));
-		ArrayList<Estatistica> lista2 = new ArrayList<>(controler.rankingLocaisProximos(casos, inicio, fim));
+		ArrayList<Medicao> recuperados = new ArrayList<>(cont.getRecuperados());
+		ArrayList<Estatistica> lista = new ArrayList<>(controler.rankingMaiorValor(recuperados, inicio, fim));
+		ArrayList<Estatistica> lista2 = new ArrayList<>(controler.rankingCrescimento(mortos, inicio, fim));
+		ArrayList<Estatistica> lista3 = new ArrayList<>(controler.rankingMortalidade(mortos, casos, inicio, fim));
+		ArrayList<Estatistica> lista4 = new ArrayList<>(controler.rankingLocaisProximos(casos, inicio, fim));
 		
 		System.out.println(lista.size());
 		for (Estatistica est : lista) {
@@ -156,6 +195,10 @@ public class EstatisticaController {
 		}
 		System.out.println(controler.toTSV(lista, "teste"));
 		System.out.println(controler.toTSV(lista2, "teste2"));
+		
+		for (String[] linha : controler.rankingToArray(lista2)) {
+			System.out.println(linha[0]+ "\t" + linha[1]);
+		}
 	}
 	
 }

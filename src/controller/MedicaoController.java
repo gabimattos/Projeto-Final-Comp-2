@@ -86,7 +86,7 @@ public class MedicaoController {
 
 				int porcentagem = (int) (baixado / ((float) total) * 100);
 				System.out.printf("Progresso %d/%d(%d%%) de medi��es de pa�ses.\n", baixado, total, porcentagem);
-//				if (pais.getSlug().equals("cameroon")) {
+//				if (pais.getSlug().equals("haiti")) {
 //					break;
 //				}
 			}
@@ -123,13 +123,14 @@ public class MedicaoController {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private ArrayList<Medicao> deserialize(File file) {
 		ArrayList<Medicao> medicoes = new ArrayList<>();
 
 		try {
 			FileInputStream fileIn = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
-			medicoes = (ArrayList) in.readObject();
+			medicoes = (ArrayList<Medicao>) in.readObject();
 			in.close();
 			fileIn.close();
 		} catch (FileNotFoundException e) {

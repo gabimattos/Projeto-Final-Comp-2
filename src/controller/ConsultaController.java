@@ -16,7 +16,7 @@ import model.*;
 public class ConsultaController {
 	private static final ConsultaController consultaController = new ConsultaController();
 	
-	private List<Consulta> consultas;
+	private List<Consulta> consultas = new ArrayList<Consulta>();
 	private int indexAtual;
 	
 	private ConsultaController(){
@@ -75,6 +75,7 @@ public class ConsultaController {
 				consultaAtual.alternateMapBoolean(consultaAtual.getCrescimentoDe(), StatusCaso.MORTOS, checked);
 				break;
 			}
+		consultaAtual.setCrescimentoDe(consultaAtual.getCrescimentoDe());
 	}
 	
 	/**
@@ -138,8 +139,21 @@ public class ConsultaController {
 	 */
 	@SuppressWarnings("unchecked")
 	public void carregaConsultas() {
-		try(ObjectInputStream oos = new ObjectInputStream(new FileInputStream("resources"+File.separator+"consultas.ser"))) {
-			this.setConsultas((List<Consulta>)oos.readObject());
+		File pasta = new File("resources");
+		if(!pasta.exists()) pasta.mkdirs();
+		File arq = new File("resources"+File.separator+"consultas.ser");
+		if(!arq.exists()) {
+			try {
+				arq.createNewFile();
+			} catch (IOException e) {
+				System.err.println("Nao foi possivel criar o arquivo consultas.ser");
+			}
+			return;
+		}
+		if(arq.length() <= 0) return;
+		try(ObjectInputStream oos = new ObjectInputStream(new FileInputStream(arq))) {
+			Object objectReaded = oos.readObject();
+			this.setConsultas((List<Consulta>)objectReaded);
 			
 		} catch (FileNotFoundException e) {
 			System.err.println("Arquivo \"consultas.ser\" nï¿½o encontrado em resources/");
@@ -154,6 +168,18 @@ public class ConsultaController {
 	 * Guarda o histï¿½rico de consultas realizadas no arquivo "consultas.ser".
 	 */
 	public void guardarConsultas() {
+		File pasta = new File("resources");
+		if(!pasta.exists()) pasta.mkdirs();
+		File arq = new File("resources"+File.separator+"consultas.ser");
+		if(!arq.exists()) {
+			try {
+				arq.createNewFile();
+			} catch (IOException e) {
+				System.err.println("Nao foi possivel criar o arquivo consultas.ser");
+			}
+			return;
+		}
+		
 		try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("resources"+File.separator+"consultas.ser"))) {
 			oos.writeObject(this.getConsultas());
 			
@@ -210,45 +236,51 @@ public class ConsultaController {
 	 * Chama os métodos de rankings a partir da consulta relacionado ao indice passado pelo parametro.
 	 * @param index O indice da consulta a se realizar.
 	 */
-	public void realizarConsulta(int index) {
+	public List<String[][]> realizarConsulta(int index) {
 		Consulta consulta = consultas.get(index);
 		
 		EstatisticaController estatisticas = EstatisticaController.getInstance();
 		MedicaoController medicoes = MedicaoController.getInstance();
 		
-		List<Medicao> casos = new ArrayList<>(medicoes.getConfirmados());
-		List<Medicao> mortos = new ArrayList<>(medicoes.getMortos());
-		List<Medicao> recuperados = new ArrayList<>(medicoes.getRecuperados());
+		ArrayList<Medicao> casos = new ArrayList<>(medicoes.getConfirmados());
+		ArrayList<Medicao> mortos = new ArrayList<>(medicoes.getMortos());
+		ArrayList<Medicao> recuperados = new ArrayList<>(medicoes.getRecuperados());
 		
-		LocalDateTime inicio = consulta.getInicioPeriodo().atStartOfDay();
-		LocalDateTime fim = consulta.getFimPeriodo().atStartOfDay();
+//		LocalDateTime inicio = consulta.getInicioPeriodo().atStartOfDay();
+//		LocalDateTime fim = consulta.getFimPeriodo().atStartOfDay();
+		LocalDateTime inicio = LocalDateTime.parse("2020-11-01T00:00:00");
+		LocalDateTime fim = LocalDateTime.parse("2020-11-03T00:00:00");
 		
+		List<String[][]> data = new ArrayList<>();
+		System.out.println(inicio.toString()+" "+fim.toString());
 		if(consulta.getNumeroDe().get(StatusCaso.CONFIRMADOS)) {
-			estatisticas.rankingMaiorValor(casos, inicio, fim);
+			data.add(estatisticas.rankingToArray(estatisticas.rankingMaiorValor(casos, inicio, fim)));
 		}
 		if(consulta.getNumeroDe().get(StatusCaso.MORTOS)) {
-			estatisticas.rankingMaiorValor(mortos, inicio, fim);
+			data.add(estatisticas.rankingToArray(estatisticas.rankingMaiorValor(mortos, inicio, fim)));
 		}
 		if(consulta.getNumeroDe().get(StatusCaso.RECUPERADOS)) {
-			estatisticas.rankingMaiorValor(recuperados, inicio, fim);
+			data.add(estatisticas.rankingToArray(estatisticas.rankingMaiorValor(recuperados, inicio, fim)));
 		}
 		
 		if(consulta.getCrescimentoDe().get(StatusCaso.CONFIRMADOS)) {
-			estatisticas.rankingCrescimento(casos, inicio, fim);
+			data.add(estatisticas.rankingToArray(estatisticas.rankingCrescimento(casos, inicio, fim)));
 		}
 		if(consulta.getCrescimentoDe().get(StatusCaso.MORTOS)) {
-			estatisticas.rankingCrescimento(mortos, inicio, fim);
+			data.add(estatisticas.rankingToArray(estatisticas.rankingCrescimento(mortos, inicio, fim)));
 		}
 		if(consulta.getCrescimentoDe().get(StatusCaso.RECUPERADOS)) {
-			estatisticas.rankingCrescimento(recuperados, inicio, fim);
+			data.add(estatisticas.rankingToArray(estatisticas.rankingCrescimento(recuperados, inicio, fim)));
 		}
 		
 		if(consulta.getMortalidade()) {
-			estatisticas.rankingMortalidade(mortos, casos, inicio, fim);
+			data.add(estatisticas.rankingToArray(estatisticas.rankingMortalidade(mortos, casos, inicio, fim)));
 		}
 		if(consulta.getLocaisMaisProximos()) {
-			estatisticas.rankingLocaisProximos(casos, inicio, fim);
+			data.add(estatisticas.rankingToArray(estatisticas.rankingLocaisProximos(casos, inicio, fim)));
 		}
+		
+		return data;
 	}
 	
 	public Consulta getConsultaAtual() {
@@ -262,4 +294,14 @@ public class ConsultaController {
 	public void setConsultas(List<Consulta> consultas) {
 		this.consultas = new ArrayList<Consulta>(consultas);
 	}
+	
+	public int getIndexAtual() {
+		return this.indexAtual;
+	}
 }
+
+
+
+
+
+
