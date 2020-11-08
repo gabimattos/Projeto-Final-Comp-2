@@ -5,8 +5,20 @@ import java.util.ArrayList;
 import model.Estatistica;
 import model.Medicao;
 
+/**
+ * Esta estatistica representa um aumento no numero de casos, em um determinado
+ * periodo determinado pelas medicoes fornecidas.
+ * 
+ * @author Gabriel Rodrigues Cunha - 119.143.696
+ *
+ */
 public class CrescimentoPeriodo extends Estatistica {
 
+	/**
+	 * Cria um novo CrescimentoPeriodo com o nome fornecido.
+	 * 
+	 * @param nome	nome do TotalPeriodo;
+	 */
 	public CrescimentoPeriodo(String nome) {
 		super(nome);
 	}
