@@ -75,6 +75,7 @@ public class ConsultaController {
 				consultaAtual.alternateMapBoolean(consultaAtual.getCrescimentoDe(), StatusCaso.MORTOS, checked);
 				break;
 			}
+		consultaAtual.setCrescimentoDe(consultaAtual.getCrescimentoDe());
 	}
 	
 	/**
@@ -149,9 +150,10 @@ public class ConsultaController {
 			}
 			return;
 		}
-		
+		if(arq.length() <= 0) return;
 		try(ObjectInputStream oos = new ObjectInputStream(new FileInputStream(arq))) {
-			this.setConsultas((List<Consulta>)oos.readObject());
+			Object objectReaded = oos.readObject();
+			this.setConsultas((List<Consulta>)objectReaded);
 			
 		} catch (FileNotFoundException e) {
 			System.err.println("Arquivo \"consultas.ser\" n�o encontrado em resources/");
@@ -240,40 +242,42 @@ public class ConsultaController {
 		EstatisticaController estatisticas = EstatisticaController.getInstance();
 		MedicaoController medicoes = MedicaoController.getInstance();
 		
-		List<Medicao> casos = new ArrayList<>(medicoes.getConfirmados());
-		List<Medicao> mortos = new ArrayList<>(medicoes.getMortos());
-		List<Medicao> recuperados = new ArrayList<>(medicoes.getRecuperados());
+		ArrayList<Medicao> casos = new ArrayList<>(medicoes.getConfirmados());
+		ArrayList<Medicao> mortos = new ArrayList<>(medicoes.getMortos());
+		ArrayList<Medicao> recuperados = new ArrayList<>(medicoes.getRecuperados());
 		
-		LocalDateTime inicio = consulta.getInicioPeriodo().atStartOfDay();
-		LocalDateTime fim = consulta.getFimPeriodo().atStartOfDay();
+//		LocalDateTime inicio = consulta.getInicioPeriodo().atStartOfDay();
+//		LocalDateTime fim = consulta.getFimPeriodo().atStartOfDay();
+		LocalDateTime inicio = LocalDateTime.parse("2020-11-01T00:00:00");
+		LocalDateTime fim = LocalDateTime.parse("2020-11-03T00:00:00");
 		
 		List<String[][]> data = new ArrayList<>();
-		
+		System.out.println(inicio.toString()+" "+fim.toString());
 		if(consulta.getNumeroDe().get(StatusCaso.CONFIRMADOS)) {
-			estatisticas.rankingToArray(estatisticas.rankingMaiorValor(casos, inicio, fim));
+			data.add(estatisticas.rankingToArray(estatisticas.rankingMaiorValor(casos, inicio, fim)));
 		}
 		if(consulta.getNumeroDe().get(StatusCaso.MORTOS)) {
-			estatisticas.rankingToArray(estatisticas.rankingMaiorValor(mortos, inicio, fim));
+			data.add(estatisticas.rankingToArray(estatisticas.rankingMaiorValor(mortos, inicio, fim)));
 		}
 		if(consulta.getNumeroDe().get(StatusCaso.RECUPERADOS)) {
-			estatisticas.rankingToArray(estatisticas.rankingMaiorValor(recuperados, inicio, fim));
+			data.add(estatisticas.rankingToArray(estatisticas.rankingMaiorValor(recuperados, inicio, fim)));
 		}
 		
 		if(consulta.getCrescimentoDe().get(StatusCaso.CONFIRMADOS)) {
-			estatisticas.rankingToArray(estatisticas.rankingCrescimento(casos, inicio, fim));
+			data.add(estatisticas.rankingToArray(estatisticas.rankingCrescimento(casos, inicio, fim)));
 		}
 		if(consulta.getCrescimentoDe().get(StatusCaso.MORTOS)) {
-			estatisticas.rankingToArray(estatisticas.rankingCrescimento(mortos, inicio, fim));
+			data.add(estatisticas.rankingToArray(estatisticas.rankingCrescimento(mortos, inicio, fim)));
 		}
 		if(consulta.getCrescimentoDe().get(StatusCaso.RECUPERADOS)) {
-			estatisticas.rankingToArray(estatisticas.rankingCrescimento(recuperados, inicio, fim));
+			data.add(estatisticas.rankingToArray(estatisticas.rankingCrescimento(recuperados, inicio, fim)));
 		}
 		
 		if(consulta.getMortalidade()) {
-			estatisticas.rankingToArray(estatisticas.rankingMortalidade(mortos, casos, inicio, fim));
+			data.add(estatisticas.rankingToArray(estatisticas.rankingMortalidade(mortos, casos, inicio, fim)));
 		}
 		if(consulta.getLocaisMaisProximos()) {
-			estatisticas.rankingToArray(estatisticas.rankingLocaisProximos(casos, inicio, fim));
+			data.add(estatisticas.rankingToArray(estatisticas.rankingLocaisProximos(casos, inicio, fim)));
 		}
 		
 		return data;
@@ -289,6 +293,10 @@ public class ConsultaController {
 	
 	public void setConsultas(List<Consulta> consultas) {
 		this.consultas = new ArrayList<Consulta>(consultas);
+	}
+	
+	public int getIndexAtual() {
+		return this.indexAtual;
 	}
 }
 

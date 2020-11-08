@@ -47,7 +47,7 @@ public class Consulta implements Serializable {
 	}
 
 	public TreeMap<StatusCaso, Boolean> getNumeroDe() {
-		return new TreeMap<StatusCaso, Boolean>(numeroDe);
+		return numeroDe;
 	}
 
 	public void setNumeroDe(TreeMap<StatusCaso, Boolean> numeroDe) {
@@ -55,7 +55,7 @@ public class Consulta implements Serializable {
 	}
 
 	public TreeMap<StatusCaso, Boolean> getCrescimentoDe() {
-		return new TreeMap<StatusCaso, Boolean>(crescimentoDe);
+		return crescimentoDe;
 	}
 
 	public void setCrescimentoDe(TreeMap<StatusCaso, Boolean> crescimentoDe) {
