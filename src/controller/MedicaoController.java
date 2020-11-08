@@ -10,6 +10,7 @@ import org.json.simple.parser.*;
 
 import model.*;
 import utils.APIConsumer;
+import view.TelaInicial;
 
 /**
  * Classe que baixa, salva e carrega as medicoes dos paises.
@@ -66,7 +67,9 @@ public class MedicaoController {
 			List<Medicao> confirmados = new ArrayList<>();
 			List<Medicao> mortos = new ArrayList<>();
 			List<Medicao> recuperados = new ArrayList<>();
-
+			
+			int total = paises.size();
+			
 			for (Pais pais : paises) {
 				HttpResponse<String> response = APIConsumer
 						.httpGet(String.format("https://api.covid19api.com/total/country/%s", pais.getSlug()));
@@ -89,10 +92,13 @@ public class MedicaoController {
 					System.err.println("Problemas ao converter JSON em objeto.");
 				}
 				System.out.println(pais.getSlug());
-				int total = paises.size();
+				
 				int baixado = paises.indexOf(pais) + 1;
 
 				int porcentagem = (int) (baixado / ((float) total) * 100);
+				
+				TelaInicial.barra.updateBarMedicoes(baixado, total, porcentagem);
+				
 				System.out.printf("Progresso %d/%d(%d%%) de medicoes de paises.\n", baixado, total, porcentagem);
 			}
 
@@ -104,9 +110,11 @@ public class MedicaoController {
 			serialize(mortosFile, this.getMortos());
 			serialize(recuperadosFile, this.getRecuperados());
 
+			TelaInicial.barra.updateBarMedicoes(total, total, 100);
+			
 			long fim = new Date().getTime();
 			float duracao = (float) (fim - inicio) / 1000.0f;
-
+			
 			System.out.printf("Medicoes dos paises baixados em %.2f segundos\n", duracao);
 		}
 	}

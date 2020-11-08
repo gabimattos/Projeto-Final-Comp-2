@@ -8,6 +8,7 @@ import org.json.simple.parser.*;
 
 import model.Pais;
 import utils.APIConsumer;
+import view.TelaInicial;
 
 public class PaisController {
 	private static final PaisController paisController = new PaisController();
@@ -76,9 +77,10 @@ public class PaisController {
 			int porcentagem = (int) (baixado/((float)total)*100);
 			System.out.printf("Progresso %d/%d(%d%%) de pa�ses\n", baixado, total, porcentagem);
 
-//			if (slug.equals("france")) {
-//				break;
-//			}
+			TelaInicial.barra.updateBarPaises(baixado, total, porcentagem);
+			if (slug.equals("paraguay")) {
+				break;	
+			}
 		}
 		long fim = new Date().getTime();
 		float duracao = (float)(fim - inicio)/1000.0f;

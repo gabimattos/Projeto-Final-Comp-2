@@ -12,7 +12,8 @@ import model.*;
 
 public class TelaInicial {
 	
-	ConsultaController consulta = ConsultaController.getInstance();
+	public static BarraProgresso barra = new BarraProgresso();
+	private ConsultaController consulta = ConsultaController.getInstance();
 	
 
 	private JFrame janela;
@@ -82,10 +83,9 @@ public class TelaInicial {
         	else {
             List<String[][]> datas = consulta.realizarConsulta(consulta.getIndexAtual());
             
-            for(String[][] data: datas) {
-            	for(int i = 0; i < data.length; i++) {
-            		System.out.println(data[i][0]+"\t"+data[i][1]);
-            	}
+            for(String dados[][]: datas) {
+            	Display display = new Display();
+            	display.trataDados(dados);
             }
         	} 
         }
@@ -122,16 +122,12 @@ public class TelaInicial {
         	
         	else {
 
-        		System.out.println("teste");
+        			consulta.guardarConsultas();
 	            List<String[][]> datas = consulta.realizarConsulta(consulta.getIndexAtual());
 	            
-	            consulta.guardarConsultas();
-	            
-	            for(String[][] data: datas) {
-	            	for(int i = 0; i < data.length; i++) {
-	            		System.out.println(data[i][0]+" "+data[i][1]);
-	            	}
-
+	            for(String dados[][]: datas) {
+	            	Display display = new Display();
+	            	display.trataDados(dados);
 	            }
         	} 
         }
@@ -344,9 +340,16 @@ public class TelaInicial {
          
          janela.add(conteinerRanking, BorderLayout.WEST); 
          janela.add(conteinerStatus);
-         janela.setVisible(true);
          
          this.medicao = MedicaoController.getInstance();
+         
+         janela.setVisible(true);
+         
+         System.out.println(consulta.getConsultas().size());
+         for(Consulta con:consulta.getConsultas()) {
+        	 if(consulta.getConsultas().indexOf(con) == consulta.getIndexAtual()) continue;
+        	 System.out.println(consulta.consultaToString(consulta.getConsultas().indexOf(con)));
+         }
     }
 
 }
