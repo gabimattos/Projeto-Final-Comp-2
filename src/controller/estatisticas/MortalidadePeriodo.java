@@ -4,8 +4,20 @@ import model.Estatistica;
 import model.Medicao;
 import model.StatusCaso;
 
+/**
+ * Esta estatistica representa a mortalidade (mortes por casos confirmados)
+ * de um pais, em um determinado periodo determinado pelas medicoes fornecidas.
+ * 
+ * @author Gabriel Rodrigues Cunha - 119.143.696
+ *
+ */
 public class MortalidadePeriodo extends Estatistica {
 
+	/**
+	 * Cria um novo MortalidadePeriodo com o nome fornecido.
+	 * 
+	 * @param nome	nome do MortalidadePeriodo;
+	 */
 	public MortalidadePeriodo(String nome) {
 		super(nome);
 	}

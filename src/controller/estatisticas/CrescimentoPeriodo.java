@@ -17,7 +17,7 @@ public class CrescimentoPeriodo extends Estatistica {
 	/**
 	 * Cria um novo CrescimentoPeriodo com o nome fornecido.
 	 * 
-	 * @param nome	nome do TotalPeriodo;
+	 * @param nome	nome do CrescimentoPeriodo;
 	 */
 	public CrescimentoPeriodo(String nome) {
 		super(nome);
