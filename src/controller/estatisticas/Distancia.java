@@ -5,7 +5,7 @@ import model.Medicao;
 
 /**
  * Esta estatistica recebe duas medicoes calcula a distancia entre seus
- * respectivos paises. A distancia calculada é dada em Km.
+ * respectivos paises. A distancia calculada eh dada em Km.
  * 
  * @author Gabriel Rodrigues Cunha - 119.143.696
  *
@@ -24,7 +24,7 @@ public class Distancia extends Estatistica {
 	@Override
 	public void inclui(Medicao observacao) {
 		if (this.getObservacoes().size() == 2)
-			throw new AssertionError("Distancia não pode possuir mais que 2 medições");
+			throw new AssertionError("Distancia nao pode possuir mais que 2 medicoes");
 		super.inclui(observacao);
 	}
 

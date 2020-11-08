@@ -18,7 +18,12 @@ public class Display {
 	JTable table = null;
 	JScrollPane scroll = null;
 	FlowLayout layout = new FlowLayout();
+	
+	private JFrame janela;
 
+	public Display(JFrame janela) {
+		this.janela = janela;
+	}
 	
 	public void display(String Titulo, String[][] newDados, String[] colunas, String dados[][]) {
 		topPanel = new JPanel();
@@ -68,15 +73,14 @@ public class Display {
 		back.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				janela.setVisible(true);
+				frame.setVisible(false);
 			}
 		});
 	}
 
 	public void exportButton(String dados[][], String[] colunas) {
 		JButton export = new JButton("Exportar");
-		// frame.add(export);
-		// layout.setAlignment(FlowLayout.RIGHT);
-		// layout.setAlignment(FlowLayout.CENTER);
 		btnPanel.add(export);
 
 		export.addActionListener(new ActionListener() {
@@ -87,14 +91,7 @@ public class Display {
 		});
 	}
 	
-	public void trataDados(String dados[][]) {
-//		String dados[][] = {
-//				{"Pais","Valor"},
-//				{"Estados Unidos","22"},
-//				{"Brasil","32"},
-//				{"Inglaterra","25"}
-//		};
-		
+	public void trataDados(String dados[][]) {		
 		String colunas[] = null;
 		colunas = dados[0];
 		
@@ -106,9 +103,4 @@ public class Display {
 		
 		display(colunas[1],newDados,colunas,dados);
 	}
-
-//	public static void main(String[] args) {
-//		Display display = new Display();
-//		display.trataDados();
-//	}
 }

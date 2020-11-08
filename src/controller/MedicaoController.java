@@ -18,18 +18,24 @@ import view.TelaInicial;
  *
  */
 public class MedicaoController {
+	/**
+	 * Instancia unica da classe MedicaoController
+	 */
 	private static final MedicaoController medicaoController = new MedicaoController();
 
 	private List<Medicao> confirmados;
 	private List<Medicao> mortos;
 	private List<Medicao> recuperados;
 
+	/**
+	 * Metodo construtor. Carrega as medicoes dos paises.
+	 */
 	private MedicaoController() {
 		this.carregaMedicoes();
 	}
 
 	/**
-	 * Metodo que retorna uma instancia unica da classe MedicaoController.
+	 * Metodo que retorna a instancia unica da classe MedicaoController.
 	 * @return A instancia unica da classe MedicaoController.
 	 */
 	public static MedicaoController getInstance() {
@@ -39,7 +45,9 @@ public class MedicaoController {
 	/**
 	 *	Metodo que carrega as medicoes dos paises de todos os dias atraves da classe APIConsumer.
 	 *<p>
-	 *	
+	 *	Primeiro, eh verificado se existe um cache para as medicoes e se sao medicoes do dia atual.
+	 *	Se a condicao for satisfeita, atribui as medicoes do cache as listas medicoes.
+	 *	Caso contrario, baixa as medicoes da api, sinalizando o progresso do download.
 	 *</p>
 	 */
 	private void carregaMedicoes() {
@@ -50,8 +58,9 @@ public class MedicaoController {
 		File mortosFile = new File("cache/medicoes/" + LocalDate.now() + " - mortos.ser");
 		File recuperadosFile = new File("cache/medicoes/" + LocalDate.now() + " - recuperados.ser");
 		
+		String ultimoDownload = mortosFile.getName().split(" ")[0];
 
-		if (confirmadosFile.isFile() && mortosFile.isFile() &&  recuperadosFile.isFile()) {
+		if (confirmadosFile.isFile() && mortosFile.isFile() && recuperadosFile.isFile() && ultimoDownload.equals(LocalDate.now().toString())) {
 			System.out.println("Carregando dados ja baixados.");
 			this.setConfirmados(deserialize(confirmadosFile));
 			this.setMortos(deserialize(mortosFile));
@@ -156,27 +165,51 @@ public class MedicaoController {
 
 		return medicoes;
 	}
-
+	
+	/**
+	 * Getter da lista de medicoes do numero de casos confirmados.
+	 * @return A lista de medicoes do numero de casos confirmados.
+	 */
 	public List<Medicao> getConfirmados() {
 		return new ArrayList<Medicao>(this.confirmados);
 	}
 
+	/**
+	 * Setter da lista de medicoes do numero de casos confirmados.
+	 * @param confirmados A lista de medicoes do numero de casos confirmados a se definir.
+	 */
 	public void setConfirmados(List<Medicao> confirmados) {
 		this.confirmados = new ArrayList<Medicao>(confirmados);
 	}
 
+	/**
+	 * Getter da lista de medicoes do numero de mortos.
+	 * @return A lista de medicoes do numero de mortos.
+	 */
 	public List<Medicao> getMortos() {
 		return new ArrayList<Medicao>(this.mortos);
 	}
 
+	/**
+	 * Setter da lista de medicoes do numero de mortos.
+	 * @param mortos A lista de medicoes do numero de mortos a se definir.
+	 */
 	public void setMortos(List<Medicao> mortos) {
 		this.mortos = new ArrayList<Medicao>(mortos);
 	}
 
+	/**
+	 * Getter da lista de medicoes do numero de recuperados.
+	 * @return A lista de medicoes do numero de recuperados.
+	 */
 	public List<Medicao> getRecuperados() {
 		return new ArrayList<Medicao>(this.recuperados);
 	}
 
+	/**
+	 * Setter da lista de medicoes do numero de recuperados.
+	 * @param recuperados A lista de medicoes do numero de recuperados a se definir.
+	 */
 	public void setRecuperados(List<Medicao> recuperados) {
 		this.recuperados = new ArrayList<Medicao>(recuperados);
 	}

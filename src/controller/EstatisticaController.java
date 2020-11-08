@@ -190,37 +190,6 @@ public class EstatisticaController {
 		}
 		
 		return true;
-	}
-	
-	public static void main(String[] args) {
-		EstatisticaController controler = EstatisticaController.getInstance();
-		LocalDateTime inicio = LocalDateTime.parse("2019-05-01T00:00:00");
-		LocalDateTime fim = LocalDateTime.parse("2020-05-02T00:00:00");
-		MedicaoController cont = null;
-		try {
-			cont = MedicaoController.getInstance();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		ArrayList<Medicao> casos = new ArrayList<>(cont.getConfirmados());
-		ArrayList<Medicao> mortos = new ArrayList<>(cont.getMortos());
-		ArrayList<Medicao> recuperados = new ArrayList<>(cont.getRecuperados());
-		ArrayList<Estatistica> lista = new ArrayList<>(controler.rankingMaiorValor(recuperados, inicio, fim));
-		ArrayList<Estatistica> lista2 = new ArrayList<>(controler.rankingCrescimento(casos, inicio, fim));
-		ArrayList<Estatistica> lista3 = new ArrayList<>(controler.rankingMortalidade(mortos, casos, inicio, fim));
-		ArrayList<Estatistica> lista4 = new ArrayList<>(controler.rankingLocaisProximos(casos, inicio, fim));
-		
-		System.out.println(lista.size());
-		for (Estatistica est : lista) {
-			System.out.println(est.toTSV());
-		}
-//		System.out.println(controler.toTSV(lista, "teste"));
-//		System.out.println(controler.toTSV(lista2, "teste2"));
-		
-		for (String[] linha : controler.rankingToArray(lista)) {
-			System.out.println(linha[0]+ "\t" + linha[1]);
-		}
-	}
-	
+	}	
 }
 
