@@ -14,6 +14,10 @@ public class EstatisticaController {
 	
 	private EstatisticaController() { };
 	
+	public static EstatisticaController getInstance() {
+		return EstatisticaController.estatisticaController;
+	}
+	
 	public List<Estatistica> rankingMaiorValor (List <Medicao> dadosTotal,
 			LocalDateTime inicio, LocalDateTime fim){
 		Collections.sort(dadosTotal);
@@ -36,10 +40,6 @@ public class EstatisticaController {
 		}
 		Collections.sort(rankingMaiorValor);
 		return rankingMaiorValor;
-	}
-	
-	public static EstatisticaController getInstance() {
-		return EstatisticaController.estatisticaController;
 	}
 	
 	public List<Estatistica> rankingMortalidade (List <Medicao> dadosMortes,
@@ -115,6 +115,14 @@ public class EstatisticaController {
 		return rankingLocaisProximos;
 	}
 	
+	/**
+	 * Recebe um ranking (lista de Estatisticas) e cria um array bidimensional
+	 * cos os valores desse ranking. A primeira linha representa o Header do
+	 * ranking e as demais representam as entradas.
+	 * 
+	 * @param ranking	Ranking a ser estatistica.
+	 * @return	Ranking em um array bidimensional.
+	 */
 	public String[][] rankingToArray(List <Estatistica> ranking) {
 		String[][] rankingArr = new String[ranking.size() + 1][2];
 		boolean isInt = ranking.get(0) instanceof TotalPeriodo;
@@ -148,12 +156,21 @@ public class EstatisticaController {
 		} else if(exemplo instanceof MortalidadePeriodo) {
 			valor = "Taxa de mortalidade";
 		} else {
-			valor = "Distância do epicentro (Km)";
+			valor = "Distancia do epicentro (Km)";
 		}
 		
 		return new String[] {"Pais", valor};
 	}
 	
+	/**
+	 * Recebe um ranking (lista de Estatisticas) e salva o seu conteudo em um
+	 * arquivo TSV, cujo nome também deve ser fornecido. O arquivo gerado é
+	 * colocado na pasta rankings.
+	 * 
+	 * @param dados	Dados do ranking a serem convertidos em TSV.
+	 * @param nome	Nome do arquivo a ser gerado
+	 * @return	true se a operacao foi bem sucedida, caso contrário retorna false.
+	 */
 	public boolean toTSV(List<Estatistica> dados, String nome) {
 		File pasta = new File("rankings");
 		File arquivo = new File(pasta, nome + ".tsv");
