@@ -138,6 +138,8 @@ public class ConsultaController {
 	 */
 	@SuppressWarnings("unchecked")
 	public void carregaConsultas() {
+		File pasta = new File("resources");
+		if(!pasta.exists()) pasta.mkdirs();
 		File arq = new File("resources"+File.separator+"consultas.ser");
 		if(!arq.exists()) {
 			try {
@@ -164,6 +166,18 @@ public class ConsultaController {
 	 * Guarda o histï¿½rico de consultas realizadas no arquivo "consultas.ser".
 	 */
 	public void guardarConsultas() {
+		File pasta = new File("resources");
+		if(!pasta.exists()) pasta.mkdirs();
+		File arq = new File("resources"+File.separator+"consultas.ser");
+		if(!arq.exists()) {
+			try {
+				arq.createNewFile();
+			} catch (IOException e) {
+				System.err.println("Nao foi possivel criar o arquivo consultas.ser");
+			}
+			return;
+		}
+		
 		try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("resources"+File.separator+"consultas.ser"))) {
 			oos.writeObject(this.getConsultas());
 			
@@ -220,7 +234,7 @@ public class ConsultaController {
 	 * Chama os métodos de rankings a partir da consulta relacionado ao indice passado pelo parametro.
 	 * @param index O indice da consulta a se realizar.
 	 */
-	public void realizarConsulta(int index) {
+	public List<String[][]> realizarConsulta(int index) {
 		Consulta consulta = consultas.get(index);
 		
 		EstatisticaController estatisticas = EstatisticaController.getInstance();
@@ -233,32 +247,36 @@ public class ConsultaController {
 		LocalDateTime inicio = consulta.getInicioPeriodo().atStartOfDay();
 		LocalDateTime fim = consulta.getFimPeriodo().atStartOfDay();
 		
+		List<String[][]> data = new ArrayList<>();
+		
 		if(consulta.getNumeroDe().get(StatusCaso.CONFIRMADOS)) {
-			estatisticas.rankingMaiorValor(casos, inicio, fim);
+			estatisticas.rankingToArray(estatisticas.rankingMaiorValor(casos, inicio, fim));
 		}
 		if(consulta.getNumeroDe().get(StatusCaso.MORTOS)) {
-			estatisticas.rankingMaiorValor(mortos, inicio, fim);
+			estatisticas.rankingToArray(estatisticas.rankingMaiorValor(mortos, inicio, fim));
 		}
 		if(consulta.getNumeroDe().get(StatusCaso.RECUPERADOS)) {
-			estatisticas.rankingMaiorValor(recuperados, inicio, fim);
+			estatisticas.rankingToArray(estatisticas.rankingMaiorValor(recuperados, inicio, fim));
 		}
 		
 		if(consulta.getCrescimentoDe().get(StatusCaso.CONFIRMADOS)) {
-			estatisticas.rankingCrescimento(casos, inicio, fim);
+			estatisticas.rankingToArray(estatisticas.rankingCrescimento(casos, inicio, fim));
 		}
 		if(consulta.getCrescimentoDe().get(StatusCaso.MORTOS)) {
-			estatisticas.rankingCrescimento(mortos, inicio, fim);
+			estatisticas.rankingToArray(estatisticas.rankingCrescimento(mortos, inicio, fim));
 		}
 		if(consulta.getCrescimentoDe().get(StatusCaso.RECUPERADOS)) {
-			estatisticas.rankingCrescimento(recuperados, inicio, fim);
+			estatisticas.rankingToArray(estatisticas.rankingCrescimento(recuperados, inicio, fim));
 		}
 		
 		if(consulta.getMortalidade()) {
-			estatisticas.rankingMortalidade(mortos, casos, inicio, fim);
+			estatisticas.rankingToArray(estatisticas.rankingMortalidade(mortos, casos, inicio, fim));
 		}
 		if(consulta.getLocaisMaisProximos()) {
-			estatisticas.rankingLocaisProximos(casos, inicio, fim);
+			estatisticas.rankingToArray(estatisticas.rankingLocaisProximos(casos, inicio, fim));
 		}
+		
+		return data;
 	}
 	
 	public Consulta getConsultaAtual() {
