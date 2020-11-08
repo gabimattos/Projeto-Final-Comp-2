@@ -18,7 +18,7 @@ import model.*;
  * de casos confirmados em um periodo de tempo, ate um raio r (km). Alem disso o usuario tem a opcao de apenas enviar suas opcoes ou 
  * de enviar e salvar suas opcoes.
  * 
- * @author Gabriela Mattos
+ * @author Gabriela Mattos, Raphael Mesquita - 118.020.104
  */
 public class TelaInicial {
 	
@@ -58,7 +58,7 @@ public class TelaInicial {
      * preenchidos eh notificado um erro e a consulta nao eh feita. Caso alguma opcao seja selecionada e o campo das datas sejam preenchidos 
      * a consulta eh feita corretamente.
      * 
-     * @author Gabriela Mattos
+     * @author Gabriela Mattos, Raphael Mesquita - 118.020.104
      *
      */
     public class AcaoBotaoEnviarRanking implements ActionListener {
