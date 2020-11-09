@@ -201,6 +201,9 @@ public class ConsultaController {
 			
 			oos.writeObject(this.getConsultas());
 			
+			consultas.add(new Consulta());
+			indexAtual = consultas.size() - 1;
+
 		} catch (FileNotFoundException e) {
 			System.err.println("Arquivo \"consultas.ser\" nao encontrado em resources/");
 		} catch (IOException e) {

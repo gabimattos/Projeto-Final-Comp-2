@@ -15,7 +15,7 @@ import controller.EstatisticaController;
  * <p>Exportar o ranking que foi demonstrado ou voltar para o menu principal.</p>
  * @author Mariane Ferreira - 118.154.254
  * @author Victoria Almeida - 118.140.336
- *
+ * @author Raphael Mesquita - 118.020.104
  */
 public class Display {
 	private JPanel topPanel;

@@ -48,6 +48,8 @@ public class TelaInicial {
 	private JTextField dataInicial;
 	private JTextField dataFinal;
 
+	private JPanel historico;
+
 	public MedicaoController medicao;
 
 	public static void main(String[] args) {
@@ -161,13 +163,19 @@ public class TelaInicial {
 
 			else {
 
-				consulta.guardarConsultas();
 				List<String[][]> datas = consulta.realizarConsulta(consulta.getIndexAtual());
 
 				for (String dados[][] : datas) {
 					Display display = new Display(janela);
 					display.trataDados(dados);
 				}
+				
+				consulta.guardarConsultas();
+				
+				janela.remove(historico);
+				historico = initHistorico(consulta.getConsultas());
+				janela.add(historico);
+				
 				janela.setVisible(false);
 			}
 		}
@@ -331,7 +339,8 @@ public class TelaInicial {
 
 		janela.add(conteinerRanking, BorderLayout.WEST);
 
-		janela.add(initHistorico(consulta.getConsultas()));
+		historico = initHistorico(consulta.getConsultas());
+		janela.add(historico);
 
 		this.medicao = MedicaoController.getInstance();
 
@@ -342,11 +351,11 @@ public class TelaInicial {
 	 * Metodo para mostrar consultas salvas.
 	 * <p>
 	 * Recebe uma lista de consultas salvas, armazena-a em uma JList, adiciona a
-	 * JList e um bot�o para confirmar a consulta selecionada a um Panel criado, e
+	 * JList e um botao para confirmar a consulta selecionada a um Panel criado, e
 	 * retorna o mesmo.
 	 *  
 	 * @param elementos Lista de consultas salvas
-	 * @return Panel com os elementos que compoem o hist�rico de consultas
+	 * @return Panel com os elementos que compoem o historico de consultas
 	 */
 	private JPanel initHistorico(List<Consulta> elementos) {
 		String elements[] = new String[elementos.size()];
