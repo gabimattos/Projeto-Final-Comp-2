@@ -71,7 +71,7 @@ public class EstatisticaController {
 	 * o ranking e retorna essa lista.
 	 * 
 	 * @param dadosMortes Dados do total de mortes da API.
-	 * @param dadosTotal Dados do total de casos da API.
+	 * @param dadosCasos Dados do total de casos da API.
 	 * @param inicio Inicio das medicoes.
 	 * @param fim Fim das medicoes.
 	 * @return Lista de estatisticas de cada pais.
@@ -113,7 +113,7 @@ public class EstatisticaController {
 	 * de acordo com o crescimento de casos para se formar o ranking e retorna
 	 * essa lista.
 	 * 
-	 * @param dadosTotal Dados do casos total da API.
+	 * @param dadosCasos Dados do casos total da API.
 	 * @param inicio Inicio das medicoes.
 	 * @param fim Fim das medicoes.
 	 * @return Lista de estatisticas de cada pais.
@@ -150,7 +150,7 @@ public class EstatisticaController {
 	 * e ordena essas estatisticas de acordo com a distancia at� o pais com maior
 	 * crescimento de casos para se formar o ranking e retorna essa lista. 
 	 * 
-	 * @param dadosTotal Dados do casos total da API.
+	 * @param dadosCasos Dados do casos total da API.
 	 * @param inicio Inicio das medicoes.
 	 * @param fim Fim das medicoes.
 	 * @return Lista de estatisticas de cada pais.

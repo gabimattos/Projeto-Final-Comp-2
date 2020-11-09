@@ -6,7 +6,7 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 /**
- * Classe que mostra visualmente a progressão dos arquivos baixados pela API.
+ * Classe que mostra visualmente a progressao dos arquivos baixados pela API.
  * 
  * @author Victoria Almeida - 118.140.336
  *
@@ -34,15 +34,15 @@ public class BarraProgresso extends JFrame {
 
 	/**
 	 * Atualiza a porcentagem da barra de acordo com o quanto
-	 * a API já foi lida. Considerando o total de leitura de paises 50%.
+	 * a API ja foi lida. Considerando o total de leitura de paises 50%.
 	 * 
 	 * @param baixado Total de paises baixados.
-	 * @param total Total de paises que serão baixados.
-	 * @param porcentagem Porcentagem dos paises que já foram baixados.
+	 * @param total Total de paises que serao baixados.
+	 * @param porcentagem Porcentagem dos paises que ja foram baixados.
 	 */
 	public void updateBarPaises(int baixado, int total, int porcentagem) {
 		if (!barraProgresso.isCanceled()) {
-			//subtrai por 1 para só chegar em 100% após a serialização
+			//subtrai por 1 para so chegar em 100% apos a serializacao
 			int newPorcentagem = Math.max(0, porcentagem - 1) / 2;
 			barraProgresso.setNote("Progresso " + baixado + "/" + total + " (" + newPorcentagem + "%) de paises\n");
 			barraProgresso.setProgress(newPorcentagem);
@@ -53,15 +53,15 @@ public class BarraProgresso extends JFrame {
 
 	/**
 	 * Atualiza a porcentagem da barra de acordo com o quanto
-	 * a API já foi lida. Considerando o total de leitura de medicoes 100%.
+	 * a API jï¿½ foi lida. Considerando o total de leitura de medicoes 100%.
 	 * 
 	 * @param baixado Total de medicoes baixadas.
-	 * @param total Total de medicoes que serão baixadas.
-	 * @param porcentagem Porcentagem das medicoes que já foram baixadas.
+	 * @param total Total de medicoes que serï¿½o baixadas.
+	 * @param porcentagem Porcentagem das medicoes que jï¿½ foram baixadas.
 	 */
 	public void updateBarMedicoes(int baixado, int total, int porcentagem) {
 		if (!barraProgresso.isCanceled()) {
-			//subtrai por 1 para só chegar em 100% após a serialização
+			//subtrai por 1 para sï¿½ chegar em 100% apï¿½s a serializaï¿½ï¿½o
 			int newPorcentagem = Math.max(0, porcentagem - 1) / 2 + 50;
 			barraProgresso.setNote(
 					"Progresso " + baixado + "/" + total + " (" + newPorcentagem + "%) de medicoes dos paises\n");

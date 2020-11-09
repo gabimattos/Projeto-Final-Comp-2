@@ -73,11 +73,11 @@ public class Display {
 	/**
 	 * Metodo que centraliza os textos de uma tabela.
 	 * <p>
-	 * Recebe a tabela que será formatada e seu header para saber
-	 * a quantidade de colunas que serão centralizadas e retorna a
+	 * Recebe a tabela que sera formatada e seu header para saber
+	 * a quantidade de colunas que serao centralizadas e retorna a
 	 * tabela formatada.
 	 * 
-	 * @param table Tabela que será formatada.
+	 * @param table Tabela que sera formatada.
 	 * @param header Titulo de cada coluna da tabela.
 	 * @return Tabela formatada.
 	 */
