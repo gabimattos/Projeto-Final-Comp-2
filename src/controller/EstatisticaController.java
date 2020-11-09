@@ -9,10 +9,11 @@ import model.*;
 /**
  * Classe controller das classes Estatistica.
  * <p>
- * Gera as listas que ser�o usadas na constru��o dos
+ * Gera as listas que serao usadas na construcao dos
  * rankings.
  * 
- * @author Victoria Almeida - 118.140.336
+ * @author Victoria Almeida - 118.140.336,
+ * Gabriel Rodrigues Cunha - 119.143.696
  *
  */
 public class EstatisticaController {
