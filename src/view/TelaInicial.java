@@ -21,7 +21,8 @@ import model.*;
  * um periodo de tempo, ate um raio r (km). Alem disso o usuario tem a opcao de
  * apenas enviar suas opcoes ou de enviar e salvar suas opcoes.
  * 
- * @author Gabriela Mattos
+ * @author Gabriela Mattos - 119.048.406
+ * @author Victoria Almeida - 118.140.336
  */
 public class TelaInicial {
 
@@ -64,7 +65,7 @@ public class TelaInicial {
 	 * corretamente.
 	 * 
 	 * @author Gabriela Mattos
-	 *
+	 * 
 	 */
 	public class AcaoBotaoEnviarRanking implements ActionListener {
 		@Override
@@ -339,13 +340,14 @@ public class TelaInicial {
 	}
 
 	/**
-	 * Metodo para mostrar o historico de consultas salvas. 
-	 * Cria JList com os dados da lista de consultas salvas.
-	 * Adiciona essa JList a um Panel junto com um botão para confirmar
-	 * a consulta selecionada pelo usuário e retorna esse Panel.
+	 * Metodo para mostrar consultas salvas.
+	 * <p>
+	 * Recebe uma lista de consultas salvas, armazena-a em uma JList, adiciona a
+	 * JList e um botão para confirmar a consulta selecionada a um Panel criado, e
+	 * retorna o mesmo.
 	 *  
-	 * @param elementos Lista de consultas salvas.
-	 * @return Panel com os elemento para selecionar a consulta.
+	 * @param elementos Lista de consultas salvas
+	 * @return Panel com os elementos que compoem o histórico de consultas
 	 */
 	private JPanel initHistorico(List<Consulta> elementos) {
 		String elements[] = new String[elementos.size()];

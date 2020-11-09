@@ -10,7 +10,13 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import controller.EstatisticaController;
-
+/**
+ * <p>Esta classe gera a tela de ranking em forma de tabela e mostra pro usuario as seguintes opcoes:</p>
+ * <p>Exportar o ranking que foi demonstrado ou voltar para o menu principal.</p>
+ * @author Mariane Ferreira - 118.154.254
+ * @author Victoria Almeida - 118.140.336
+ *
+ */
 public class Display {
 	private JPanel topPanel;
 	private JPanel btnPanel;
@@ -24,7 +30,15 @@ public class Display {
 	public Display(JFrame janela) {
 		this.janela = janela;
 	}
-	
+	/**
+	 * <p>Este metodo faz o design da janela de ranking, cria a tabela e adiciona os botoes "exportar" e "voltar.</p>
+	 * @param Titulo Titulo do ranking selecionado no menu principal.
+	 * @param newDados Dados tratados pelo metodo trataDados.
+	 * @param colunas Titulo das celulas.
+	 * @param dados Dados nao tratados pelo metodo trataDados.
+	 * 
+	 * @see Display#trataDados(String[][])
+	 */
 	public void display(String Titulo, String[][] newDados, String[] colunas, String dados[][]) {
 		topPanel = new JPanel();
 		btnPanel = new JPanel();
@@ -56,6 +70,17 @@ public class Display {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * Metodo que centraliza os textos de uma tabela.
+	 * <p>
+	 * Recebe a tabela que será formatada e seu header para saber
+	 * a quantidade de colunas que serão centralizadas e retorna a
+	 * tabela formatada.
+	 * 
+	 * @param table Tabela que será formatada.
+	 * @param header Titulo de cada coluna da tabela.
+	 * @return Tabela formatada.
+	 */
 	private JTable centralizeText(JTable table, String[] header) {
 		DefaultTableCellRenderer render = new DefaultTableCellRenderer();
 		render.setHorizontalAlignment(SwingConstants.CENTER);
@@ -65,7 +90,9 @@ public class Display {
 
 		return table;
 	}
-
+/**
+ * <p>Este metodo cria o botao de voltar e atribui sua funcao de voltar para o menu principal.</p>
+ */
 	public void backButton() {
 		JButton back = new JButton("Voltar");
 		btnPanel.add(back);
@@ -78,7 +105,11 @@ public class Display {
 			}
 		});
 	}
-
+/**
+ * <p>Este metodo cria o botao de exportar ranking e atribui a funcao de exportar o ranking atual para um arquivo tsv.</p>
+ * @param dados Dados do ranking.
+ * @param colunas Titulo das celulas.
+ */
 	public void exportButton(String dados[][], String[] colunas) {
 		JButton export = new JButton("Exportar");
 		btnPanel.add(export);
@@ -90,7 +121,12 @@ public class Display {
 			}
 		});
 	}
-	
+	/**
+	 * <p>Este metodo trata os dados antes de serem mostrados no ranking. O metodo recebe um vetor bidimensional,</p>
+	 * <p>o divide em um vetor unidimensional para ser usado como titulo das celulas e outro bidimensional para ser</p>
+	 * <p>mostrado como os dados da tabela. Os dados devem ser tratados para serem mostrados corretamente.</p>
+	 * @param dados Dados nao tratados
+	 */
 	public void trataDados(String dados[][]) {		
 		String colunas[] = null;
 		colunas = dados[0];
