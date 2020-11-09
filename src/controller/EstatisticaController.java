@@ -167,6 +167,7 @@ public class EstatisticaController {
 		for (Estatistica e : rankingCrescimento) {
 			Distancia currDist = new Distancia(e.getNome());
 			currDist.inclui(maiorCrescimento.getObservacoes().get(0));
+			if (e.getObservacoes().size() == 0) continue;
 			currDist.inclui(e.getObservacoes().get(0));
 			rankingLocaisProximos.add(currDist);
 		}
