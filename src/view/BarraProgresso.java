@@ -3,42 +3,72 @@ package view;
 import javax.swing.JFrame;
 import javax.swing.ProgressMonitor;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 
+/**
+ * Classe que mostra visualmente a progressão dos arquivos baixados pela API.
+ * 
+ * @author Victoria Almeida - 118.140.336
+ *
+ */
 public class BarraProgresso extends JFrame {
 	private static final long serialVersionUID = 4L;
 	static final int MINIMO = 0;
 	static final int MAXIMO = 100;
-	private ProgressMonitor barraProgresso;
-	//private JPanel panel;
-	
+	public ProgressMonitor barraProgresso;
+
+	/**
+	 * Classe contrutora da barra de progresso.
+	 */
 	public BarraProgresso() {
-		 String message = "Baixando Paises e suas medicoes:";
-		    String note = "iniciando...";
-		    String title = "Baixando";
-		    UIManager.put("ProgressMonitor.progressText", title);
-		    
-		    barraProgresso = new ProgressMonitor(this, message, note, MINIMO, MAXIMO);
+		String message = "Baixando paises e suas medicoes:";
+		String note = "iniciando...";
+		String title = "Baixando";
+		UIManager.put("ProgressMonitor.progressText", title);
+
+		barraProgresso = new ProgressMonitor(this, message, note, MINIMO, MAXIMO);
+		this.setResizable(false);
+		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		this.setVisible(true);
 	}
 
+	/**
+	 * Atualiza a porcentagem da barra de acordo com o quanto
+	 * a API já foi lida. Considerando o total de leitura de paises 50%.
+	 * 
+	 * @param baixado Total de paises baixados.
+	 * @param total Total de paises que serão baixados.
+	 * @param porcentagem Porcentagem dos paises que já foram baixados.
+	 */
 	public void updateBarPaises(int baixado, int total, int porcentagem) {
 		if (!barraProgresso.isCanceled()) {
+			//subtrai por 1 para só chegar em 100% após a serialização
 			int newPorcentagem = Math.max(0, porcentagem - 1) / 2;
-			barraProgresso.setNote("Progresso " + baixado + "/"+ total +" ("+ newPorcentagem +"%) de paises\n");
+			barraProgresso.setNote("Progresso " + baixado + "/" + total + " (" + newPorcentagem + "%) de paises\n");
 			barraProgresso.setProgress(newPorcentagem);
-		}
-		else {
+		} else {
 			System.exit(0);
 		}
 	}
-	
+
+	/**
+	 * Atualiza a porcentagem da barra de acordo com o quanto
+	 * a API já foi lida. Considerando o total de leitura de medicoes 100%.
+	 * 
+	 * @param baixado Total de medicoes baixadas.
+	 * @param total Total de medicoes que serão baixadas.
+	 * @param porcentagem Porcentagem das medicoes que já foram baixadas.
+	 */
 	public void updateBarMedicoes(int baixado, int total, int porcentagem) {
 		if (!barraProgresso.isCanceled()) {
+			//subtrai por 1 para só chegar em 100% após a serialização
 			int newPorcentagem = Math.max(0, porcentagem - 1) / 2 + 50;
-			barraProgresso.setNote("Progresso " + baixado + "/"+ total +" ("+ newPorcentagem +"%) de medicoes dos paises\n");
+			barraProgresso.setNote(
+					"Progresso " + baixado + "/" + total + " (" + newPorcentagem + "%) de medicoes dos paises\n");
 			barraProgresso.setProgress(newPorcentagem);
-			if(porcentagem == 100) barraProgresso.close();
-		}
-		else {
+			if (porcentagem == 100)
+				barraProgresso.close();
+		} else {
 			System.exit(0);
 		}
 	}

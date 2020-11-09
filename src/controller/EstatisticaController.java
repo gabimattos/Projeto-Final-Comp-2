@@ -3,11 +3,18 @@ package controller;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
-
 import controller.estatisticas.*;
-
 import model.*;
 
+/**
+ * Classe controller das classes Estatistica.
+ * <p>
+ * Gera as listas que ser�o usadas na constru��o dos
+ * rankings.
+ * 
+ * @author Victoria Almeida - 118.140.336
+ *
+ */
 public class EstatisticaController {
 	private static final EstatisticaController estatisticaController =
 			new EstatisticaController();
@@ -18,6 +25,18 @@ public class EstatisticaController {
 		return EstatisticaController.estatisticaController;
 	}
 	
+	/**
+	 * Metodo que recebe os datas da consulta e os dados de casos total
+	 * da API (confirmados, mortos ou recuperados), itera pelos dados pegando 
+	 * as medicoes do intervalo desejado, cria uma estatistica para cada pais 
+	 * com sua respectivas medicoes e ordena essas estatistica em uma lista 
+	 * de acordo com o numero de casos para se formar o ranking e retorna essa lista.
+	 * 
+	 * @param dadosTotal Dados do casos total da API.
+	 * @param inicio Inicio das medicoes.
+	 * @param fim Fim das medicoes.
+	 * @return Lista de estatisticas de cada pais.
+	 */
 	public List<Estatistica> rankingMaiorValor (List <Medicao> dadosTotal,
 			LocalDateTime inicio, LocalDateTime fim){
 		Collections.sort(dadosTotal);
@@ -42,6 +61,20 @@ public class EstatisticaController {
 		return rankingMaiorValor;
 	}
 	
+	/**
+	 * Metodo que recebe os datas da consulta e os dados de mortes e casos total 
+	 * (confirmados, mortos ou recuperados) da API, itera pelos dados pegando 
+	 * as medicoes do intervalo desejado, cria uma estatistica para cada pais 
+	 * com sua respectivas medicoes e ordena essas estatistica em uma lista 
+	 * de acorde com o numero de mortalidades em rela��o aos casos para se formar 
+	 * o ranking e retorna essa lista.
+	 * 
+	 * @param dadosMortes Dados do total de mortes da API.
+	 * @param dadosTotal Dados do total de casos da API.
+	 * @param inicio Inicio das medicoes.
+	 * @param fim Fim das medicoes.
+	 * @return Lista de estatisticas de cada pais.
+	 */
 	public List<Estatistica> rankingMortalidade (List <Medicao> dadosMortes,
 			List <Medicao> dadosCasos, LocalDateTime inicio, LocalDateTime fim){
 		
@@ -60,10 +93,10 @@ public class EstatisticaController {
 				currPais = dados.get(i).getPais();
 				currEstatisticaMortalidade = new MortalidadePeriodo(currPais.getNome());
 			}
-			//pega todas as medicoes de um pais nesse intervalo de tempo
+			//Pega todas as medicoes de um pais nesse intervalo de tempo
 			if (!dados.get(i).getMomento().isBefore(inicio) && 
 					!dados.get(i).getMomento().isAfter(fim)) {
-				currEstatisticaMortalidade.inclui(dados.get(i)); //inclui medicoes dentro do periodo definido.
+				currEstatisticaMortalidade.inclui(dados.get(i)); //Inclui medicoes dentro do periodo definido.
 			}
 		}
 
@@ -71,6 +104,19 @@ public class EstatisticaController {
 		return rankingMortalidade;
 	}
 	
+	/**
+	 * Metodo que recebe os datas da consulta e os dados de casos total
+	 * da API (confirmados, mortos ou recuperados), itera pelos dados pegando 
+	 * as medicoes do intervalo desejado, cria uma estatistica para cada pais 
+	 * com sua respectivas medicoes e ordena essas estatistica em uma lista 
+	 * de acordo com o crescimento de casos para se formar o ranking e retorna
+	 * essa lista.
+	 * 
+	 * @param dadosTotal Dados do casos total da API.
+	 * @param inicio Inicio das medicoes.
+	 * @param fim Fim das medicoes.
+	 * @return Lista de estatisticas de cada pais.
+	 */
 	public List<Estatistica> rankingCrescimento (List <Medicao> dadosCasos,
 			LocalDateTime inicio, LocalDateTime fim){
 		Collections.sort(dadosCasos);
@@ -95,7 +141,19 @@ public class EstatisticaController {
 		return rankingCrescimento;
 	}
 	
-  
+	/**
+	 * Metodo que recebe os datas da consulta e os dados de casos total
+	 * da API (confirmados, mortos ou recuperados), descobre o pais com maior 
+	 * crescimento de casos no intervalo desejado, itera pelos paises colocando-os
+	 * em uma lista de estatisticas para cada pais com seus respectivos dados
+	 * e ordena essas estatisticas de acordo com a distancia at� o pais com maior
+	 * crescimento de casos para se formar o ranking e retorna essa lista. 
+	 * 
+	 * @param dadosTotal Dados do casos total da API.
+	 * @param inicio Inicio das medicoes.
+	 * @param fim Fim das medicoes.
+	 * @return Lista de estatisticas de cada pais.
+	 */
 	public List <Estatistica> rankingLocaisProximos (List <Medicao> dadosCasos,
 			LocalDateTime inicio, LocalDateTime fim){
 		List <Estatistica> rankingCrescimento = rankingCrescimento (dadosCasos, inicio, fim);
@@ -144,6 +202,15 @@ public class EstatisticaController {
 		return rankingArr;
 	}
 	
+	/**
+	 * Recebe uma estatistica de um determinado ranking e, a partir
+	 * dela descobre o header que ser� usado na montagem desse ranking,
+	 * retornando esse header no formato de um array de String unidimensional,
+	 * onde cada posi��o � o titulo de uma determinada coluna.
+	 * 
+	 * @param exemplo Estatistica que ser� analisada
+	 * @return Header do ranking a ser montado.
+	 */
 	private String[] getHeader(Estatistica exemplo) {
 		String valor = null;
 		String tipo = (exemplo.getObservacoes().size() == 0)?
@@ -188,7 +255,6 @@ public class EstatisticaController {
 		} catch(IOException e) {
 			return false;
 		}
-		
 		return true;
 	}
 	

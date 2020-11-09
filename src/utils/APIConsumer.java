@@ -6,6 +6,8 @@ import java.net.http.*;
 import java.net.http.HttpClient.Redirect;
 import java.net.http.HttpClient.Version;
 
+import view.TelaInicial;
+
 /**
  * Classe que implementa o metodo GET para COVID19 API.
  * @author Raphael Mesquita &lt;raphafm.rf@gmail.com&gt;
@@ -40,6 +42,7 @@ public class APIConsumer {
 				return response;
 			} catch(IOException e) {
 				System.err.println("Problema ao enviar ou receber da requisicao. Tentando novamente.");
+				TelaInicial.barra.barraProgresso.setNote("Problema ao enviar ou receber da requisicao. Tentando novamente.");
 			} catch (InterruptedException e) {
 				System.err.println("A operacao doi interrompida.");
 			}

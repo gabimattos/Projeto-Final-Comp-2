@@ -70,6 +70,17 @@ public class Display {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * Metodo que centraliza os textos de uma tabela.
+	 * <p>
+	 * Recebe a tabela que será formatada e seu header para saber
+	 * a quantidade de colunas que serão centralizadas e retorna a
+	 * tabela formatada.
+	 * 
+	 * @param table Tabela que será formatada.
+	 * @param header Titulo de cada coluna da tabela.
+	 * @return Tabela formatada.
+	 */
 	private JTable centralizeText(JTable table, String[] header) {
 		DefaultTableCellRenderer render = new DefaultTableCellRenderer();
 		render.setHorizontalAlignment(SwingConstants.CENTER);

@@ -1,10 +1,11 @@
 package controller;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.*;
-import java.time.format.*;
 import java.util.*;
-
 import model.*;
 
 /** Classe controller do historico de consultas.
