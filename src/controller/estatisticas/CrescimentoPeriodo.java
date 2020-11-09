@@ -35,6 +35,8 @@ public class CrescimentoPeriodo extends Estatistica {
 		
 		Float valor = (ultimo - primeiro)/primeiro;
 		
+		valor = (valor < 0) ? 0 : valor;
+		
 		this.valorCache = valor;
 		this.cacheAtualizado = true;
 		return valor;

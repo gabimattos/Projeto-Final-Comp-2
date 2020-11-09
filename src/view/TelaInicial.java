@@ -22,7 +22,8 @@ import model.*;
  * apenas enviar suas opcoes ou de enviar e salvar suas opcoes.
  * 
  * @author Gabriela Mattos - 119.048.406,
- * Victoria Almeida - 118.140.336
+ * Victoria Almeida - 118.140.336,
+ * Raphael Mesquita - 118.020.104
  */
 public class TelaInicial {
 
@@ -53,20 +54,18 @@ public class TelaInicial {
 		new TelaInicial().initWindow();
 	}
 
-	/**
-	 * Classe 'AcaoBotaoEnviarRanking()' Classe interna da classe 'TelaInicial()'
-	 * responsavel pelo funcionamento do botao 'btnEnviarRanking'. Dentro dessa
-	 * classe verifica-se se alguma opcao de consulta foi selecionada e se os campos
-	 * das datas (dataInicial e dataFinal), por onde identifica-se o periodo em que
-	 * se deseja obter aquela informacao (ranking), foram preenchidos. Caso nenhuma
-	 * opcao seja selecionada ou um dos campos de data nao sejam preenchidos eh
-	 * notificado um erro e a consulta nao eh feita. Caso alguma opcao seja
-	 * selecionada e o campo das datas sejam preenchidos a consulta eh feita
-	 * corretamente.
-	 * 
-	 * @author Gabriela Mattos
-	 * 
-	 */
+    /**
+     * Classe 'AcaoBotaoEnviarRanking()'
+     * Classe interna da classe 'TelaInicial()' responsavel pelo funcionamento do botao 'btnEnviarRanking'. Dentro dessa classe verifica-se 
+     * se alguma opcao de consulta foi selecionada e se os campos das datas (dataInicial e dataFinal), por onde identifica-se o periodo em 
+     * que se deseja obter aquela informacao (ranking), foram preenchidos. Caso nenhuma opcao seja selecionada ou um dos campos de data nao sejam
+     * preenchidos eh notificado um erro e a consulta nao eh feita. Caso alguma opcao seja selecionada e o campo das datas sejam preenchidos 
+     * a consulta eh feita corretamente.
+     * 
+     * @author Gabriela Mattos - 119.048.406,
+     * Raphael Mesquita - 118.020.104
+     *
+     */
 	public class AcaoBotaoEnviarRanking implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {

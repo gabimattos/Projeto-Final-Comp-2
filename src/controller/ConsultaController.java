@@ -11,7 +11,7 @@ import model.*;
 /** Classe controller do historico de consultas.
  * Possui uma consulta atual que representa o estado atual do programa, em termos consulta ou entradas do usuario.
  * 
- * @author Raphael Mesquita &lt;raphafm.rf@gmail.com&gt;
+ * @author Raphael Mesquita - 118.020.104
  */
 public class ConsultaController {
 	/**

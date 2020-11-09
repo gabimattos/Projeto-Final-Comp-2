@@ -10,7 +10,7 @@ import view.TelaInicial;
 
 /**
  * Classe que implementa o metodo GET para COVID19 API.
- * @author Raphael Mesquita &lt;raphafm.rf@gmail.com&gt;
+ * @author Raphael Mesquita - 118.020.104
  *
  */
 public class APIConsumer {

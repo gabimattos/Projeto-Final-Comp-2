@@ -12,7 +12,7 @@ import view.TelaInicial;
 
 /**
  * Classe que baixa, salva e carrega os dados dos paises.
- * @author Raphael Mesquita &lt;raphafm.rf@gmail.com&gt;
+ * @author Raphael Mesquita - 118.020.104
  *
  */
 public class PaisController {

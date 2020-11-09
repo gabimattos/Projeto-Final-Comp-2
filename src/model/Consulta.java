@@ -7,7 +7,7 @@ import java.util.TreeMap;
 /** Classe model de consulta. Guarda a entrada do usuario.
  * 	Cada campo boolean representa se o usuario deseja o ranking associado.
  * 
- * @author Raphael Mesquita &lt;raphafm.rf@gmail.com&gt;
+ * @author Raphael Mesquita - 118.020.104
  */
 public class Consulta implements Serializable {
 	private static final long serialVersionUID = 6523835329789813037L;
