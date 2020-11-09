@@ -188,8 +188,8 @@ public class TelaInicial {
 		lblTopico2 = new JLabel("Crescimento");
 		lblTopico3 = new JLabel("Mortalidade");
 		lblTopico4 = new JLabel("Locais Proximos");
-		lblDataInicial = new JLabel("Data Inicial");
-		lblDataFinal = new JLabel("Data Final");
+		lblDataInicial = new JLabel("Data Inicial (DD/MM/AAAA)");
+		lblDataFinal = new JLabel("Data Final (DD/DD/AAAA)");
 
 		dataInicial = new JTextField();
 		dataFinal = new JTextField();
