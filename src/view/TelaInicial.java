@@ -18,7 +18,7 @@ import model.*;
  * de casos confirmados em um periodo de tempo, ate um raio r (km). Alem disso o usuario tem a opcao de apenas enviar suas opcoes ou 
  * de enviar e salvar suas opcoes.
  * 
- * @author Gabriela Mattos
+ * @author Gabriela Mattos - 119.048.406
  */
 public class TelaInicial {
 	
