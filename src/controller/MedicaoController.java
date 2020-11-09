@@ -61,6 +61,7 @@ public class MedicaoController {
 		String ultimoDownload = mortosFile.getName().split(" ")[0];
 
 		if (confirmadosFile.isFile() && mortosFile.isFile() && recuperadosFile.isFile() && ultimoDownload.equals(LocalDate.now().toString())) {
+			TelaInicial.barra.setVisible(false);
 			System.out.println("Carregando dados ja baixados.");
 			this.setConfirmados(deserialize(confirmadosFile));
 			this.setMortos(deserialize(mortosFile));

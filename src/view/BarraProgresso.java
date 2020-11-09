@@ -66,8 +66,10 @@ public class BarraProgresso extends JFrame {
 			barraProgresso.setNote(
 					"Progresso " + baixado + "/" + total + " (" + newPorcentagem + "%) de medicoes dos paises\n");
 			barraProgresso.setProgress(newPorcentagem);
-			if (porcentagem == 100)
+			if (porcentagem == 100) {
+				this.setVisible(false);
 				barraProgresso.close();
+			}
 		} else {
 			System.exit(0);
 		}
