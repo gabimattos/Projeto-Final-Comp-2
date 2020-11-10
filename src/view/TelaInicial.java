@@ -98,6 +98,14 @@ public class TelaInicial {
 						JLabel.CENTER);
 				erro.add(lblerror);
 				erro.setVisible(true);
+			} else if (consultaAtual.getFimPeriodo().isBefore(consultaAtual.getInicioPeriodo())) {
+				erro = new JFrame("ERRO");
+				erro.setSize(450, 200);
+
+				lblerror = new JLabel("ERRO!\n Periodo invalido!",
+						JLabel.CENTER);
+				erro.add(lblerror);
+				erro.setVisible(true);
 			}
 
 			else {
@@ -156,7 +164,16 @@ public class TelaInicial {
 				erro = new JFrame("ERRO");
 				erro.setSize(400, 200);
 
-				lblerror = new JLabel("ERRO!\n Alguma data nao foi preenchida!");
+				lblerror = new JLabel("ERRO!\n Alguma data nao foi preenchida corretamente! (Ex.: 08/11/2020)",
+						JLabel.CENTER);
+				erro.add(lblerror);
+				erro.setVisible(true);
+			} else if (consultaAtual.getFimPeriodo().isBefore(consultaAtual.getInicioPeriodo())) {
+				erro = new JFrame("ERRO");
+				erro.setSize(450, 200);
+
+				lblerror = new JLabel("ERRO!\n Periodo invalido!",
+						JLabel.CENTER);
 				erro.add(lblerror);
 				erro.setVisible(true);
 			}
@@ -379,13 +396,24 @@ public class TelaInicial {
 			public void actionPerformed(ActionEvent e) {
 				int indicesSeleciodado[] = list.getSelectedIndices();
 
-				List<String[][]> datas = consulta.realizarConsulta(indicesSeleciodado[0]);
+				try {
+					List<String[][]> datas = consulta.realizarConsulta(indicesSeleciodado[0]);
+					
+					for (String dados[][] : datas) {
+						Display display = new Display(janela);
+						display.trataDados(dados);
+					}
+					janela.setVisible(false);
+					
+				} catch(NullPointerException | ArrayIndexOutOfBoundsException oob) {
+					erro = new JFrame("ERRO");
+					erro.setSize(450, 200);
 
-				for (String dados[][] : datas) {
-					Display display = new Display(janela);
-					display.trataDados(dados);
+					lblerror = new JLabel("ERRO!\n Nenhuma consulta valida foi selecionada",
+							JLabel.CENTER);
+					erro.add(lblerror);
+					erro.setVisible(true);
 				}
-				janela.setVisible(false);
 			}
 		});
 		button.setPreferredSize(new Dimension(150, 40));

@@ -112,14 +112,21 @@ public class Display {
  */
 	public void exportButton(String dados[][], String[] colunas) {
 		JButton export = new JButton("Exportar");
-		btnPanel.add(export);
+	  btnPanel.add(export);
 
-		export.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				EstatisticaController.getInstance().toTSV(dados, colunas[1]);
-			}
-		});
+	  export.addActionListener(new ActionListener() {
+	   @Override
+	   public void actionPerformed(ActionEvent arg0) {
+	    if (EstatisticaController.getInstance().toTSV(dados, colunas[1]) == true) {
+	     JFrame frame = new JFrame();  
+	        JOptionPane.showMessageDialog(frame,"Arquivo salvo com sucesso na pasta rankings, dentro do projeto.");  
+	    }
+	    else {
+	     JFrame frame = new JFrame();  
+	        JOptionPane.showMessageDialog(frame,"Problema ao salvar o arquivo.","Alert",JOptionPane.WARNING_MESSAGE);    
+	    }
+	   }
+	  });
 	}
 	/**
 	 * <p>Este metodo trata os dados antes de serem mostrados no ranking. O metodo recebe um vetor bidimensional,</p>

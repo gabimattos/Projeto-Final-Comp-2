@@ -64,8 +64,11 @@ public class MedicaoController {
 			TelaInicial.barra.setVisible(false);
 			System.out.println("Carregando dados ja baixados.");
 			this.setConfirmados(deserialize(confirmadosFile));
+			System.out.println("Medicoes de casos confirmados carregados.");
 			this.setMortos(deserialize(mortosFile));
+			System.out.println("Medicoes de mortos carregados.");
 			this.setRecuperados(deserialize(recuperadosFile));
+			System.out.println("Medicoes de recuperados carregados.");
 		}
 
 		else {
